@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { Button, Typography } from "@material-ui/core";
 //import TextField from "@mui/material/TextField";
 //import { alpha, styled } from "@mui/material/styles";
@@ -21,9 +21,10 @@ import BootstrapInput from "../components/BootstrapInput";
 import ControlledCheckbox from "../components/ControlledCheckbox";
 import PageSignUp from "./PageSignUp";
 
-//import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 function PageLogin() {
+  const [email, setEmail] = useState("");
   //Password visibility
   const [values, setValues] = React.useState({
     password: "",
@@ -43,7 +44,9 @@ function PageLogin() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  //const { signInWithGoogle } = useAuth();
+  
+  const { signInWithGoogle } = useAuth();
+  const { signin } = useAuth();
 
   return (
     <>
@@ -60,6 +63,7 @@ function PageLogin() {
             }
           />
         }
+        onClick={signInWithGoogle}
       >
         Continue with Google
       </Button>
@@ -73,7 +77,7 @@ function PageLogin() {
         <InputLabel shrink htmlFor="bootstrap-input">
           Email
         </InputLabel>
-        <BootstrapInput id="email-input" />
+        <BootstrapInput id="email-input" value={email} onChange={(e) => setEmail(e.target.value)}/>
       </FormControl>
       <p> </p>
       <FormControl variant="standard" style={{ marginLeft: "33px" }}>
@@ -113,6 +117,7 @@ function PageLogin() {
         variant="contained"
         color="primary"
         fullWidth
+        onClick={() => signin(email, values.password)}
       >
         Login
       </Button>
