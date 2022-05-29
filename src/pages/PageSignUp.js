@@ -13,15 +13,20 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import BootstrapInput from "../components/BootstrapInput";
 
-//Confirm password ikut keisi wkt input set pw
+import { useAuth } from "../hooks/useAuth";
+
 //* blm warna merah?
 
 function PageSignUp() {
   //Password visibility
   const [values, setValues] = React.useState({
+    email: "",
     password: "",
-    showPassword: false
+    confirmPassword: "",
+    showPassword: false,
+    showConfirmPassword: false
   });
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
@@ -33,11 +38,26 @@ function PageSignUp() {
     });
   };
 
+  const handleClickShowConfirmPassword = (x) => {
+    setValues({
+      ...values,
+      showConfirmPassword: !values.showConfirmPassword
+    });
+  };
+
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
-  //const { signInWithGoogle } = useAuth();
+  const handleSubmit = () => {
+    if (values.password !== values.confirmPassword) {
+        alert("Passwords don't match");
+    } else {
+        signup(values.email, values.confirmPassword);
+    }
+}
+
+  const { signup } = useAuth();
 
   return (
     <>
@@ -60,7 +80,7 @@ function PageSignUp() {
         <InputLabel shrink htmlFor="email-input">
           Email Address*
         </InputLabel>
-        <BootstrapInput id="email-bootstrap" />
+        <BootstrapInput id="email-bootstrap" value={values.email} onChange={handleChange("email")}/>
       </FormControl>
       <p> </p>
       <FormControl variant="standard">
@@ -99,19 +119,19 @@ function PageSignUp() {
           Confirm Password*
         </InputLabel>
         <BootstrapInput
-          id="password-input"
-          type={values.showPassword ? "text" : "password"}
-          value={values.password}
-          onChange={handleChange("password")}
+          id="confirm-password-input"
+          type={values.showConfirmPassword ? "text" : "password"}
+          value={values.confirmPassword}
+          onChange={handleChange("confirmPassword")}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
                 aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
+                onClick={handleClickShowConfirmPassword}
                 onMouseDown={handleMouseDownPassword}
                 edge="end"
               >
-                {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                {values.showConfirmPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
           }
@@ -123,6 +143,7 @@ function PageSignUp() {
         variant="contained"
         color="primary"
         fullWidth
+        onClick={handleSubmit}
       >
         Sign Up
       </Button>

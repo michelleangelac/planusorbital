@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState, useEffect, useContext, createContext } from "react";
 import { config as firebaseConfig } from "../config/firebase.js";
 
@@ -41,7 +41,8 @@ function useProvideAuth() {
       .then((response) => {
         setUser(response.user);
         return response.user;
-      });
+      })
+      .catch((err) => alert(err.message));
   };
 
   const signup = (email, password) => {
@@ -49,7 +50,8 @@ function useProvideAuth() {
       .then((response) => {
         setUser(response.user);
         return response.user;
-      });
+      })
+      .catch((err) => alert(err.message));
   };
 
   const signout = () => {
@@ -71,7 +73,8 @@ function useProvideAuth() {
   };
 
   const signInWithGoogle = () => {
-    return signInWithPopup(firebaseAuth, googleAuthProvider);
+    return signInWithPopup(firebaseAuth, googleAuthProvider)
+    .catch((err) => alert(err.message));
   };
 
   // Subscribe to user on mount
