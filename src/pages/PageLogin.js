@@ -1,77 +1,127 @@
-import { Button } from "@material-ui/core";
-import TextField from "@mui/material/TextField";
-import { alpha, styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
+import * as React from "react";
+import { Button, Typography } from "@material-ui/core";
+//import TextField from "@mui/material/TextField";
+//import { alpha, styled } from "@mui/material/styles";
+//import InputBase from "@mui/material/InputBase";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import Avatar from "@mui/material/Avatar";
+
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
+//import Link from "@material-ui/core/Link";
+//import FormControlLabel from "@material-ui/core/FormControlLabel";
+//import Checkbox from "@mui/material/Checkbox";
+
+import "./PageLogin.module.css";
+import BootstrapInput from "../components/BootstrapInput";
+import ControlledCheckbox from "../components/ControlledCheckbox";
+import PageSignUp from "./PageSignUp";
+
 //import { useAuth } from "../hooks/useAuth";
 
 function PageLogin() {
-  //const { signInWithGoogle } = useAuth();
+  //Password visibility
+  const [values, setValues] = React.useState({
+    password: "",
+    showPassword: false
+  });
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
 
-  const BootstrapInput = styled(InputBase)(({ theme }) => ({
-    "label + &": {
-      marginTop: theme.spacing(3)
-    },
-    "& .MuiInputBase-input": {
-      borderRadius: 4,
-      position: "relative",
-      backgroundColor: theme.palette.mode === "light" ? "#fcfcfb" : "#2b2b2b",
-      border: "1px solid #ced4da",
-      fontSize: 16,
-      width: "auto",
-      padding: "10px 12px",
-      transition: theme.transitions.create([
-        "border-color",
-        "background-color",
-        "box-shadow"
-      ]),
-      fontFamily: [
-        "-apple-system",
-        "BlinkMacSystemFont",
-        '"Segoe UI"',
-        "Roboto",
-        '"Helvetica Neue"',
-        "Arial",
-        "sans-serif",
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"'
-      ].join(","),
-      "&:focus": {
-        boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-        borderColor: theme.palette.primary.main
-      }
-    }
-  }));
+  const handleClickShowPassword = () => {
+    setValues({
+      ...values,
+      showPassword: !values.showPassword
+    });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+  //const { signInWithGoogle } = useAuth();
 
   return (
     <>
-      <h1>Login to your account</h1>
-      <Button variant="contained" color="primary">
+      <h1>Login to Your Account</h1>
+      <Button
+        style={{ maxWidth: "250px", fontSize: "14px" }}
+        variant="outlined"
+        fullWidth
+        startIcon={
+          <Avatar
+            sx={{ width: 20, height: 20 }}
+            src={
+              "https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png"
+            }
+          />
+        }
+      >
         Continue with Google
       </Button>
-      <p> or </p>
+      <div class="line">
+        <span class="text" style={{ fontSize: 10 }}>
+          or
+        </span>
+        <script src="./src/index.js"></script>
+      </div>
       <FormControl variant="standard">
         <InputLabel shrink htmlFor="bootstrap-input">
           Email
         </InputLabel>
-        <BootstrapInput id="bootstrap-input" />
+        <BootstrapInput id="email-input" />
       </FormControl>
       <p> </p>
-      <FormControl variant="standard">
+      <FormControl variant="standard" style={{ marginLeft: "33px" }}>
         <InputLabel shrink htmlFor="bootstrap-input">
           Password
         </InputLabel>
-        <BootstrapInput id="bootstrap-input" />
+        <BootstrapInput
+          id="password-input"
+          type={values.showPassword ? "text" : "password"}
+          value={values.password}
+          onChange={handleChange("password")}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {values.showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
+        />
       </FormControl>
+      <p style={{ fontSize: 10 }}>
+        {" "}
+        <ControlledCheckbox label="Remember me?"></ControlledCheckbox>
+        Remember me?{" "}
+        <a href="#" className="link" style={{ marginLeft: 30 }}>
+          Forget your password?
+        </a>
+      </p>
       <p> </p>
-      <TextField
-        id="outlined-password-input"
-        label="Password"
-        type="password"
-        autoComplete="current-password"
-      />
+      <Button
+        style={{ maxWidth: "250px", fontSize: "14px" }}
+        variant="contained"
+        color="primary"
+        fullWidth
+      >
+        Login
+      </Button>
+      <p className="signup-label" style={{ fontSize: 10 }}>
+        Not registered yet?{" "}
+        <a href="#" className="link">
+          Create an account
+        </a>
+      </p>
     </>
   );
 }
