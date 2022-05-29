@@ -67,8 +67,8 @@ function PageLogin() {
       >
         Continue with Google
       </Button>
-      <div class="line">
-        <span class="text" style={{ fontSize: 10 }}>
+      <div className="line">
+        <span className="text" style={{ fontSize: 10 }}>
           or
         </span>
         <script src="./src/index.js"></script>
@@ -123,7 +123,7 @@ function PageLogin() {
       </Button>
       <p className="signup-label" style={{ fontSize: 10 }}>
         Not registered yet?{" "}
-        <a href="#" className="link">
+        <a href="/signup" className="link">
           Create an account
         </a>
       </p>
