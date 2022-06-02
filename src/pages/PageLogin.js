@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { Button, Typography } from "@material-ui/core";
 //import TextField from "@mui/material/TextField";
 //import { alpha, styled } from "@mui/material/styles";
@@ -19,11 +19,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import "./PageLogin.module.css";
 import BootstrapInput from "../components/BootstrapInput";
 import ControlledCheckbox from "../components/ControlledCheckbox";
-import PageSignUp from "./PageSignUp";
+//import PageSignUp from "./PageSignUp";
 
-//import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 function PageLogin() {
+  const [email, setEmail] = useState("");
   //Password visibility
   const [values, setValues] = React.useState({
     password: "",
@@ -43,7 +44,9 @@ function PageLogin() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  //const { signInWithGoogle } = useAuth();
+  
+  const { signInWithGoogle } = useAuth();
+  const { signin } = useAuth();
 
   return (
     <>
@@ -60,11 +63,12 @@ function PageLogin() {
             }
           />
         }
+        onClick={signInWithGoogle}
       >
         Continue with Google
       </Button>
-      <div class="line">
-        <span class="text" style={{ fontSize: 10 }}>
+      <div className="line">
+        <span className="text" style={{ fontSize: 10 }}>
           or
         </span>
         <script src="./src/index.js"></script>
@@ -73,7 +77,7 @@ function PageLogin() {
         <InputLabel shrink htmlFor="bootstrap-input">
           Email
         </InputLabel>
-        <BootstrapInput id="email-input" />
+        <BootstrapInput id="email-input" value={email} onChange={(e) => setEmail(e.target.value)}/>
       </FormControl>
       <p> </p>
       <FormControl variant="standard" style={{ marginLeft: "33px" }}>
@@ -103,7 +107,7 @@ function PageLogin() {
         {" "}
         <ControlledCheckbox label="Remember me?"></ControlledCheckbox>
         Remember me?{" "}
-        <a href="#" className="link" style={{ marginLeft: 30 }}>
+        <a href="/resetpassword" className="resetpw-label" style={{ marginLeft: 30 }}>
           Forget your password?
         </a>
       </p>
@@ -113,12 +117,13 @@ function PageLogin() {
         variant="contained"
         color="primary"
         fullWidth
+        onClick={() => signin(email, values.password)}
       >
         Login
       </Button>
       <p className="signup-label" style={{ fontSize: 10 }}>
         Not registered yet?{" "}
-        <a href="#" className="link">
+        <a href="/signup" className="link">
           Create an account
         </a>
       </p>
