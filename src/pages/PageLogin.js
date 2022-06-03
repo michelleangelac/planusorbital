@@ -52,6 +52,7 @@ function PageLogin() {
     <>
       <h1>Login to Your Account</h1>
       <Button
+        className='google-button'
         style={{ maxWidth: "250px", fontSize: "14px" }}
         variant="outlined"
         fullWidth
