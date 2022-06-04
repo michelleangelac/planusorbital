@@ -19,7 +19,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import "./PageLogin.module.css";
 import BootstrapInput from "../components/BootstrapInput";
 import ControlledCheckbox from "../components/ControlledCheckbox";
-import PageSignUp from "./PageSignUp";
+//import PageSignUp from "./PageSignUp";
 
 import { useAuth } from "../hooks/useAuth";
 
@@ -52,6 +52,7 @@ function PageLogin() {
     <>
       <h1>Login to Your Account</h1>
       <Button
+        className='google-button'
         style={{ maxWidth: "250px", fontSize: "14px" }}
         variant="outlined"
         fullWidth
@@ -107,7 +108,7 @@ function PageLogin() {
         {" "}
         <ControlledCheckbox label="Remember me?"></ControlledCheckbox>
         Remember me?{" "}
-        <a href="#" className="link" style={{ marginLeft: 30 }}>
+        <a href="/resetpassword" className="resetpw-label" style={{ marginLeft: 30 }}>
           Forget your password?
         </a>
       </p>

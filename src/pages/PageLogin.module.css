@@ -10,6 +10,10 @@
   margin: auto;
 }
 
+.google-button {
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
 .text {
   margin: 0 1rem;
 }
