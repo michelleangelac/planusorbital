@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
+import * as BiIcons from "react-icons/bi";
+import * as BsIcons from "react-icons/bs";
 import { Link } from 'react-router-dom';
 import { IconContext } from 'react-icons';
-import { SidebarData } from "./SidebarData";
 import "./Tabs.css";
 
 import { Avatar } from '@mui/material';
@@ -29,16 +30,56 @@ function Tabs() {
               <AiIcons.AiOutlineClose />
             </Link>
           </li>
-          {SidebarData.map((item, index) => {
-            return (
-              <li key={index} className={item.cName}>
-                <Link to={item.path}>
-                  {item.icon}
-                  <span>{item.title}</span>
-                </Link>
-              </li>
-            )
-          })}
+          <li className='profile-pic'>
+            <Link to="#" className='profile'>
+              <Avatar sx={{ bgcolor: '#D0D4EB', width: 53, height: 53 }}>GG</Avatar>
+            </Link>
+          </li>
+          <li className='profile-name'>
+            <p>gwynethguo</p>
+          </li>
+          <li className='dashboard'>
+            <Link to='/dashboard'>
+              <AiIcons.AiOutlineHome/>
+              <span>Dashboard</span>
+            </Link>
+          </li>
+          <li className='icon'>
+            <Link to='/schedules'>
+              <BsIcons.BsCalendar4Week/>
+              <span>Schedules</span>
+            </Link>
+          </li>
+          <li className='icon'>
+            <Link to='/todolist'>
+              <BsIcons.BsPencilSquare/>
+              <span>To-do List</span>
+            </Link>
+          </li>
+          <li className='icon'>
+            <Link to='/groups'>
+              <BsIcons.BsChatLeftText/>
+              <span>Groups</span>
+            </Link>
+          </li>
+          <li className='icon'>
+            <Link to='/projects'>
+              <AiIcons.AiOutlineFile/>
+              <span>Projects</span>
+            </Link>
+          </li>
+          <li className='icon'>
+            <Link to='/settings'>
+              <AiIcons.AiOutlineSetting/>
+              <span>Settings</span>
+            </Link>
+          </li>
+          <li className='icon'>
+            <Link to='/login'>
+              <BiIcons.BiLogOut/>
+              <span>Log Out</span>
+            </Link>
+          </li>
         </ul>
       </nav>
       </IconContext.Provider>

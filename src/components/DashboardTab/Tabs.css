@@ -10,23 +10,9 @@
   margin-left: 2rem;
   font-size: 2rem;
   background: none;
-}
-
-.profile-pic {
-  display: flex;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  display: block;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin: 0 auto;
-}
-
-.profile-name {
-  margin-bottom: 30px;
-  text-align: center;
-  margin: 10px 0 5px;
+  position:absolute;
+  top: 15px;
+  left: 10px;
 }
 
 .nav-menu {
@@ -39,7 +25,6 @@
   top: 0;
   left: -100%;
   transition: 850ms;
-  padding: 20px 0;
 }
 
 .nav-menu.active {
@@ -47,19 +32,38 @@
   transition: 350ms;
 }
 
-.nav-text {
+.profile-pic {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+
+.profile-pic a {
+  color: #D0D4EB;
+}
+
+.profile-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  font-size: 16px;
+}
+
+.dashboard {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 8px 0px 8px 16px;
   list-style: none;
-  height: 60px;
+  height: 50px;
+  margin-top: 6px;
 }
 
-.nav-text a {
+.dashboard a {
   text-decoration: none;
   color: black;
-  font-size: 18px;
+  font-size: 16px;
   width: 95%;
   height: 100%;
   display: flex;
@@ -68,7 +72,32 @@
   border-radius: 4px;
 }
 
-.nav-text a:hover {
+.dashboard a:hover {
+  background-color: #D0D4EB;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0px 8px 16px;
+  list-style: none;
+  height: 50px;
+}
+
+.icon a {
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  width: 95%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 4px;
+}
+
+.icon a:hover {
   background-color: #D0D4EB;
 }
 

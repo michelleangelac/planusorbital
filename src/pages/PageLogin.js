@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Typography } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 //import TextField from "@mui/material/TextField";
 //import { alpha, styled } from "@mui/material/styles";
 //import InputBase from "@mui/material/InputBase";
@@ -53,7 +53,7 @@ function PageLogin() {
       <h1>Login to Your Account</h1>
       <Button
         className='google-button'
-        style={{ maxWidth: "250px", fontSize: "14px" }}
+        style={{ maxWidth: "215px", fontSize: "14px" }}
         variant="outlined"
         fullWidth
         startIcon={
@@ -106,15 +106,13 @@ function PageLogin() {
       </FormControl>
       <p style={{ fontSize: 10 }}>
         {" "}
-        <ControlledCheckbox label="Remember me?"></ControlledCheckbox>
-        Remember me?{" "}
-        <a href="/resetpassword" className="resetpw-label" style={{ marginLeft: 30 }}>
+        <a href="/resetpassword" className="resetpw-label" style={{ marginLeft: 100 }}>
           Forget your password?
         </a>
       </p>
       <p> </p>
       <Button
-        style={{ maxWidth: "250px", fontSize: "14px" }}
+        style={{ maxWidth: "215px", fontSize: "14px" }}
         variant="contained"
         color="primary"
         fullWidth
