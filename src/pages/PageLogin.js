@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@material-ui/core";
 //import TextField from "@mui/material/TextField";
 //import { alpha, styled } from "@mui/material/styles";
@@ -19,11 +19,14 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import "./PageLogin.module.css";
 import BootstrapInput from "../components/BootstrapInput";
 import ControlledCheckbox from "../components/ControlledCheckbox";
-//import PageSignUp from "./PageSignUp";
+import PageSignUp from "./PageSignUp";
 
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { firebaseAuth } from "../hooks/useAuth";
 
 function PageLogin() {
+
   const [email, setEmail] = useState("");
   //Password visibility
   const [values, setValues] = React.useState({

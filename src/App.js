@@ -11,18 +11,20 @@ import TodoList from "./pages/TodoList";
 import Groups from "./pages/Groups";
 import Projects from "./pages/Projects";
 import Settings from "./pages/Settings";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { PublicRoute } from "./components/PublicRoute";
+import { firebaseAuth } from "./hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 export default function App() {
   const { user } = useAuth();
   return (
     <div className="App">
       <Routes>
-        {user ? <Route path='/' element={<Dashboard />}></Route> : <Route path='/' element={<PageLogin /> }></Route>}
-        <Route path='/login' element={<PageLogin />}></Route>
-        <Route path='/signup' element={<PageSignUp />}></Route>
-        <Route path='/dashboard' element={<Dashboard />}></Route>
-        <Route path='/resetpassword' element={<ResetPassword />}></Route>
-
+          <Route path='/login' element={<PublicRoute><PageLogin /></PublicRoute>}></Route>
+          <Route path='/signup' element={<PublicRoute><PageSignUp /></PublicRoute>}></Route>
+          <Route path='/resetpassword' element={<PublicRoute><ResetPassword /></PublicRoute>}></Route>
+        <Route path='/dashboard' element={<ProtectedRoute><Dashboard /></ProtectedRoute>}></Route>
         <Route path='/schedules' element={<Schedules/>}></Route>
         <Route path='/todolist' element={<TodoList/>}></Route>
         <Route path='/groups' element={<Groups/>}></Route>
