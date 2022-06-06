@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { Button, Typography } from "@material-ui/core";
 //import TextField from "@mui/material/TextField";
 //import { alpha, styled } from "@mui/material/styles";
@@ -14,13 +14,30 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import BootstrapInput from "../components/BootstrapInput";
 
 import { useAuth } from "../hooks/useAuth";
+import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { db, firebaseAuth } from "../hooks/useAuth";
+//import { firebase } from "firebase";
 
 //* blm warna merah?
 
 function PageSignUp() {
+  const navigate = useNavigate(); 
+  var user = firebaseAuth.currentUser;
+
+  useEffect(() => {
+    if(user) {
+      navigate("/dashboard");
+    } else {
+    }
+  })
+
   //Password visibility
   const [values, setValues] = React.useState({
+    username: "",
+    name: "",
     email: "",
+    faculty: "",
     password: "",
     confirmPassword: "",
     showPassword: false,
@@ -52,8 +69,20 @@ function PageSignUp() {
   const handleSubmit = () => {
     if (values.password !== values.confirmPassword) {
         alert("Passwords don't match");
+        navigate("/signup");
+    } else if (values.username == "" || values.name == "" || values.email == "" || values.password == "") {
+        alert("Please fill in the required fields.");
+        navigate("/signup");
     } else {
         signup(values.email, values.confirmPassword);
+        var user = firebaseAuth.currentUser;
+        if (user) {
+          setDoc(doc(db, "profile", user?.uid), { username: values.username, name: values.name, email: values.email, password: values.password, faculty: values.faculty });
+          navigate("/dashboard"); 
+        }
+        else {
+          navigate("/signup");
+        }
     }
 }
 
@@ -66,14 +95,14 @@ function PageSignUp() {
         <InputLabel shrink htmlFor="usn-input">
           Username*
         </InputLabel>
-        <BootstrapInput id="usn-bootstrap" />
+        <BootstrapInput id="usn-bootstrap" value={values.username} onChange={handleChange("username")} />
       </FormControl>
       <p> </p>
       <FormControl variant="standard">
         <InputLabel shrink htmlFor="fname-input">
           Full Name*
         </InputLabel>
-        <BootstrapInput id="fname-bootstrap" />
+        <BootstrapInput id="fname-bootstrap" value={values.name} onChange={handleChange("name")}/>
       </FormControl>
       <p> </p>
       <FormControl variant="standard">
@@ -87,7 +116,7 @@ function PageSignUp() {
         <InputLabel shrink htmlFor="faculty-input">
           Faculty
         </InputLabel>
-        <BootstrapInput id="faculty-bootstrap" />
+        <BootstrapInput id="faculty-bootstrap" value={values.faculty} onChange={handleChange("faculty")}/>
       </FormControl>
       <p> </p>
       <FormControl variant="standard" style={{ marginLeft: "33px" }}>

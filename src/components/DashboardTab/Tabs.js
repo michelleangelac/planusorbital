@@ -8,12 +8,15 @@ import { IconContext } from 'react-icons';
 import "./Tabs.css";
 
 import { Avatar } from '@mui/material';
+import { useAuth } from "../../hooks/useAuth";
 import { Button } from '@mui/material';
 
 function Tabs() {
   const [sidebar, setSidebar] = useState(false);
 
   const showSidebar = () => setSidebar(!sidebar);
+
+  const { signout } = useAuth();
 
   return (
     <>
@@ -74,7 +77,7 @@ function Tabs() {
               <span>Settings</span>
             </Link>
           </li>
-          <li className='icon'>
+          <li className='icon' onClick={signout}>
             <Link to='/login'>
               <BiIcons.BiLogOut/>
               <span>Log Out</span>

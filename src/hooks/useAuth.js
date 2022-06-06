@@ -1,8 +1,9 @@
 import { RssFeed } from "@mui/icons-material";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import React, { useState, useEffect, useContext, createContext } from "react";
 import { config as firebaseConfig } from "../config/firebase.js";
+import { getFirestore } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom'; 
 
 // Code edited from https://usehooks.com/useAuth/ and
@@ -13,7 +14,9 @@ import { useNavigate } from 'react-router-dom';
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
-const firebaseAuth = getAuth(app);
+export const firebaseAuth = getAuth(app);
+
+export const db = getFirestore(app);
 
 const googleAuthProvider = new GoogleAuthProvider();
 
@@ -28,14 +31,14 @@ export function ProvideAuth({ children }) {
 
 // Hook for child components to get the auth object ...
 // ... and re-render when it changes.
-export const useAuth = () => {
+export const useAuth = () => { 
   return useContext(authContext);
 };
 
 // Provider hook that creates auth object and handles state
 function useProvideAuth() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
-
   // Wrap any Firebase methods we want to use making sure ...
   // ... to save the user to state.
   const signin = (email, password) => {
@@ -51,9 +54,11 @@ function useProvideAuth() {
     return createUserWithEmailAndPassword(firebaseAuth, email, password)
       .then((response) => {
         setUser(response.user);
+        console.log
         return response.user;
       })
-      .catch((err) => alert(err.message));
+      .catch((err) => alert(err.message))
+      .finally(user ? navigate("/dashboard") : navigate("/signup"));
   };
 
   const signout = () => {
@@ -98,7 +103,9 @@ function useProvideAuth() {
 
   // Return the user object and auth methods
   return {
+    db,
     user,
+    firebaseAuth,
     signin,
     signup,
     signout,
