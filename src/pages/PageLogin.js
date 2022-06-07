@@ -56,7 +56,7 @@ function PageLogin() {
       <h1>Login to Your Account</h1>
       <Button
         className='google-button'
-        style={{ maxWidth: "215px", fontSize: "14px" }}
+        style={{ maxWidth: "235px", fontSize: "12px", justifyContent: 'start' }}
         variant="outlined"
         fullWidth
         startIcon={
@@ -115,7 +115,7 @@ function PageLogin() {
       </p>
       <p> </p>
       <Button
-        style={{ maxWidth: "215px", fontSize: "14px" }}
+        style={{ maxWidth: "235px", fontSize: "14px" }}
         variant="contained"
         color="primary"
         fullWidth

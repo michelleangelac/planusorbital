@@ -39,7 +39,7 @@
 }
 
 .profile-pic a {
-  color: #D0D4EB;
+  text-decoration: none;
 }
 
 .profile-name {
@@ -48,6 +48,7 @@
   align-items: center;
   list-style: none;
   font-size: 16px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .dashboard {
@@ -70,6 +71,7 @@
   align-items: center;
   padding: 0 16px;
   border-radius: 4px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .dashboard a:hover {
@@ -95,6 +97,7 @@
   align-items: center;
   padding: 0 16px;
   border-radius: 4px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .icon a:hover {
