@@ -21,9 +21,10 @@ export default function App() {
   return (
     <div className="App">
       <Routes>
-          <Route path='/login' element={<PublicRoute><PageLogin /></PublicRoute>}></Route>
-          <Route path='/signup' element={<PublicRoute><PageSignUp /></PublicRoute>}></Route>
-          <Route path='/resetpassword' element={<PublicRoute><ResetPassword /></PublicRoute>}></Route>
+        <Route path='/' element={<PublicRoute><PageLogin /></PublicRoute>}></Route>
+        <Route path='/login' element={<PublicRoute><PageLogin /></PublicRoute>}></Route>
+        <Route path='/signup' element={<PublicRoute><PageSignUp /></PublicRoute>}></Route>
+        <Route path='/resetpassword' element={<PublicRoute><ResetPassword /></PublicRoute>}></Route>
         <Route path='/dashboard' element={<ProtectedRoute><Dashboard /></ProtectedRoute>}></Route>
         <Route path='/schedules' element={<Schedules/>}></Route>
         <Route path='/todolist' element={<TodoList/>}></Route>
