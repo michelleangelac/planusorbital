@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@material-ui/core";
 //import TextField from "@mui/material/TextField";
 //import { alpha, styled } from "@mui/material/styles";
@@ -18,7 +19,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import "./PageLogin.module.css";
 import BootstrapInput from "../components/BootstrapInput";
-import ControlledCheckbox from "../components/ControlledCheckbox";
+//import ControlledCheckbox from "../components/ControlledCheckbox";
 import PageSignUp from "./PageSignUp";
 
 import { useAuth } from "../hooks/useAuth";
@@ -72,10 +73,9 @@ function PageLogin() {
         Continue with Google
       </Button>
       <div className="line">
-        <span className="text" style={{ fontSize: 10 }}>
+        <span className="line span" style={{ fontSize: 10 }}>
           or
         </span>
-        <script src="./src/index.js"></script>
       </div>
       <FormControl variant="standard">
         <InputLabel shrink htmlFor="bootstrap-input">

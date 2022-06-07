@@ -9,7 +9,6 @@ import "./Tabs.css";
 
 import { Avatar } from '@mui/material';
 import { useAuth } from "../../hooks/useAuth";
-import { Button } from '@mui/material';
 
 function Tabs() {
   const [sidebar, setSidebar] = useState(false);

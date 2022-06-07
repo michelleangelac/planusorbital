@@ -17,7 +17,6 @@ import { useAuth } from "../hooks/useAuth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db, firebaseAuth } from "../hooks/useAuth";
-//import { firebase } from "firebase";
 
 //* blm warna merah?
 
