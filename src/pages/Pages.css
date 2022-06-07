@@ -5,3 +5,9 @@
     justify-content: center;
     font-size: 3rem;
 }
+
+.tasks-paper {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+}
