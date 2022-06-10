@@ -1,0 +1,81 @@
+.container {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 0.25fr 1fr 1fr 1fr;
+    grid-template-rows: 0.4fr 1fr;
+    grid-template-areas: 
+    "sidebar title title title"
+    "sidebar not-started in-progress completed";
+}
+
+.sidebar {
+    grid-area: sidebar;
+}
+
+.title {
+    font-size: 36px;
+    grid-area: title;
+    object-position: top center;
+    text-align: center;
+    font-family: "Inter";
+    font-weight: 900;
+    background: #D0D4EB;
+    padding-top: 0.1%;
+}
+
+.not-started {
+    grid-area: not-started;
+    background: #D0D4EB;
+}
+
+.in-progress {
+    grid-area: in-progress;
+    background: #D0D4EB;
+}
+
+.completed {
+    grid-area: completed;
+    background: #D0D4EB;
+}
+
+.ns-text {
+    font-size: 1.75em;
+    text-align: left;
+    padding: 20% 0 0 5%;
+    font-weight: 900;
+    font-family: "Inter";
+}
+
+.ip-text {
+    font-size: 1.75em;
+    text-align: left;
+    padding: 20% 0 0 5%;
+    font-weight: 900;
+    font-family: "Inter";
+}
+
+.completed-text {
+    text-align: left;
+    font-size: 1.75em;
+    padding: 20% 0 0 5%;
+    font-weight: 900;
+    font-family: "Inter";
+}
+
+.add-task { 
+    border-radius: 2;
+    color: #96A2D0;
+    opacity: 70%;
+}
+
+.vl {
+    border-left: 2px solid #7D8ED4;
+    height: 78vh;
+    float: right;
+    opacity: 60%;
+}
+
+.task-paper {
+    text-align: left;
+    margin-left: 3%;
+}

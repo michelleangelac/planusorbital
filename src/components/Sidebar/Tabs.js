@@ -34,7 +34,10 @@ function Tabs() {
           </li>
           <li className='profile-pic'>
             <Link to="#" className='profile'>
-              <Avatar sx={{ bgcolor: '#D0D4EB', width: 53, height: 53 }}>GG</Avatar>
+              <Avatar 
+                sx={{ width: 55, height: 55 }}
+                src='/broken-image.jpg'
+              />
             </Link>
           </li>
           <li className='profile-name'>

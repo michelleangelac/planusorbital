@@ -7,7 +7,7 @@ import PageSignUp from "./pages/PageSignUp";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import Schedules from "./pages/Schedules";
-import TodoList from "./pages/TodoList";
+import TodoList from "./pages/TodoList/TodoList";
 import Groups from "./pages/Groups";
 import Projects from "./pages/Projects";
 import Settings from "./pages/Settings";

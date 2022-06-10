@@ -1,37 +1,41 @@
 .background {
     position: relative;
-    z-index: 20;
+    background: #D0D4EB;
     height: 100vh;
-    background-color: #D0D4EB;
-}
-
-.side-icons {
-    position: relative;
-    z-index: 20;
-    height: 100vh;
-    width: 8%;
-    background-color: #fff;
 }
 
 .tasks-paper {
     position: absolute;
-    top: 10px;
-    left: 150px;
+    top: 1.5%;
+    left: 11%;
     background-color: #fdfdfd;
     box-shadow: inset;
 }
 
+.calendar {
+    position: absolute;
+    top: 3%;
+    left: 60%;
+}
+
 .todos-paper {
     position: absolute;
-    top: 100px;
-    left: 150px;
+    top: 17%;
+    left: 11%;
     background-color: #fdfdfd;
 }
 
 .events-paper {
     position: absolute;
-    top: 330px;
-    left: 150px;
+    top: 57%;
+    left: 11%;
+    background-color: #fdfdfd;
+}
+
+.projects-paper {
+    position: absolute;
+    top: 57%;
+    left: 55%;
     background-color: #fdfdfd;
 }
 
@@ -41,7 +45,7 @@
     border-style: inset; 
     border-width: 1px;
     opacity: 50%;
-    margin-top: 10px;
+    margin-top: 1.5%;
 }
 
 .tasks-text {
