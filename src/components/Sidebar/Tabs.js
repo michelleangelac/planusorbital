@@ -7,9 +7,14 @@ import { Link } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import "./Tabs.css";
 
-import { Avatar } from '@mui/material';
 import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { Avatar } from '@mui/material';
+<<<<<<< HEAD
+import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
+import { collection, query, where, getDocs } from "firebase/firestore";
+=======
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 
 async function getData() {
   var user = firebaseAuth.currentUser;
@@ -32,6 +37,10 @@ var getInitials = function (string) {
   return initials;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 function stringAvatar(fullname) {
   return {
     sx: {
@@ -79,8 +88,12 @@ function Tabs() {
                 sx={{ width: 55, height: 55 }}
                 src='/broken-image.jpg'
               /> */}
+<<<<<<< HEAD
               <Avatar 
                 {...stringAvatar(name)} />
+=======
+            <Avatar {...stringAvatar(name)} />
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
             </Link>
           </li>
           <li className='profile-name'>
