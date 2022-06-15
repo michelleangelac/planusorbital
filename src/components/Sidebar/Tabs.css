@@ -1,6 +1,5 @@
 .navbar {
-  background-color: white;
-  height: 80px;
+  background-color: #fdfdfd;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -11,14 +10,14 @@
   font-size: 2rem;
   background: none;
   position:absolute;
-  top: 15px;
-  left: 3px;
+  top: 3%;
+  left: 0.01%;
 }
 
 .nav-menu {
   background-color: white;
-  width: 250px;
-  height: 100vh;
+  width: 20%;
+  height: 100%;
   display: flex;
   justify-content: center;
   position: fixed;
@@ -34,9 +33,9 @@
 }
 
 .profile-pic {
-  display: flex;
-  justify-content: center;
+  justify-content: start;
   list-style: none;
+  margin-left: 35%;
 }
 
 .profile-pic a {
@@ -45,8 +44,8 @@
 
 .profile-name {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: start;
+  margin-left: 27%;
   list-style: none;
   font-size: 16px;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -56,10 +55,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 0px 8px 16px;
+  padding: 8px 0px 8px 4px;
   list-style: none;
-  height: 50px;
-  margin-top: 6px;
+  height: 9.5%;
+  margin-top: 0.2%;
 }
 
 .dashboard a {
@@ -72,20 +71,22 @@
   align-items: center;
   padding: 0 16px;
   border-radius: 4px;
+  margin-right: 10%;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .dashboard a:hover {
   background-color: #D0D4EB;
+  margin-right: 10%;
 }
 
 .icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 0px 8px 16px;
+  padding: 8px 0px 8px 4px;
   list-style: none;
-  height: 50px;
+  height: 9.5%;
 }
 
 .icon a {
@@ -98,11 +99,13 @@
   align-items: center;
   padding: 0 16px;
   border-radius: 4px;
+  margin-right: 10%;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .icon a:hover {
   background-color: #D0D4EB;
+  margin-right: 10%;
 }
 
 .nav-menu-items {
@@ -112,12 +115,12 @@
 .navbar-toggle {
   background-color: white;
   width: 100%;
-  height: 80px;
+  height: 12%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
 span {
-  margin-left: 16px;
+  margin-left: 10%;
 }
