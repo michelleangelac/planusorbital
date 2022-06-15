@@ -22,18 +22,23 @@ import BootstrapInput from "../components/BootstrapInput";
 //import ControlledCheckbox from "../components/ControlledCheckbox";
 import PageSignUp from "./PageSignUp";
 
-import { useAuth } from "../hooks/useAuth";
+import { firebaseAuth, useAuth, isNewUser, db } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { firebaseAuth } from "../hooks/useAuth";
+import { getAuth,   onAuthStateChanged, getAdditionalUserInfo } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 function PageLogin() {
-
-  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
   //Password visibility
   const [values, setValues] = React.useState({
+    username: "",
+    name: "",
+    email: "",
     password: "",
+    faculty: "",
     showPassword: false
   });
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
@@ -48,6 +53,40 @@ function PageLogin() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    signin(values.email, values.password);
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      console.log(user);
+      if (user) {
+        navigate("/dashboard");
+      } else {
+        navigate("#");
+      }
+    })
+  }
+
+  const generateUsername = require('generate-username-from-email');
+
+  const handleSubmitGoogle = async(event) => {
+    event.preventDefault();
+    const result = await signInWithGoogle();
+    const { isNewUser } = getAdditionalUserInfo(result);
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      console.log(isNewUser);
+      if (user) {
+        if (isNewUser) {
+          setDoc(doc(db, "profile", user.email), { username: generateUsername(user.email), name: user.displayName, email: user.email, password: values.password, faculty: values.faculty });
+        }
+        navigate("/dashboard");
+      } else {
+        navigate("#");
+      }
+    })
+  }
   
   const { signInWithGoogle } = useAuth();
   const { signin } = useAuth();
@@ -68,7 +107,7 @@ function PageLogin() {
             }
           />
         }
-        onClick={signInWithGoogle}
+        onClick={handleSubmitGoogle}
       >
         Continue with Google
       </Button>
@@ -81,7 +120,7 @@ function PageLogin() {
         <InputLabel shrink htmlFor="bootstrap-input">
           Email
         </InputLabel>
-        <BootstrapInput id="email-input" value={email} onChange={(e) => setEmail(e.target.value)}/>
+        <BootstrapInput id="email-input" value={values.email} onChange= { handleChange("email") } />
       </FormControl>
       <p> </p>
       <FormControl variant="standard" style={{ marginLeft: "33px" }}>
@@ -119,7 +158,7 @@ function PageLogin() {
         variant="contained"
         color="primary"
         fullWidth
-        onClick={() => signin(email, values.password)}
+        onClick={handleSubmit}
       >
         Login
       </Button>

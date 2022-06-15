@@ -17,7 +17,11 @@ import { useAuth } from "../hooks/useAuth";
 import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 
 function ResetPassword() {
-  const resetpassword = useAuth();
+  const [values, setValues] = React.useState({
+    email: ""
+  });
+
+  const { resetpassword } = useAuth();
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -40,21 +44,6 @@ function ResetPassword() {
     dynamicLinkDomain: 'example.page.link'
   };
 
-  const auth = getAuth();
-  sendSignInLinkToEmail(auth, email, actionCodeSettings)
-  .then(() => {
-    // The link was successfully sent. Inform the user.
-    // Save the email locally so you don't need to ask the user for it again
-    // if they open the link on the same device.
-    window.localStorage.setItem('emailForSignIn', email);
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // ...
-  });
-
   return (
     <>
       <h1>Reset Password</h1>
@@ -74,7 +63,7 @@ function ResetPassword() {
         variant="contained"
         color="primary"
         fullWidth
-        onClick={() => resetpassword(email)}
+        onClick={() => resetpassword(values.email)}
       >
         Continue
       </Button>

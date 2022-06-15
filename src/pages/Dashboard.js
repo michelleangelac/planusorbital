@@ -1,14 +1,29 @@
 import "./Dashboard.css"
 import Tabs from "../components/Sidebar/Tabs";
-
-import { firebaseAuth } from "../hooks/useAuth";
+import { db, firebaseAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { Box, Paper, Checkbox, FormControlLabel, Typography, FormGroup } from "@mui/material";
 import Calendar from 'short-react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { getDisplayName } from "@mui/utils";
+import React, {useState} from "react";  
+
+async function getName() {
+  var user = firebaseAuth.currentUser;
+  const q = query(collection(db, "profile"), where("email", "==", user.email));
+  try {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs[0].data();
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 function Dashboard() {
+  const [name, setName] = useState("");
+  var name2 = getName().then(userData => setName(userData.name)).catch(err => console.log(err));
+  
   var numOfObject = 0;
 
   function ReactCalendar() {
@@ -39,7 +54,7 @@ function Dashboard() {
           >
             <Paper className="tasks-paper" variant="outlined">
               <div className="tasks-text">
-                Hi Gwyneth,
+                Hi { name },
               </div>
               <div className="tasks-text2">
                 You have completed 3/5 of your tasks today.
