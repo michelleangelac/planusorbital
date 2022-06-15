@@ -1,6 +1,6 @@
 import { RssFeed } from "@mui/icons-material";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
 import React, { useState, useEffect, useContext, createContext } from "react";
 import { config as firebaseConfig } from "../config/firebase.js";
 import { getFirestore } from "firebase/firestore";
@@ -39,6 +39,7 @@ export const useAuth = () => {
 function useProvideAuth() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [isNewUser, setIsNewUser] = useState(false);
   // Wrap any Firebase methods we want to use making sure ...
   // ... to save the user to state.
   const signin = (email, password) => {
@@ -67,7 +68,7 @@ function useProvideAuth() {
     });
   };
 
-  const sendPasswordResetEmail = (email) => {
+  const resetpassword = (email) => {
     return sendPasswordResetEmail(firebaseAuth, email).then(() => {
       return true;
     });
@@ -106,10 +107,11 @@ function useProvideAuth() {
     db,
     user,
     firebaseAuth,
+    isNewUser,
     signin,
     signup,
     signout,
-    sendPasswordResetEmail,
+    resetpassword,
     confirmPasswordReset,
     signInWithGoogle
   };
