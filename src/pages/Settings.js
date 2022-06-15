@@ -7,6 +7,7 @@ function Settings() {
     <div>
       <Tabs/>
       <h1>Settings</h1>
+      <h2>Account</h2>
     </div>
   )
 }

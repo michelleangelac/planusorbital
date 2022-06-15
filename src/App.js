@@ -5,7 +5,7 @@ import { useAuth } from "./hooks/useAuth";
 import PageLogin from "./pages/PageLogin";
 import PageSignUp from "./pages/PageSignUp";
 import ResetPassword from "./pages/ResetPassword";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/Dashboard/Dashboard";
 import Schedules from "./pages/Schedules";
 import TodoList from "./pages/TodoList/TodoList";
 import Groups from "./pages/Groups";

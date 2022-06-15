@@ -8,7 +8,40 @@ import { IconContext } from 'react-icons';
 import "./Tabs.css";
 
 import { Avatar } from '@mui/material';
-import { useAuth } from "../../hooks/useAuth";
+import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
+import { collection, query, where, getDocs } from "firebase/firestore";
+
+async function getData() {
+  var user = firebaseAuth.currentUser;
+  const q = query(collection(db, "profile"), where("email", "==", user.email));
+  try {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs[0].data();
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+var getInitials = function (string) {
+  var names = string.split(' '),
+      initials = names[0].substring(0, 1).toUpperCase();
+  
+  if (names.length > 1) {
+      initials += names[names.length - 1].substring(0, 1).toUpperCase();
+  }
+  return initials;
+};
+
+function stringAvatar(fullname) {
+  return {
+    sx: {
+      bgcolor: '#D0D4EB',
+      width: 100,
+      height: 100,
+    },
+    children: getInitials(fullname),
+  };
+}
 
 function Tabs() {
   const [sidebar, setSidebar] = useState(false);
@@ -16,6 +49,14 @@ function Tabs() {
   const showSidebar = () => setSidebar(!sidebar);
 
   const { signout } = useAuth();
+
+  const [name, setName] = useState("");
+  var name3 = getData().then(userData => setName(userData.name)).catch(err => console.log(err));
+  // console.log({ name });
+
+  const [username, setUsername] = useState("");
+  var name2 = getData().then(userData => setUsername(userData.username)).catch(err => console.log(err));
+  // console.log(username);
 
   return (
     <>
@@ -34,14 +75,16 @@ function Tabs() {
           </li>
           <li className='profile-pic'>
             <Link to="#" className='profile'>
-              <Avatar 
+              {/* <Avatar 
                 sx={{ width: 55, height: 55 }}
                 src='/broken-image.jpg'
-              />
+              /> */}
+              <Avatar 
+                {...stringAvatar(name)} />
             </Link>
           </li>
           <li className='profile-name'>
-            <p>gwynethguo</p>
+            <p>{ username }</p>
           </li>
           <li className='dashboard'>
             <Link to='/dashboard'>

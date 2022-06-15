@@ -17,19 +17,12 @@ import { useAuth } from "../hooks/useAuth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db, firebaseAuth } from "../hooks/useAuth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 //* blm warna merah?
 
 function PageSignUp() {
-  const navigate = useNavigate(); 
-  var user = firebaseAuth.currentUser;
-
-  useEffect(() => {
-    if(user) {
-      navigate("/dashboard");
-    } else {
-    }
-  })
+  const navigate = useNavigate();
 
   //Password visibility
   const [values, setValues] = React.useState({
@@ -65,7 +58,8 @@ function PageSignUp() {
     event.preventDefault();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     if (values.password !== values.confirmPassword) {
         alert("Passwords don't match");
         navigate("/signup");
@@ -74,16 +68,18 @@ function PageSignUp() {
         navigate("/signup");
     } else {
         signup(values.email, values.confirmPassword);
-        var user = firebaseAuth.currentUser;
-        if (user) {
-          setDoc(doc(db, "profile", user?.uid), { username: values.username, name: values.name, email: values.email, password: values.password, faculty: values.faculty });
-          navigate("/dashboard"); 
-        }
-        else {
-          navigate("/signup");
-        }
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+          console.log(user);
+          if (user) {
+            setDoc(doc(db, "profile", values.email), { username: values.username, name: values.name, email: values.email, password: values.password, faculty: values.faculty });
+            navigate("/dashboard");
+          } else {
+            navigate("#");
+          }
+        })
+      }
     }
-}
 
   const { signup } = useAuth();
 
