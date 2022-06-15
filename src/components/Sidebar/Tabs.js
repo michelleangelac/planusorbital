@@ -44,6 +44,13 @@ function stringAvatar(fullname) {
   };
 }
 
+function profilePicture(link, name){
+  if(link) {
+    return <Avatar sx={{ width: 100, height: 100 }} src={ link } />;
+  }
+  return <Avatar {...stringAvatar(name)} />;
+}
+
 function Tabs() {
   const [sidebar, setSidebar] = useState(false);
 
@@ -58,6 +65,9 @@ function Tabs() {
   const [username, setUsername] = useState("");
   var name2 = getData().then(userData => setUsername(userData.username)).catch(err => console.log(err));
   // console.log(username);
+
+  const [profile, setProfile] = useState("");
+  var name1 = getData().then(userData => setProfile(userData.profile)).catch(err => console.log(err));
 
   return (
     <>
@@ -76,11 +86,7 @@ function Tabs() {
           </li>
           <li className='profile-pic'>
             <Link to="#" className='profile'>
-              {/* <Avatar 
-                sx={{ width: 55, height: 55 }}
-                src='/broken-image.jpg'
-              /> */}
-            <Avatar {...stringAvatar(name)} />
+              { profilePicture(profile, name) }
             </Link>
           </li>
           <li className='profile-name'>
