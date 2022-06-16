@@ -1,0 +1,91 @@
+.container-dsh {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 0.16fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 
+    "sidebar-dsh tasks schedules"
+    "sidebar-dsh events projects";
+}
+
+.sidebar-dsh {
+    grid-area: sidebar;
+}
+
+.tasks {
+    grid-area: tasks;
+    background: #D0D4EB;
+}
+
+.schedules {
+    grid-area: schedules;
+    background: #D0D4EB;
+}
+
+.events {
+    grid-area: events;
+    background: #D0D4EB;
+}
+
+.projects {
+    grid-area: projects;
+    background: #D0D4EB;
+}
+
+.hr { 
+    display: block; 
+    overflow: hidden; 
+    border-style: inset; 
+    border-width: 1px;
+    opacity: 50%;
+}
+
+.tasks-count {
+    margin: 1% 0 0 2%;
+}
+
+.left-papers {
+    margin-left: 2%;
+}
+
+.tasks-text {
+    text-align: left;
+    font-family: "Inter";
+    font-weight: 900;
+    font-size: 1.25em;
+    margin: 2% 0 0 3%;
+}
+
+.tasks-text2 {
+    text-align: left;
+    font-family: "Inter";
+    font-weight: 900;
+    margin: 0 0 2% 3%;
+}
+
+.paper-text {
+    text-align: left;
+    font-family: "Inter";
+    font-weight: 900;
+    font-size: 1.25em;
+    margin: 1% 0 1% 2%;
+}
+
+.paper-text2 {
+    text-align: left;
+    font-family: "Inter";
+    font-size: 1.15em;
+    margin: 0.75% 0 0.75% 3%;
+}
+
+.calendar-text {
+    font-size: 1.25em;
+    font-family: "Inter";
+    font-weight: 600;
+    text-align: center;
+    margin: 2% 10% 0 0;
+}
+
+.calendar-dsh {
+    margin-top: 1%;
+}

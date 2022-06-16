@@ -7,9 +7,9 @@
 
 .menu-bars {
   margin-left: 2rem;
-  font-size: 2rem;
+  font-size: 2.35em;
   background: none;
-  position:absolute;
+  position: absolute;
   top: 3%;
   left: 0.01%;
 }
@@ -33,7 +33,6 @@
 }
 
 .profile-pic {
-  justify-content: start;
   list-style: none;
   margin-left: 25%;
 }
@@ -44,8 +43,7 @@
 
 .profile-name {
   display: flex;
-  text-align: start;
-  margin-left: 27%;
+  text-align: center;
   list-style: none;
   font-size: 16px;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;

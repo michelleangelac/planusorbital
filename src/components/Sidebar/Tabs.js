@@ -10,6 +10,8 @@ import "./Tabs.css";
 import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { Avatar } from '@mui/material';
+import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 async function getData() {
   var user = firebaseAuth.currentUser;
@@ -31,7 +33,6 @@ var getInitials = function (string) {
   }
   return initials;
 };
-
 
 function stringAvatar(fullname) {
   return {
