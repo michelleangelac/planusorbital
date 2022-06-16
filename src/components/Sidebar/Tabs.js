@@ -11,8 +11,11 @@ import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { Avatar } from '@mui/material';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
 import { collection, query, where, getDocs } from "firebase/firestore";
+=======
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 =======
 >>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 
@@ -38,6 +41,10 @@ var getInitials = function (string) {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 =======
 
 >>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
@@ -89,8 +96,12 @@ function Tabs() {
                 src='/broken-image.jpg'
               /> */}
 <<<<<<< HEAD
+<<<<<<< HEAD
               <Avatar 
                 {...stringAvatar(name)} />
+=======
+            <Avatar {...stringAvatar(name)} />
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 =======
             <Avatar {...stringAvatar(name)} />
 >>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
