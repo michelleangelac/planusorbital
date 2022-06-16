@@ -24,7 +24,15 @@ import PageSignUp from "./PageSignUp";
 
 import { firebaseAuth, useAuth, isNewUser, db } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
+<<<<<<< HEAD
+import { getAuth, onAuthStateChanged, getAdditionalUserInfo } from "firebase/auth";
+=======
 import { getAuth,   onAuthStateChanged, getAdditionalUserInfo } from "firebase/auth";
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
+=======
+import { getAuth,   onAuthStateChanged, getAdditionalUserInfo } from "firebase/auth";
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 import { doc, setDoc } from "firebase/firestore";
 
 function PageLogin() {

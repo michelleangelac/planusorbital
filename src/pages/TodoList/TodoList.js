@@ -1,15 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import IconButton from '@mui/material/IconButton';
 import * as CgIcons from "react-icons/cg";
 import * as IoIcons from "react-icons/io";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 import Tabs from "../../components/Sidebar/Tabs";
 import Task from "./Task";
+import Popup from "../../components/Popup";
+
 import './TodoList.css';
 import "@fontsource/inter";
 
 function TodoList() {
+  const [isOpen, setIsOpen] = useState(false);
+ 
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  }
+
   return (
     <div className="container">
       <div className="sidebar">
@@ -27,7 +35,8 @@ function TodoList() {
         <Task />
         <Button 
           className="add-task"
-          startIcon={<IoIcons.IoIosAdd />}>
+          startIcon={<IoIcons.IoIosAdd />}
+          onClick={togglePopup}>
           Add task
         </Button>
       </div>
@@ -42,7 +51,8 @@ function TodoList() {
         </div>
         <Button 
           className="add-task"
-          startIcon={<IoIcons.IoIosAdd />}>
+          startIcon={<IoIcons.IoIosAdd />}
+          onClick={togglePopup}>
           Add task
         </Button>
       </div>
@@ -55,9 +65,44 @@ function TodoList() {
           </IconButton>
         </div>
         <Button className="add-task"
-          startIcon={<IoIcons.IoIosAdd />}>
+          startIcon={<IoIcons.IoIosAdd />}
+          onClick={togglePopup}>
           Add task
         </Button>
+        {isOpen && <Popup
+          content={
+            <>
+              <b style={{ fontSize: '1.5em' }}>Add a task</b>
+              <div>
+                <TextField 
+                  label="Name*"
+                  style={{ color: '#A9A9A9' }}
+                  variant="standard"/>
+              </div>
+              <div>
+                <TextField 
+                  label="Project"
+                  style={{ color: '#A9A9A9', marginTop: '3%' }}
+                  variant="standard"/>
+              </div>              
+              <div>
+                <TextField 
+                  label="Members"
+                  style={{ color: '#A9A9A9', marginTop: '3%' }}
+                  variant="standard"/>
+              </div>
+              <div>
+                <Button 
+                  variant="contained"
+                  fullWidth 
+                  style={{ marginTop: '7%', maxWidth: '75%', backgroundColor: '#A9A9A9' }}>
+                  Confirm
+                </Button>
+              </div>
+            </>
+          }
+          handleClose={togglePopup}
+        />}
       </div>
     </div>
   )

@@ -14,8 +14,7 @@ function Task() {
               display: 'flex',
               '& > :not(style)': {
                 m: 1,
-                width: '70%',
-                height: '2%',
+                width: '90%',
               },
             }}
             >

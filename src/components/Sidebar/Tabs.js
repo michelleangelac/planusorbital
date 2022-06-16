@@ -10,6 +10,14 @@ import "./Tabs.css";
 import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { Avatar } from '@mui/material';
+<<<<<<< HEAD
+<<<<<<< HEAD
+import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
+import { collection, query, where, getDocs } from "firebase/firestore";
+=======
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
+=======
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 
 async function getData() {
   var user = firebaseAuth.currentUser;
@@ -32,7 +40,14 @@ var getInitials = function (string) {
   return initials;
 };
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
 
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
+=======
+
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 function stringAvatar(fullname) {
   return {
     sx: {
@@ -80,7 +95,16 @@ function Tabs() {
                 sx={{ width: 55, height: 55 }}
                 src='/broken-image.jpg'
               /> */}
+<<<<<<< HEAD
+<<<<<<< HEAD
+              <Avatar 
+                {...stringAvatar(name)} />
+=======
             <Avatar {...stringAvatar(name)} />
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
+=======
+            <Avatar {...stringAvatar(name)} />
+>>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
             </Link>
           </li>
           <li className='profile-name'>
