@@ -10,14 +10,8 @@ import "./Tabs.css";
 import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { Avatar } from '@mui/material';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
 import { collection, query, where, getDocs } from "firebase/firestore";
-=======
->>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
-=======
->>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 
 async function getData() {
   var user = firebaseAuth.currentUser;
@@ -40,14 +34,6 @@ var getInitials = function (string) {
   return initials;
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
-=======
-
->>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
 function stringAvatar(fullname) {
   return {
     sx: {
@@ -57,6 +43,13 @@ function stringAvatar(fullname) {
     },
     children: getInitials(fullname),
   };
+}
+
+function profilePicture(link, name){
+  if(link) {
+    return <Avatar sx={{ width: 100, height: 100 }} src={ link } />;
+  }
+  return <Avatar {...stringAvatar(name)} />;
 }
 
 function Tabs() {
@@ -73,6 +66,9 @@ function Tabs() {
   const [username, setUsername] = useState("");
   var name2 = getData().then(userData => setUsername(userData.username)).catch(err => console.log(err));
   // console.log(username);
+
+  const [profile, setProfile] = useState("");
+  var name1 = getData().then(userData => setProfile(userData.profile)).catch(err => console.log(err));
 
   return (
     <>
@@ -91,20 +87,7 @@ function Tabs() {
           </li>
           <li className='profile-pic'>
             <Link to="#" className='profile'>
-              {/* <Avatar 
-                sx={{ width: 55, height: 55 }}
-                src='/broken-image.jpg'
-              /> */}
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <Avatar 
-                {...stringAvatar(name)} />
-=======
-            <Avatar {...stringAvatar(name)} />
->>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
-=======
-            <Avatar {...stringAvatar(name)} />
->>>>>>> 6f27fbeb0f7b5092ea29e3d915651e37894f3505
+              { profilePicture(profile, name) }
             </Link>
           </li>
           <li className='profile-name'>

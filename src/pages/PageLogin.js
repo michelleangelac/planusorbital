@@ -82,12 +82,12 @@ function PageLogin() {
     event.preventDefault();
     const result = await signInWithGoogle();
     const { isNewUser } = getAdditionalUserInfo(result);
+    var profilePic = getAdditionalUserInfo(result).profile.picture;
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-      console.log(isNewUser);
       if (user) {
         if (isNewUser) {
-          setDoc(doc(db, "profile", user.email), { username: generateUsername(user.email), name: user.displayName, email: user.email, password: values.password, faculty: values.faculty });
+          setDoc(doc(db, "profile", user.email), { username: generateUsername(user.email), name: user.displayName, email: user.email, password: values.password, faculty: values.faculty , profile: profilePic });
         }
         navigate("/dashboard");
       } else {
