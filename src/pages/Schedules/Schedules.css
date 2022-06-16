@@ -2,7 +2,7 @@
     display: grid;
     height: 100vh;
     grid-template-columns: 0.17fr 1.2fr 0.8fr;
-    grid-template-rows: 0.2fr 1fr 0.4fr;
+    grid-template-rows: 0.3fr 1fr 0.4fr;
     grid-template-areas: 
     "sidebar-sch navbar-sch navbar-sch"
     "sidebar-sch calendar-sch popup-sch"
@@ -33,20 +33,7 @@
     background: #D0D4EB;
 }
 
-.monthly-btn, .weekly-btn, .daily-btn {
-    margin-top: 1.5%;
-}
-
-.monthly-btn {
-    border-radius: 12px 0px 0px 12px;
-}
-
-.weekly-btn {
-    border-radius: 0 0 0 0;
-}
-
 .daily-btn, .daily-text {
-    border-radius: 12px 0px 0px 12px;
     transform: scaleX(-1);
     font-size: 0.99em;
 }

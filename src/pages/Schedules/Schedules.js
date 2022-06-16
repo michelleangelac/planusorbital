@@ -2,16 +2,27 @@ import React from "react";
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import { Avatar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import * as AiIcons from "react-icons/ai";
 import * as BiIcons from "react-icons/bi";
 
-import RCalendar from "../components/Calendar";
-import Tabs from "../components/Sidebar/Tabs";
+import RCalendar from "../../components/Calendar";
+import Tabs from "../../components/Sidebar/Tabs";
 
 import "./Schedules.css";
 import "@fontsource/inter";
 
 function Schedules() {
+  const navigate = useNavigate(); 
+  const navigateWeekly = () => { 
+    let path = '/sch-weekly'; 
+    navigate(path);
+  }
+  const navigateDaily = () => { 
+    let path = '/sch-daily'; 
+    navigate(path);
+  }
+
   const BootstrapButton = styled(Button)({
     boxShadow: 'none',
     textTransform: 'none',
@@ -43,13 +54,27 @@ function Schedules() {
         </div>*/}
       </div>
       <div className="navbar-sch">
-        <BootstrapButton className="monthly-btn" variant="contained" disableRipple>
+        <BootstrapButton 
+          className="monthly-btn" 
+          variant="contained" 
+          style={{ marginTop: '1.5%', borderRadius: '12px 0 0 12px' }}
+          disableRipple>
           Monthly
         </BootstrapButton>
-        <BootstrapButton className="weekly-btn" variant="contained" disableRipple>
+        <BootstrapButton 
+          className="weekly-btn" 
+          variant="contained" 
+          style={{ marginTop: '1.5%', borderRadius: '0 0 0 0' }}
+          onClick={ navigateWeekly }
+          disableRipple>
           Weekly
         </BootstrapButton>
-        <BootstrapButton className="daily-btn" variant="contained" disableRipple>
+        <BootstrapButton 
+        className="daily-btn" 
+        variant="contained" 
+        style={{ marginTop: '1.5%', borderRadius: '12px 0 0 12px' }}
+        onClick={ navigateDaily }
+        disableRipple>
           <div className="daily-text">
             Daily
           </div>

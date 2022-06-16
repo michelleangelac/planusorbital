@@ -1,0 +1,110 @@
+.container-set {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 0.17fr 1fr 1fr;
+    grid-template-rows: 0.2fr 0.3fr 0.5fr 1fr 0.6fr;
+    grid-template-areas: 
+    "sidebar-set title-set title-set"
+    "sidebar-set navbar-set navbar-set"
+    "sidebar-set profilepic-set profilepic-set"
+    "sidebar-set content-set content2-set"
+    "sidebar-set save-btn save-btn";
+}
+
+.sidebar-set {
+    grid-area: sidebar-set;
+}
+
+.title-set {
+    grid-area: title-set;
+    background: #D0D4EB;
+    font-size: 2em;
+    font-weight: 600;
+    font-family: "Inter";
+    text-align: left;
+    padding: 1% 0 0 3%;
+}
+
+.navbar-set {
+    grid-area: navbar-set;
+    background: #D0D4EB;
+    font-size: 1.2em;
+    font-weight: 600;
+    font-family: "Inter";
+}
+
+.profilepic-set {
+    grid-area: profilepic-set;
+    background: #D0D4EB;
+}
+
+.content-set {
+    grid-area: content-set;
+    background: #D0D4EB;
+    padding-left: 30%;
+}
+
+.content2-set {
+    grid-area: content2-set;
+    background: #D0D4EB;
+    padding-right: 30%;
+}
+
+.save-btn {
+    grid-area: save-btn;
+    background: #D0D4EB;
+}
+
+.picture-set {
+    margin: auto;
+    width: 20vh;
+    height: 20vh;
+}
+
+.changepic-btn {
+    position: relative;
+    bottom: 25%;
+    left: 3.5%;
+    border-radius: 50%;
+    background-color: #5062AD;
+    width: 7vh;
+    height: 7vh;
+}
+
+.popup-box {
+    position: fixed;
+    background: #00000080;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+  
+.box {
+    position: relative;
+    width: 25%;
+    margin: auto;
+    height: auto;
+    max-height: 70vh;
+    margin-top: calc(100vh - 65vh - 20px);
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #999;
+    overflow: auto;
+}
+  
+.close-icon {
+    content: 'x';
+    cursor: pointer;
+    position: fixed;
+    right: 38%;
+    top: 33%;
+    background: #fff;
+    border-radius: 2px;
+    width: 25px;
+    height: 25px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 24px;
+}
