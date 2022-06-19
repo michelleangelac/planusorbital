@@ -12,7 +12,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "light" ? "#fcfcfb" : "#2b2b2b",
     border: "1px solid #645C5C",
     fontSize: 16,
-    width: "50vh",
+    maxWidth: '70vh',
     padding: "10px 12px",
     transition: theme.transitions.create([
       "border-color",

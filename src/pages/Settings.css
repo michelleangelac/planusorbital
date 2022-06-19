@@ -55,18 +55,11 @@
     background: #D0D4EB;
 }
 
-.picture-set {
-    margin: auto;
-    width: 20vh;
-    height: 20vh;
-}
-
 .changepic-btn {
     position: relative;
     bottom: 25%;
     left: 3.5%;
     border-radius: 50%;
-    background-color: #5062AD;
     width: 7vh;
     height: 7vh;
 }

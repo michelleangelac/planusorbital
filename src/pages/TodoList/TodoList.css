@@ -92,20 +92,22 @@
     height: 100vh;
     top: 0;
     left: 0;
+    z-index: 20;
 }
   
 .box {
     position: relative;
-    width: 25%;
+    width: 70vh;    
     margin: auto;
     height: auto;
     max-height: 70vh;
-    margin-top: calc(100vh - 65vh - 20px);
+    margin-top: 35vh;
     background: #fff;
     border-radius: 12px;
     padding: 20px;
     border: 1px solid #999;
     overflow: auto;
+    z-index: 20;
 }
   
 .close-icon {
@@ -121,4 +123,5 @@
     line-height: 20px;
     text-align: center;
     font-size: 24px;
+    z-index: 20;
 }

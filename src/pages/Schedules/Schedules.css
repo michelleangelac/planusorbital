@@ -1,21 +1,25 @@
 .container-sch {
     display: grid;
     height: 100vh;
-    grid-template-columns: 0.17fr 1.2fr 0.8fr;
-    grid-template-rows: 0.3fr 1fr 0.4fr;
+    grid-template-columns: 0.085fr 1fr;
+    grid-template-rows: 0.2fr 1fr 0.3fr;
     grid-template-areas: 
-    "sidebar-sch navbar-sch navbar-sch"
-    "sidebar-sch calendar-sch popup-sch"
-    "sidebar-sch nusmods-btn nusmods-btn";
+    "sidebar-sch title-sch"
+    "sidebar-sch calendar-sch"
+    "sidebar-sch nusmods-btn";
 }
 
 .sidebar-sch {
     grid-area: sidebar-sch;
 }
 
-.navbar-sch {
-    grid-area: navbar-sch;
+.title-sch {
+    grid-area: title-sch;
     background: #D0D4EB;
+    padding: 1% 0 2% 0;
+    font-size: 2em;
+    font-weight: 600;
+    font-family: "Inter";
 }
 
 .calendar-sch {
@@ -23,21 +27,7 @@
     background: #D0D4EB;
 }
 
-.popup-sch {
-    grid-area: popup-sch;
-    background: #D0D4EB;
-}
-
 .nusmods-btn {
     grid-area: nusmods-btn;
     background: #D0D4EB;
-}
-
-.daily-btn, .daily-text {
-    transform: scaleX(-1);
-    font-size: 0.99em;
-}
-
-.daily-text {
-    display: inline-block;
 }

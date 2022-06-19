@@ -28,8 +28,12 @@ function Settings() {
       <div className="title-set">Settings</div>
       <div className="navbar-set">Account</div>
       <div className="profilepic-set">
-        <Avatar className="picture-set"/>
-        <IconButton className="changepic-btn" onClick={togglePicturePopup} disableRipple>
+        <Avatar style={{ margin: 'auto', width: '20vh', height: '20vh' }}/>
+        <IconButton 
+          className="changepic-btn"
+          style={{ backgroundColor: '#5062AD' }} 
+          onClick={togglePicturePopup} 
+          disableRipple>
           <IoIcons.IoIosCamera/>
         </IconButton>
       </div>
@@ -39,7 +43,7 @@ function Settings() {
             <InputLabel shrink htmlFor="label-set">
               Username
             </InputLabel>
-            <BootstrapInput id="textbox-set"/>
+            <BootstrapInput id="textbox-set" style={{ width: '60vh' }}/>
           </FormControl>
         </div>
         <div>
@@ -47,7 +51,7 @@ function Settings() {
             <InputLabel shrink htmlFor="label-set">
               Full Name
             </InputLabel>
-            <BootstrapInput id="textbox-set"/>
+            <BootstrapInput id="textbox-set" style={{ width: '60vh' }}/>
           </FormControl>
           </div>
       </div>
@@ -57,7 +61,7 @@ function Settings() {
             <InputLabel shrink htmlFor="label-set">
               Email Address
             </InputLabel>
-            <BootstrapInput id="textbox-set"/>
+            <BootstrapInput id="textbox-set" style={{ width: '60vh' }}/>
           </FormControl>
         </div>
         <div>
@@ -65,7 +69,7 @@ function Settings() {
             <InputLabel shrink htmlFor="label-set">
               Faculty
             </InputLabel>
-            <BootstrapInput id="textbox-set"/>
+            <BootstrapInput id="textbox-set" style={{ width: '60vh' }}/>
           </FormControl>
           </div>
       </div>
@@ -73,16 +77,16 @@ function Settings() {
         <div>
           <Button 
             variant="contained" 
-            style={{ backgroundColor: '#5062AD', width: '50vh' }}
-            onClick={togglePasswordPopup}>
-            Change Password
+            style={{ backgroundColor: '#5062AD', width: '43vh' }}>
+            Save Changes
           </Button>
         </div>
         <div>
           <Button 
             variant="contained" 
-            style={{ backgroundColor: '#5062AD', width: '50vh', marginTop: '2%' }}>
-            Save Changes
+            style={{ backgroundColor: '#5062AD', width: '43vh', marginTop: '1.5%' }}
+            onClick={togglePasswordPopup}>
+            Change Password
           </Button>
         </div>
         {/*Picture popup */}
