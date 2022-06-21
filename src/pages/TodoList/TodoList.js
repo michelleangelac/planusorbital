@@ -16,8 +16,7 @@ import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc } from "
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
 
-async function getTasks() {
-  var user = firebaseAuth.currentUser;
+async function getTasks(user) {
   //console.log(user.email);
   const q = query(collection(db, "tasks"), where("user", "==", user.email));
   try {
@@ -28,14 +27,10 @@ async function getTasks() {
   }
 }
 
-function displayTasks(tasks) {
-  return tasks.map(x => Task(x));
-}
-
 function TodoList() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
+  const [tasks, setTasks] = useState([]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -54,21 +49,17 @@ function TodoList() {
     //console.log(user);
     addDoc(collection(db, "tasks"), { user: user.email, name: values.name, project: values.project, members: values.members});
     //useEffect();
-    setTasks([]);
-    getTasks().then(userData => userData.forEach(x => setTasks(prev => [...prev, x.data().name]))).catch(err => console.log(err));
   }
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const [tasks, setTasks] = useState([]);
-
   useEffect(() => {
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
         setTasks([]);
-        getTasks().then(userData => userData.forEach(x => setTasks(prev => [...prev, x.data().name]))).catch(err => console.log(err));
+        getTasks(user).then(userData => userData.forEach(x => setTasks(prev => [...prev, x.data().name]))).catch(err => console.log(err));
       } else {
         navigate("/login");
       }
@@ -91,7 +82,7 @@ function TodoList() {
           </IconButton>
           <div className="vl"></div>
         </div>
-        { displayTasks(tasks) }
+        { tasks.map(x => <Task name={ x } />) }
         <Button 
           className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
