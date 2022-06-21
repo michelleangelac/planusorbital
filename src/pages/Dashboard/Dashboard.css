@@ -2,14 +2,14 @@
     display: grid;
     height: 100vh;
     grid-template-columns: 0.16fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 0.7fr;
     grid-template-areas: 
     "sidebar-dsh tasks schedules"
-    "sidebar-dsh events projects";
+    "sidebar-dsh projects schedules";
 }
 
 .sidebar-dsh {
-    grid-area: sidebar;
+    grid-area: sidebar-dsh;
 }
 
 .tasks {
@@ -17,18 +17,13 @@
     background: #D0D4EB;
 }
 
-.schedules {
-    grid-area: schedules;
-    background: #D0D4EB;
-}
-
-.events {
-    grid-area: events;
-    background: #D0D4EB;
-}
-
 .projects {
     grid-area: projects;
+    background: #D0D4EB;
+}
+
+.schedules {
+    grid-area: schedules;
     background: #D0D4EB;
 }
 
@@ -41,11 +36,11 @@
 }
 
 .tasks-count {
-    margin: 1% 0 0 2%;
+    margin: 1% 0 0 5%;
 }
 
 .left-papers {
-    margin-left: 2%;
+    margin-left: 5%;
 }
 
 .tasks-text {
@@ -79,13 +74,13 @@
 }
 
 .calendar-text {
-    font-size: 1.25em;
+    font-size: 1.5em;
     font-family: "Inter";
     font-weight: 600;
     text-align: center;
-    margin: 2% 10% 0 0;
+    margin: 2% 10% 2% 0;
 }
 
 .calendar-dsh {
-    margin-top: 1%;
+    margin: 1% 6% 0 0;
 }
