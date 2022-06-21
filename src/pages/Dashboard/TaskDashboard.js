@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Paper } from "@mui/material";
-import "./Dashboard.css"
 
 export default function TaskDb() {
     var taskName = 'Learn Java'
@@ -23,7 +22,7 @@ export default function TaskDb() {
               '& > :not(style)': {
                 m: 1,
                 width: '90%',
-                height: '38vh'
+                height: 'auto'
               },
             }}
           >
@@ -46,17 +45,16 @@ export default function TaskDb() {
                     marginRight: '4%'
                 }}
                 >
-                    <div>
-                        {taskStatus}
-                    </div>
+                  <div>
+                      {taskStatus}
+                  </div>
                 </Box>
               </div>
-              <div className="hr"></div>
 
+              <div className="hr"></div>
               <div className="paper-text2">
                 Watch A Business Proposal
               </div>
-              <div className="hr"></div>
             </Paper>
           </Box>
         </>

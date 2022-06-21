@@ -5,8 +5,8 @@ import { Avatar } from "@mui/material";
 import * as AiIcons from "react-icons/ai";
 import * as BiIcons from "react-icons/bi";
 
-import RCalendar from "../components/Calendar";
-import Tabs from "../components/Sidebar/Tabs";
+import Tabs from "../../components/Sidebar/Tabs";
+import BigCalendar from "./Calendar";
 
 import "./Schedules.css";
 import "@fontsource/inter";
@@ -15,8 +15,9 @@ function Schedules() {
   const BootstrapButton = styled(Button)({
     boxShadow: 'none',
     textTransform: 'none',
-    fontSize: '1em',
-    lineHeight: 1.5,
+    fontSize: '1.2em',
+    width: '70vh',
+    margin: '3% 0 3% 0',
     backgroundColor: '#8E99CD',
     fontWeight: '600',
     fontFamily: [
@@ -42,27 +43,12 @@ function Schedules() {
           <AiIcons.AiOutlineHome/>
         </div>*/}
       </div>
-      <div className="navbar-sch">
-        <BootstrapButton className="monthly-btn" variant="contained" disableRipple>
-          Monthly
-        </BootstrapButton>
-        <BootstrapButton className="weekly-btn" variant="contained" disableRipple>
-          Weekly
-        </BootstrapButton>
-        <BootstrapButton className="daily-btn" variant="contained" disableRipple>
-          <div className="daily-text">
-            Daily
-          </div>
-        </BootstrapButton>
-      </div>
+      <div className="title-sch">Schedules</div>
       <div className="calendar-sch">
-        <RCalendar/>
-      </div>
-      <div className="popup-sch">
-        <h1>Popup</h1>
+        <BigCalendar/>
       </div>
       <div className="nusmods-btn">
-        <Button 
+        <BootstrapButton 
           variant="contained"
           style={{ backgroundColor: '#5062AD' }}
           startIcon={
@@ -74,7 +60,7 @@ function Schedules() {
           }
         >
           Import Schedules from NUSMods
-        </Button>
+        </BootstrapButton>
       </div>
     </div>
   )

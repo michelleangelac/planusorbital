@@ -1,20 +1,14 @@
 import * as React from "react";
 import { Button, Typography } from "@material-ui/core";
-//import TextField from "@mui/material/TextField";
-//import { alpha, styled } from "@mui/material/styles";
-//import InputBase from "@mui/material/InputBase";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
+import './PageLogin.css';
+import "@fontsource/inter";
 import BootstrapInput from "../components/BootstrapInput";
 
 import { useAuth } from "../hooks/useAuth";
-import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
+//import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 
 function ResetPassword() {
   const [values, setValues] = React.useState({
@@ -45,29 +39,41 @@ function ResetPassword() {
   };
 
   return (
-    <>
-      <h1>Reset Password</h1>
-      <p>
-        Enter the email address associated with your account
-        and we'll send you a link to reset your password
-      </p>
-      <FormControl variant="standard">
-        <InputLabel shrink htmlFor="email-input">
-          Email Address
-        </InputLabel>
-        <BootstrapInput id="email-bootstrap" value={values.email} onChange={handleChange("email")}/>
-      </FormControl>
-      <p> </p>
-      <Button
-        style={{ maxWidth: "220px", fontSize: 14 }}
-        variant="contained"
-        color="primary"
-        fullWidth
-        onClick={() => resetpassword(values.email)}
-      >
-        Continue
-      </Button>
-    </>
+    <div className="container-log">
+      <div className="blue-bg"></div>
+      <div className="content-log">
+        <div className="title-rp">Reset Password</div>
+        <div style={{ fontSize: '0.9em', fontFamily: "Inter" }}>
+          Enter the email address associated with your account
+        </div>
+        <div style={{ fontSize: '0.9em', fontFamily: "Inter", margin: '1% 0 6% 0' }}>
+          and we'll send you a link to reset your password
+        </div>
+        <FormControl variant="standard" style={{ marginBottom: '7%' }}>
+          <InputLabel shrink htmlFor="email-input">
+            Email Address
+          </InputLabel>
+          <BootstrapInput 
+            id="email-bootstrap" 
+            style={{ width: '45vh' }}
+            value={values.email} 
+            onChange={handleChange("email")}/>
+        </FormControl>
+        <Button
+          style={{ 
+            width: '50vh', 
+            lineHeight: 2, 
+            fontSize: '1em', 
+            backgroundColor: "#5062AD",
+            color: '#FFFFFF' 
+          }}
+          variant="contained"
+          onClick={() => resetpassword(values.email)}
+        >
+          Continue
+        </Button>
+      </div>
+    </div>
   );
 }
 
