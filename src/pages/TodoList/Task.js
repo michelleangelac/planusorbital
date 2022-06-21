@@ -6,7 +6,7 @@ import TodoList from "./TodoList";
 
 import './TodoList.css';
 
-function Task() {
+function Task(name) {
     return (
         <div className="task-paper">
             <Box
@@ -23,7 +23,7 @@ function Task() {
                         <IconButton style={{ color: 'black' }}>
                             <GiIcons.GiCircle style={{ fontSize: '80%' }} />
                         </IconButton>
-                        Watch A Business Proposal
+                        { name }
                     </div>
                 </Paper>
             </Box>
