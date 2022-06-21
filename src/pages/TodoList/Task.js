@@ -7,14 +7,14 @@ import { Paper, IconButton, Button, TextField, Select, MenuItem, FormControl, Sl
 import Popup from "../../components/Popup";
 import './TodoList.css';
 
-function Task(name) {
+function Task(props) {
     const [isOpen, setIsOpen] = useState(false);
  
     const togglePopup = () => {
       setIsOpen(!isOpen);
     }
 
-    const [status, setStatus] = React.useState('');
+    const [status, setStatus] = useState('');
 
     const handleChange = (event) => {
       setStatus(event.target.value);
@@ -36,7 +36,7 @@ function Task(name) {
                         <IconButton onClick={togglePopup} style={{ color: 'black' }}>
                             <GiIcons.GiCircle style={{ fontSize: '80%' }} />
                         </IconButton>
-                        { name }
+                        { props.name }
                         {isOpen && <Popup
                             content={
                                 <>
