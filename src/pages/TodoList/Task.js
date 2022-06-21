@@ -7,7 +7,7 @@ import { Paper, IconButton, Button, TextField, Select, MenuItem, FormControl, Sl
 import Popup from "../../components/Popup";
 import './TodoList.css';
 
-function Task() {
+function Task(name) {
     const [isOpen, setIsOpen] = useState(false);
  
     const togglePopup = () => {
@@ -19,7 +19,7 @@ function Task() {
     const handleChange = (event) => {
       setStatus(event.target.value);
     };
-    
+  
     return (
         <div className="task-paper">
             <Box
@@ -36,7 +36,7 @@ function Task() {
                         <IconButton onClick={togglePopup} style={{ color: 'black' }}>
                             <GiIcons.GiCircle style={{ fontSize: '80%' }} />
                         </IconButton>
-                        Watch A Business Proposal
+                        { name }
                         {isOpen && <Popup
                             content={
                                 <>
