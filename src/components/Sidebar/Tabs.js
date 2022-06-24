@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 import { IconContext } from 'react-icons';
 import "./Tabs.css";
 
-import { db, useAuth, firebaseAuth } from "../../hooks/useAuth";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import { Avatar } from '@mui/material';
+import { db, useAuth, firebaseAuth } from '../../hooks/useAuth'; 
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 async function getData() {
   var user = firebaseAuth.currentUser;

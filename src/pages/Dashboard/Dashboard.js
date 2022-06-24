@@ -8,7 +8,7 @@ import ProjectDb from "./ProjectDb";
 import NoProject from "./NoProject";
 
 import Tabs from "../../components/Sidebar/Tabs";
-import ReactCalendar from "../../components/CalendarWeekly";
+import AgendaCalendar from "./Calendar";
 import { db, firebaseAuth } from "../../hooks/useAuth";
 
 import { useNavigate } from "react-router-dom";
@@ -65,17 +65,19 @@ function Dashboard() {
         </div>
         <div className="left-papers">
           <NoTask/>
+          {/*<TaskDb/>*/}
         </div>
       </div>
       <div className="projects">
         <div className="left-papers">
           <NoProject/>
+          {/*<ProjectDb/>*/}
         </div>
       </div>
       <div className="schedules">
-        <div className="calendar-text">Weekly Schedule</div>
+        <div className="calendar-text">Monthly Schedule</div>
         <div className="calendar-dsh">
-          <ReactCalendar/>
+          <AgendaCalendar/>
         </div>
       </div>
     </div>

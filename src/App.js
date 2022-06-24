@@ -27,7 +27,7 @@ export default function App() {
         <Route path='/resetpassword' element={<PublicRoute><ResetPassword /></PublicRoute>}></Route>
         <Route path='/dashboard' element={<ProtectedRoute><Dashboard /></ProtectedRoute>}></Route>
         <Route path='/schedules' element={<Schedules/>}></Route>
-        <Route path='/todolist' element={<TodoList/>}></Route>
+        <Route path='/todolist' element={<ProtectedRoute><TodoList /></ProtectedRoute>}></Route>
         <Route path='/groups' element={<Groups/>}></Route>
         <Route path='/projects' element={<Projects/>}></Route>
         <Route path='/settings' element={<Settings/>}></Route>
