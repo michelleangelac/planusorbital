@@ -39,7 +39,7 @@ function TodoList() {
     project: "",
     members: [],
   });
- 
+
   function togglePopup() {
     setIsOpen(!isOpen);
   }
@@ -149,10 +149,9 @@ function TodoList() {
               </div>
               <div>
                 <Button 
-                  variant="contained"
-                  fullWidth 
+                  variant="contained" 
                   onClick={handleConfirm}
-                  style={{ marginTop: '7%', maxWidth: '75%', backgroundColor: '#A9A9A9' }}>
+                  style={{ marginTop: '7%', width: '75%', backgroundColor: '#000000' }}>
                   Confirm
                 </Button>
               </div>

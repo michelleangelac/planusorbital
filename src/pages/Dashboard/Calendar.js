@@ -11,7 +11,7 @@ const events = [{ start: new Date(), end: new Date(), title: "special event" }];
 
 const DnDCalendar = withDragAndDrop(Calendar);
 
-function BigCalendar() {
+function AgendaCalendar() {
   const state = { events };
 
   const onEventResize = (data) => {
@@ -31,16 +31,17 @@ function BigCalendar() {
     <div className="App">
       <DnDCalendar
         defaultDate={moment().toDate()}
-        defaultView="month"
         events={state.events}
         localizer={localizer}
         onEventDrop={onEventDrop}
         onEventResize={onEventResize}
         resizable
         style={{ height: '60vh' }}
+        view='agenda' 
+        views={['agenda']}
       />
     </div>
   );
 }
 
-export default BigCalendar;
+export default AgendaCalendar;

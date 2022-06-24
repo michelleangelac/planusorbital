@@ -1,5 +1,6 @@
 import React from "react";
-import * as GiIcons from "react-icons/gi";
+import * as FaIcons from "react-icons/fa";
+import * as MdIcons from "react-icons/md";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import { Paper, IconButton, Button, TextField, Select, MenuItem, FormControl, Slider } from "@mui/material";
@@ -8,10 +9,16 @@ import Popup from "../../components/Popup";
 import './TodoList.css';
 
 function Task(props) {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isModifyOpen, setIsModifyOpen] = useState(false);
  
-    const togglePopup = () => {
-      setIsOpen(!isOpen);
+    const toggleModifyPopup = () => {
+      setIsModifyOpen(!isModifyOpen);
+    }
+
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+ 
+    const toggleDeletePopup = () => {
+      setIsDeleteOpen(!isDeleteOpen);
     }
 
     const [status, setStatus] = useState('');
@@ -32,12 +39,16 @@ function Task(props) {
             }}
             >
                 <Paper variant="outlined">
-                    <div className="task-name">
-                        <IconButton onClick={togglePopup} style={{ color: 'black' }}>
-                            <GiIcons.GiCircle style={{ fontSize: '80%' }} />
+                    <div className="task-name" style={{ marginLeft: '5%' }}>
+                        { props.name }
+                        <IconButton onClick={toggleModifyPopup} style={{ color: 'black', marginLeft: '18%' }}>
+                            <FaIcons.FaRegEdit style={{ fontSize: '80%', opacity: '75%' }} />
+                        </IconButton>
+                        <IconButton onClick={toggleDeletePopup} style={{ color: 'black' }}>
+                            <MdIcons.MdOutlineDelete style={{ fontSize: '90%', opacity: '75%' }} />
                         </IconButton>
                         { props.name }
-                        {isOpen && <Popup
+                        {isModifyOpen && <Popup
                             content={
                                 <>
                                     <b style={{ fontSize: '1.6em', marginLeft: '25%' }}>Modify a task</b>
@@ -132,8 +143,30 @@ function Task(props) {
                                     </div>
                                 </>
                             }
-                            handleClose={togglePopup}
+                            handleClose={toggleModifyPopup}
                         />}
+                        {isDeleteOpen && <Popup
+                            content={
+                                <>
+                                    <b style={{ fontSize: '1.6em', marginLeft: '25%' }}>Delete a task</b>
+                                    <div style={{ textAlign: 'center', marginTop: '3%' }}>Are you sure you want to delete this task?</div>
+                                    <div>
+                                        <Button 
+                                        variant="contained"
+                                        onClick={toggleDeletePopup}
+                                        style={{ margin: '7% 0 0 15%', backgroundColor: '#A9A9A9', borderRadius: '2px' }}>
+                                        Cancel
+                                        </Button>
+                                        <Button 
+                                        variant="contained"
+                                        style={{ margin: '7% 0 0 5%', backgroundColor: '#E2534A', borderRadius: '2px' }}>
+                                        Delete
+                                        </Button>                                        
+                                    </div>
+                                </>
+                            }
+                            handleClose={toggleDeletePopup}
+                        />}                    
                     </div>
                 </Paper>
             </Box>
