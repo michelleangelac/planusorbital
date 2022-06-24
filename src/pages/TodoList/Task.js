@@ -129,6 +129,12 @@ function Task(props) {
                                         style={{ marginTop: '7%', width: '95%', backgroundColor: '#A9A9A9' }}>
                                         Confirm
                                         </Button>
+
+                                        <Button 
+                                        variant="contained"
+                                        style={{ marginTop: '7%', width: '95%', backgroundColor: '#FF0000' }}>
+                                        Delete
+                                        </Button>
                                     </div>
                                 </>
                             }

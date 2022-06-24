@@ -15,10 +15,17 @@ import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
 import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
+import { SettingsSystemDaydreamRounded } from "@mui/icons-material";
 
-async function getTasks(user) {
+const initialState = {
+  name: "",
+  project: "",
+  members: []
+}
+
+async function getTasks(user, status) {
   //console.log(user.email);
-  const q = query(collection(db, "tasks"), where("user", "==", user.email));
+  const q = query(collection(db, "tasks"), where("user", "==", user.email), where("status", "==", status));
   try {
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs;
@@ -32,23 +39,34 @@ function TodoList() {
 
   const [tasks, setTasks] = useState([]);
 
+  const [tasks2, setTasks2] = useState([]);
+
+  const [tasks3, setTasks3] = useState([]);
+
   const [isOpen, setIsOpen] = useState(false);
 
-  const [values, setValues] = React.useState({
-    name: "",
-    project: "",
-    members: [],
-  });
+  const [status, setStatus] = useState("Not Started");  
+
+  const [values, setValues] = useState(initialState);
  
-  function togglePopup() {
+  function togglePopup(status1) {
+    setValues(initialState);
     setIsOpen(!isOpen);
+    setStatus(status1);
   }
 
   function handleConfirm() {
     var user = firebaseAuth.currentUser;
     //console.log(user);
-    addDoc(collection(db, "tasks"), { user: user.email, name: values.name, project: values.project, members: values.members});
+    addDoc(collection(db, "tasks"), { user: user.email, name: values.name, project: values.project, members: values.members, status: status, isCompleted: false});
     //useEffect();
+    setTasks([]);
+        getTasks(user, "Not Started").then(userData => userData.forEach(x => setTasks(prev => [...prev, x.data().name]))).catch(err => console.log(err));
+        setTasks2([]);
+        getTasks(user, "In Progress").then(userData => userData.forEach(x => setTasks2(prev => [...prev, x.data().name]))).catch(err => console.log(err));
+        setTasks3([]);
+        getTasks(user, "Completed").then(userData => userData.forEach(x => setTasks3(prev => [...prev, x.data().name]))).catch(err => console.log(err));
+    togglePopup("Not Started");
   }
 
   const handleChange = (prop) => (event) => {
@@ -59,7 +77,11 @@ function TodoList() {
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
         setTasks([]);
-        getTasks(user).then(userData => userData.forEach(x => setTasks(prev => [...prev, x.data().name]))).catch(err => console.log(err));
+        getTasks(user, "Not Started").then(userData => userData.forEach(x => setTasks(prev => [...prev, x.data().name]))).catch(err => console.log(err));
+        setTasks2([]);
+        getTasks(user, "In Progress").then(userData => userData.forEach(x => setTasks2(prev => [...prev, x.data().name]))).catch(err => console.log(err));
+        setTasks3([]);
+        getTasks(user, "Completed").then(userData => userData.forEach(x => setTasks3(prev => [...prev, x.data().name]))).catch(err => console.log(err));
       } else {
         navigate("/login");
       }
@@ -86,7 +108,7 @@ function TodoList() {
         <Button 
           className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
-          onClick={togglePopup}>
+          onClick={() => togglePopup("Not Started")}>
           Add task
         </Button>
       </div>
@@ -99,10 +121,11 @@ function TodoList() {
           </IconButton>
           <div className="vl"></div>
         </div>
+        { tasks2.map(x => <Task name={ x } />) }
         <Button 
           className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
-          onClick={togglePopup}>
+          onClick={() => togglePopup("In Progress")}>
           Add task
         </Button>
       </div>
@@ -114,9 +137,10 @@ function TodoList() {
             <CgIcons.CgMore />
           </IconButton>
         </div>
+        { tasks3.map(x => <Task name={ x } />) }
         <Button className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
-          onClick={togglePopup}>
+          onClick={() => togglePopup("Completed")}>
           Add task
         </Button>
         {isOpen && <Popup
@@ -158,7 +182,7 @@ function TodoList() {
               </div>
             </>
           }
-          handleClose={togglePopup}
+          handleClose={() => togglePopup("Not Started")}
         />}
       </div>
     </div>
