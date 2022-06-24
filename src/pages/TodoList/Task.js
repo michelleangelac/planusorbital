@@ -26,7 +26,7 @@ function Task(props) {
     const handleChange = (event) => {
       setStatus(event.target.value);
     };
-    
+  
     return (
         <div className="task-paper">
             <Box
@@ -47,6 +47,7 @@ function Task(props) {
                         <IconButton onClick={toggleDeletePopup} style={{ color: 'black' }}>
                             <MdIcons.MdOutlineDelete style={{ fontSize: '90%', opacity: '75%' }} />
                         </IconButton>
+                        { props.name }
                         {isModifyOpen && <Popup
                             content={
                                 <>
