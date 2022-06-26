@@ -1,0 +1,127 @@
+.container-prj {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 0.13fr 0.5fr 1fr;
+    grid-template-rows: 0.25fr 1fr;
+    grid-template-areas: 
+    "sidebar-prj title-prj title-prj"
+    "sidebar-prj projects-list content-prj";   
+}
+
+.sidebar-prj {
+    grid-area: sidebar-prj;
+}
+
+.title-prj {
+    grid-area: title-prj;
+    background: #D0D4EB;
+    padding: 1% 0 2% 0;
+    font-size: 2em;
+    font-weight: 600;
+    font-family: "Inter";
+}
+
+.projects-list {
+    grid-area: projects-list;
+    background: #D0D4EB;
+}
+
+.content-prj {
+    grid-area: content-prj;
+    background: #D0D4EB;
+}
+
+.prj-list-title {
+    font-size: 1.2em;
+    font-family: 'Inter';
+    font-weight: 600;
+}
+
+.prj-deadline {
+    color: #6978b5;
+    font-family: 'Inter';
+    margin: 2% 0 0 3%;
+    text-align: left;
+}
+
+.add-project { 
+    border-radius: 2;
+    color: #6978b5;
+    font-size: 1.2em;
+    font-family: "Inter";
+    margin-top: 1%;
+}
+
+.popup-box-prj {
+    position: fixed;
+    background: #00000080;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 20;
+}
+  
+.box-prj {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #999;
+    overflow-y: auto;
+    z-index: 20;
+}
+  
+.close-icon-prj {
+    content: 'x';
+    cursor: pointer;
+    background: #fff;
+    border-radius: 2px;
+    width: 25px;
+    height: 25px;
+    font-size: 24px;
+    z-index: 20;
+}
+
+.prj-name, .prj-members, .prj-date {
+    font-family: "Inter";
+    width: 75%;
+    height: 6.5vh;
+    margin: 2% 0 2% 0;
+    border: 1px solid #999;
+    border-radius: 4px;
+}
+
+.prj-mod-name, .prj-mod-members, .prj-mod-date {
+    font-family: "Inter";
+    width: 75%;
+    height: 6.5vh;
+    margin: 2% 0 2% 3%;
+    border: 1px solid #999;
+    border-radius: 4px;
+}
+
+.container-content {
+    display: grid;
+    height: auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 
+    "personal-tasks group-tasks";   
+}
+
+.personal-tasks {
+    grid-area: personal-tasks;
+    margin-top: 5%;
+}
+
+.group-tasks {
+    grid-area: group-tasks;
+    margin-top: 5%;
+}
+
+.vl-prj {
+    border-left: 2px solid rgb(118, 117, 117);
+    height: 70vh;
+    float: left;
+    opacity: 60%;
+}

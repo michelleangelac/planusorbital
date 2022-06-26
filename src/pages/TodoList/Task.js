@@ -26,7 +26,7 @@ function Task(props) {
     const handleChange = (event) => {
       setStatus(event.target.value);
     };
-  
+    
     return (
         <div className="task-paper">
             <Box
@@ -38,16 +38,15 @@ function Task(props) {
               },
             }}
             >
-                <Paper variant="outlined">
+                <Paper style={{ backgroundColor: '#F5F5F5' }}>
                     <div className="task-name" style={{ marginLeft: '5%' }}>
                         { props.name }
-                        <IconButton onClick={toggleModifyPopup} style={{ color: 'black', marginLeft: '18%' }}>
-                            <FaIcons.FaRegEdit style={{ fontSize: '80%', opacity: '75%' }} />
-                        </IconButton>
-                        <IconButton onClick={toggleDeletePopup} style={{ color: 'black' }}>
+                        <IconButton onClick={toggleDeletePopup} style={{ color: 'black', float: 'right' }}>
                             <MdIcons.MdOutlineDelete style={{ fontSize: '90%', opacity: '75%' }} />
                         </IconButton>
-                        { props.name }
+                        <IconButton onClick={toggleModifyPopup} style={{ color: 'black', float: 'right' }}>
+                            <FaIcons.FaRegEdit style={{ fontSize: '80%', opacity: '75%' }} />
+                        </IconButton>
                         {isModifyOpen && <Popup
                             content={
                                 <>

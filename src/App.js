@@ -9,7 +9,8 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Schedules from "./pages/Schedules/Schedules";
 import TodoList from "./pages/TodoList/TodoList";
 import Groups from "./pages/Groups";
-import Projects from "./pages/Projects";
+import Projects from "./pages/Projects/Projects";
+import Content from "./pages/Projects/Content";
 import Settings from "./pages/Settings";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
@@ -30,6 +31,7 @@ export default function App() {
         <Route path='/todolist' element={<ProtectedRoute><TodoList /></ProtectedRoute>}></Route>
         <Route path='/groups' element={<Groups/>}></Route>
         <Route path='/projects' element={<Projects/>}></Route>
+          <Route path='/content' element={<Content/>}></Route>
         <Route path='/settings' element={<Settings/>}></Route>
       </Routes>
     </div>
