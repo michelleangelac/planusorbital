@@ -18,9 +18,10 @@ import { getDisplayName } from "@mui/utils";
 import { Box, Paper } from "@mui/material";
 import * as AiIcons from "react-icons/ai";
 import * as BsIcons from "react-icons/bs";
+import { onAuthStateChanged } from "firebase/auth";
 
-async function getName() {
-  var user = firebaseAuth.currentUser;
+async function getName(user) {
+  console.log("Dashboard", user);
   const q = query(collection(db, "profile"), where("email", "==", user.email));
   try {
     const querySnapshot = await getDocs(q);
@@ -32,10 +33,20 @@ async function getName() {
 
 function Dashboard() {
   const [name, setName] = useState("");
-  var name2 = getName().then(userData => setName(userData.name)).catch(err => console.log(err));
+  // var name2 = getName().then(userData => setName(userData.name)).catch(err => console.log(err));
   
   var numOfTasks = 0;
   var numOfProjects = 0;
+
+  useEffect(() => {
+    firebaseAuth.onAuthStateChanged((user) => {
+      if (user) {
+        getName(user).then(userData => setName(userData.name)).catch(err => console.log(err));
+      } else {
+        navigate("/login");
+      }
+    });
+  }, [])
   
   return (
     <div className="container-dsh">
