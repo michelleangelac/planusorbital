@@ -1,6 +1,5 @@
-import { RssFeed } from "@mui/icons-material";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, updatePassword } from "firebase/auth";
 import React, { useState, useEffect, useContext, createContext } from "react";
 import { config as firebaseConfig } from "../config/firebase.js";
 import { getFirestore } from "firebase/firestore";
@@ -65,12 +64,24 @@ function useProvideAuth() {
   const signout = () => {
     return signOut(firebaseAuth).then(() => {
       setUser(false);
+    }).catch((err) => {
+      alert(error);
     });
   };
 
   const resetpassword = (email) => {
     return sendPasswordResetEmail(firebaseAuth, email).then(() => {
       return true;
+    }).catch((err) => {
+      alert(error);
+    });
+  };
+
+  const updatepassword = (password) => {
+    return updatePassword(firebaseAuth.currentUser, password).then(() => {
+      return true;
+    }).catch((error) => {
+      alert(error);
     });
   };
 
@@ -112,6 +123,7 @@ function useProvideAuth() {
     signup,
     signout,
     resetpassword,
+    updatepassword,
     confirmPasswordReset,
     signInWithGoogle
   };

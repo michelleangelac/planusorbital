@@ -32,6 +32,7 @@ async function getName(user) {
 }
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   // var name2 = getName().then(userData => setName(userData.name)).catch(err => console.log(err));
   
