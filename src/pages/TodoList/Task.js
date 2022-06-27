@@ -1,17 +1,35 @@
-import React from "react";
+import React , { useState, useEffect }from "react";
 import * as FaIcons from "react-icons/fa";
 import * as MdIcons from "react-icons/md";
 import { Box } from "@mui/system";
-import { useState } from "react";
 import { Paper, IconButton, Button, TextField, Select, MenuItem, FormControl, Slider } from "@mui/material";
 
 import Popup from "../../components/Popup";
 import './TodoList.css';
 
+import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
+import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Navigate, useNavigate } from "react-router-dom";
+
+async function getTask(user, id) {
+    //console.log(user.email);
+    const q = query(collection(db, "tasks"), where("__name__", "==", id));
+    try {
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot.docs[0].data());
+      return querySnapshot.docs[0].data();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
 function Task(props) {
+    const navigate = useNavigate();
     const [isModifyOpen, setIsModifyOpen] = useState(false);
  
     const toggleModifyPopup = () => {
+      setOldValues({name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted});
       setIsModifyOpen(!isModifyOpen);
     }
 
@@ -21,12 +39,56 @@ function Task(props) {
       setIsDeleteOpen(!isDeleteOpen);
     }
 
-    const [status, setStatus] = useState('');
+    // const [status, setStatus] = useState('');
 
-    const handleChange = (event) => {
-      setStatus(event.target.value);
-    };
+    const handleChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
+      };
+
+    const [values, setValues] = React.useState({
+        name: "",
+        project: "",
+        members: [],
+        status: "",
+        isCompleted: false,
+        progress: 0
+    });
+
+    const [oldValues, setOldValues] = React.useState({
+        name: "",
+        project: "",
+        members: [],
+        status: "",
+        isCompleted: "",
+        progress: 0
+    });
+
+    function handleConfirm() {
+        var user = firebaseAuth.currentUser;
+        //console.log(user);
+        updateDoc(doc(db, "tasks", props.id), { name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted});
+        toggleModifyPopup("Not Started");
+        props.setTasks([]);
+        }
     
+      function handleDelete() {
+        var user = firebaseAuth.currentUser;
+        deleteDoc(doc(db, "tasks", props.id));
+        toggleDeletePopup("Not Started");
+        props.setTasks([]);
+        }
+        
+    useEffect(() => {
+        firebaseAuth.onAuthStateChanged((user) => {
+            if (user) {
+                getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted})).catch(err => console.log(err));
+                getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted})).catch(err => console.log(err));
+            } else {
+                navigate("/login");
+            }
+        });
+    }, [])
+
     return (
         <div className="task-paper">
             <Box
@@ -40,12 +102,12 @@ function Task(props) {
             >
                 <Paper style={{ backgroundColor: '#F5F5F5' }}>
                     <div className="task-name" style={{ marginLeft: '5%' }}>
-                        { props.name }
-                        <IconButton onClick={toggleDeletePopup} style={{ color: 'black', float: 'right' }}>
-                            <MdIcons.MdOutlineDelete style={{ fontSize: '90%', opacity: '75%' }} />
-                        </IconButton>
-                        <IconButton onClick={toggleModifyPopup} style={{ color: 'black', float: 'right' }}>
+                        { oldValues.name }
+                        <IconButton onClick={toggleModifyPopup} style={{ color: 'black', marginLeft: '18%' }}>
                             <FaIcons.FaRegEdit style={{ fontSize: '80%', opacity: '75%' }} />
+                        </IconButton>
+                        <IconButton onClick={toggleDeletePopup} style={{ color: 'black' }}>
+                            <MdIcons.MdOutlineDelete style={{ fontSize: '90%', opacity: '75%' }} />
                         </IconButton>
                         {isModifyOpen && <Popup
                             content={
@@ -61,7 +123,8 @@ function Task(props) {
                                             Name
                                         </b>
                                         <TextField 
-                                        defaultValue="Learn Java"
+                                        value={ values.name }
+                                        onChange = { handleChange("name") }
                                         style={{ color: '#A9A9A9', width: '25vh' }}
                                         variant="standard"/>
                                     </div>
@@ -75,7 +138,8 @@ function Task(props) {
                                             Project
                                         </b>
                                         <TextField 
-                                        defaultValue="Orbital"
+                                        value={values.project}
+                                        onChange = { handleChange("project") }
                                         style={{ color: '#A9A9A9', width: '25vh' }}
                                         variant="standard"/>
                                     </div>              
@@ -90,6 +154,7 @@ function Task(props) {
                                         </b>
                                         <TextField 
                                         defaultValue="Gwyneth"
+                                        onChange = {handleChange("members")}
                                         style={{ color: '#A9A9A9', width: '25vh' }}
                                         variant="standard"/>
                                     </div>
@@ -104,8 +169,7 @@ function Task(props) {
                                         </b>
                                         <FormControl variant="standard" sx={{ m: 1, width: '25vh' }}>
                                             <Select
-                                            value={status}
-                                            onChange={handleChange}
+                                            value={values.status}
                                             defaultValue={"Not Started"}
                                             >
                                             <MenuItem value={"Not Started"}>Not Started</MenuItem>
@@ -129,13 +193,15 @@ function Task(props) {
                                                 verticalAlign: 'middle',
                                                 color: '#A9A9A9'
                                             }} 
-                                            defaultValue={50} 
+                                            value={values.progress}
+                                            onChange={handleChange("progress")} 
                                             aria-label="Default" 
                                             valueLabelDisplay="auto"/>
                                     </div>
                                     <div>
                                         <Button 
                                         variant="contained"
+                                        onClick={handleConfirm}
                                         style={{ marginTop: '7%', width: '95%', backgroundColor: '#A9A9A9' }}>
                                         Confirm
                                         </Button>
@@ -158,6 +224,7 @@ function Task(props) {
                                         </Button>
                                         <Button 
                                         variant="contained"
+                                        onClick={handleDelete}
                                         style={{ margin: '7% 0 0 5%', backgroundColor: '#E2534A', borderRadius: '2px' }}>
                                         Delete
                                         </Button>                                        
