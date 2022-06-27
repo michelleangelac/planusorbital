@@ -247,7 +247,7 @@ export default function Content() {
                                 <div>
                                     <Button 
                                         variant="contained"
-                                        style={{ margin: '35% 0 0 3%', backgroundColor: '#E2534A', borderRadius: '2px' }}>
+                                        style={{ margin: '35% 0 0 3%', backgroundColor: '#000000', borderRadius: '2px' }}>
                                         Update Progress
                                     </Button>                                        
                                 </div>
