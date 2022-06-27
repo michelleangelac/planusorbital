@@ -77,7 +77,7 @@ function Task(props) {
         toggleDeletePopup("Not Started");
         props.setTasks([]);
         }
-
+        
     useEffect(() => {
         firebaseAuth.onAuthStateChanged((user) => {
             if (user) {
@@ -88,7 +88,7 @@ function Task(props) {
             }
         });
     }, [])
-  
+
     return (
         <div className="task-paper">
             <Box
@@ -100,7 +100,7 @@ function Task(props) {
               },
             }}
             >
-                <Paper variant="outlined">
+                <Paper style={{ backgroundColor: '#F5F5F5' }}>
                     <div className="task-name" style={{ marginLeft: '5%' }}>
                         { oldValues.name }
                         <IconButton onClick={toggleModifyPopup} style={{ color: 'black', marginLeft: '18%' }}>
