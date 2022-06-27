@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import * as BiIcons from "react-icons/bi";
@@ -11,8 +11,8 @@ import { Avatar } from '@mui/material';
 import { db, useAuth, firebaseAuth } from '../../hooks/useAuth'; 
 import { collection, query, where, getDocs } from "firebase/firestore";
 
-async function getData() {
-  var user = firebaseAuth.currentUser;
+async function getData(user) {
+  console.log(user);
   const q = query(collection(db, "profile"), where("email", "==", user.email));
   try {
     const querySnapshot = await getDocs(q);
@@ -58,15 +58,24 @@ function Tabs() {
   const { signout } = useAuth();
 
   const [name, setName] = useState("");
-  var name3 = getData().then(userData => setName(userData.name)).catch(err => console.log(err));
   // console.log({ name });
 
   const [username, setUsername] = useState("");
-  var name2 = getData().then(userData => setUsername(userData.username)).catch(err => console.log(err));
   // console.log(username);
 
   const [profile, setProfile] = useState("");
-  var name1 = getData().then(userData => setProfile(userData.profile)).catch(err => console.log(err));
+
+  useEffect(() => {
+    firebaseAuth.onAuthStateChanged((user) => {
+      if (user) {
+        getData(user).then(userData => setName(userData.name)).catch(err => console.log(err));
+        getData(user).then(userData => setUsername(userData.username)).catch(err => console.log(err));
+        getData(user).then(userData => setProfile(userData.profile)).catch(err => console.log(err));
+      } else {
+        navigate("/login");
+      }
+    });
+  }, [])
 
   return (
     <>
