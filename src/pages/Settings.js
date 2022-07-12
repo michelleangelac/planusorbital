@@ -255,7 +255,8 @@ function Settings() {
               />
               <label htmlFor="contained-button-file">
                 <Button style={{ marginTop: '4%' }} variant="contained" onClick={handleSubmit} color="primary" component="span">
-                Upload
+                <Button variant="contained" onClick={handleSubmit} color="primary" component="span">
+                  Upload
                 </Button>
               </label>
               </div>

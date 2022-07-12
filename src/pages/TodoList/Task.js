@@ -112,7 +112,7 @@ async function getTask(user, id) {
             }
         });
     }, [])
-    
+
     return (
         <div className="task-paper">
             <Box
