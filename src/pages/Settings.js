@@ -252,7 +252,7 @@ function Settings() {
                 style={{ display: 'none' }}
                 id="contained-button-file"
                 onChange={handleImageChange}
-              />
+              >
               <label htmlFor="contained-button-file">
                 <Button style={{ marginTop: '4%' }} variant="contained" onClick={handleSubmit} color="primary" component="span">
                 <Button variant="contained" onClick={handleSubmit} color="primary" component="span">
