@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import IconButton from '@mui/material/IconButton';
 import * as CgIcons from "react-icons/cg";
 import * as IoIcons from "react-icons/io";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Slider } from "@mui/material";
 
 import Tabs from "../../components/Sidebar/Tabs";
 import Task from "./Task";
@@ -15,10 +15,18 @@ import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
 import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
+import { SettingsSystemDaydreamRounded } from "@mui/icons-material";
 
-async function getTasks(user) {
+const initialState = {
+  name: "",
+  project: "",
+  members: [],
+  progress: 0
+}
+
+async function getTasks(user, status) {
   //console.log(user.email);
-  const q = query(collection(db, "tasks"), where("user", "==", user.email));
+  const q = query(collection(db, "tasks"), where("user", "==", user.email), where("status", "==", status));
   try {
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs;
@@ -32,34 +40,67 @@ function TodoList() {
 
   const [tasks, setTasks] = useState([]);
 
+  const [tasks2, setTasks2] = useState([]);
+
+  const [tasks3, setTasks3] = useState([]);
+
   const [isOpen, setIsOpen] = useState(false);
 
-  const [values, setValues] = React.useState({
-    name: "",
-    project: "",
-    members: [],
-  });
+  const [status, setStatus] = useState("Not Started");  
 
-  function togglePopup() {
+  const [values2, setValues2] = useState(initialState);
+
+  console.log("ini", values2);
+
+  const [progress, setProgress] = useState(progress);
+  const handleSlider = (prop) => (event, newValue) => {
+    setProgress(newValue);
+    setValues2({ ...values2, [prop]: event.target.value });
+  }
+ 
+  function togglePopup(status1) {
+    setValues2(initialState);
     setIsOpen(!isOpen);
+    setStatus(status1);
+  }
+
+  function setProgressValue(status2, progress2) {
+    if (status2 == "Not Started") {
+      return 0;
+    } else if (status2 == "Completed") {
+      return 100;
+    } else {
+      return progress2;
+    }
   }
 
   function handleConfirm() {
     var user = firebaseAuth.currentUser;
     //console.log(user);
-    addDoc(collection(db, "tasks"), { user: user.email, name: values.name, project: values.project, members: values.members});
+    addDoc(collection(db, "tasks"), { user: user.email, name: values2.name, project: values2.project, members: values2.members, status: status, isCompleted: false, progress: values2.progress });
     //useEffect();
+    setTasks([]);
+        getTasks(user, "Not Started").then(userData => userData.forEach(x => setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
+        setTasks2([]);
+        getTasks(user, "In Progress").then(userData => userData.forEach(x => setTasks2(prev => [...prev, x.id]))).catch(err => console.log(err));
+        setTasks3([]);
+        getTasks(user, "Completed").then(userData => userData.forEach(x => setTasks3(prev => [...prev, x.id]))).catch(err => console.log(err));
+    togglePopup("Not Started");
   }
 
   const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+    setValues2({ ...values2, [prop]: event.target.value });
   };
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
         setTasks([]);
-        getTasks(user).then(userData => userData.forEach(x => setTasks(prev => [...prev, x.data().name]))).catch(err => console.log(err));
+        getTasks(user, "Not Started").then(userData => userData.forEach(x => setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
+        setTasks2([]);
+        getTasks(user, "In Progress").then(userData => userData.forEach(x => setTasks2(prev => [...prev, x.id]))).catch(err => console.log(err));
+        setTasks3([]);
+        getTasks(user, "Completed").then(userData => userData.forEach(x => setTasks3(prev => [...prev, x.id]))).catch(err => console.log(err));
       } else {
         navigate("/login");
       }
@@ -82,11 +123,11 @@ function TodoList() {
           </IconButton>
           <div className="vl"></div>
         </div>
-        { tasks.map(x => <Task name={ x } />) }
+        { tasks.map(x => <Task id={ x } setTasks={setTasks} />) }
         <Button 
           className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
-          onClick={togglePopup}>
+          onClick={() => togglePopup("Not Started")}>
           Add task
         </Button>
       </div>
@@ -99,10 +140,11 @@ function TodoList() {
           </IconButton>
           <div className="vl"></div>
         </div>
+        { tasks2.map(x => <Task id={ x } setTasks={setTasks2}/>) }
         <Button 
           className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
-          onClick={togglePopup}>
+          onClick={() => togglePopup("In Progress")}>
           Add task
         </Button>
       </div>
@@ -114,9 +156,10 @@ function TodoList() {
             <CgIcons.CgMore />
           </IconButton>
         </div>
+        { tasks3.map(x => <Task id={ x } setTasks={setTasks3}/>) }
         <Button className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
-          onClick={togglePopup}>
+          onClick={() => togglePopup("Completed")}>
           Add task
         </Button>
         {isOpen && <Popup
@@ -127,7 +170,7 @@ function TodoList() {
                 <TextField 
                   label="Name*"
                   style={{ color: '#A9A9A9' }}
-                  value={values.name}
+                  value={values2.name}
                   onChange={handleChange("name")}
                   variant="standard"/>
               </div>
@@ -135,7 +178,7 @@ function TodoList() {
                 <TextField 
                   label="Project"
                   style={{ color: '#A9A9A9', marginTop: '3%' }}
-                  value={values.project}
+                  value={values2.project}
                   onChange={handleChange("project")}
                   variant="standard"/>
               </div>              
@@ -143,9 +186,26 @@ function TodoList() {
                 <TextField 
                   label="Members"
                   style={{ color: '#A9A9A9', marginTop: '3%' }}
-                  value={values.members}
+                  value={values2.members}
                   onChange={handleChange("members")}
                   variant="standard"/>
+              </div>
+              <div>
+                <div 
+                  style={{ margin: '5% 47% 0 0', opacity: '80%', fontSize: '1.15em' }}>
+                  Progress
+                </div>
+                <Slider
+                  sx={{ 
+                    width: '33.5vh', 
+                    verticalAlign: 'middle',
+                    color: '#A9A9A9',
+                    marginRight: '25%'
+                  }}
+                  defaultValue={0} 
+                  value={setProgressValue(status, values2.progress)}
+                  onChange={handleSlider("progress")} 
+                  valueLabelDisplay="auto"/>
               </div>
               <div>
                 <Button 
@@ -157,7 +217,7 @@ function TodoList() {
               </div>
             </>
           }
-          handleClose={togglePopup}
+          handleClose={() => togglePopup("Not Started")}
         />}
       </div>
     </div>

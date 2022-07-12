@@ -109,168 +109,168 @@ export default function Content() {
 
     return (
         <div className="container-prj">
-        <div className="sidebar-prj">
-          <Tabs/>
-        </div>
-        <div className="title-prj">Projects</div>
-        <div className="projects-list">
-          <div className="prj-list-title">Ongoing Projects</div>
-          <div style={{ marginLeft: '5%' }}>
-            <Project/>
-          </div>
-        </div>
-        <div className="content-prj">
-            <Card style={{ width: '90%', marginTop: '4%' }}>
-                <div>
-                    <IconButton onClick={navigateBack} style={{ color: 'black', fontSize: '1.4em', float: 'right', marginRight: '2%' }}>
-                        <AiIcons.AiOutlineClose />
-                    </IconButton>
-                    <IconButton onClick={handleClick} style={{ color: 'black', opacity: '80%', float: 'right', marginRight: '1%' }}>
-                        <CgIcons.CgMore />
-                    </IconButton>
-                    {/*<IconButton style={{ color: 'black', fontSize: '1.4em', float: 'right', marginRight: '1%' }}>
-                        <FaIcons.FaUserPlus />
-                    </IconButton>*/}
-                    <Popover id={id} open={open} anchorEl={popover} onClose={handleClose}
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
-                        <List>
-                            <ListItem disablePadding>
-                                <ListItemButton onClick={toggleModifyPopup}>
-                                    <ListItemText primary="Modify project" />
-                                </ListItemButton>
-                                {isModifyOpen && <PopupPrj
-                                    content={
-                                        <div>
-                                            <b style={{ fontSize: '2em' }}>Modify a project</b>
-                                            <form>
-                                                <div 
-                                                    style={{ 
-                                                        textAlign: 'left', 
-                                                        marginTop: '3%', 
-                                                        fontSize: '1.15em', 
-                                                        fontFamily: 'Inter', 
-                                                        fontWeight: 600, 
-                                                    }}>
-                                                    <label>Project Name</label>
-                                                </div>
-                                                <div>
-                                                    <input className="prj-mod-name" type="text"></input>
-                                                </div>
-                                                <div style={{ textAlign: 'left', marginTop: '3%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
-                                                    <label>Members</label>
-                                                </div>
-                                                <div>
-                                                    <input className="prj-mod-members" type="text">{/*chip for each member*/}</input>
-                                                </div>
-                                                <div style={{ marginTop: '2%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
-                                                    <label>Start Date</label>
-                                                </div>
-                                                <div>
-                                                    <DatePicker
-                                                    className="prj-mod-date"
-                                                    selected={startDate}
-                                                    onChange={(date) => setStartDate(date)}
-                                                    dateFormat="MMMM d, yyyy"/>
-                                                </div>
-                                                <div style={{ marginTop: '2%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
-                                                    <label>Due Date</label>
-                                                </div>
-                                                <div>
-                                                    <DatePicker
-                                                    className="prj-mod-date"
-                                                    selected={endDate}
-                                                    onChange={(date) => setEndDate(date)}
-                                                    dateFormat="MMMM d, yyyy"/>
-                                                </div>
-                                            </form>
-                                            <Button
-                                                variant="contained"
-                                                style={{ margin: '3% 0 50% 3%', width: '75%', backgroundColor: '#000000' }}>
-                                                Save
-                                            </Button>
-                                        </div>
-                                    }
-                                    handleClose={toggleModifyPopup}
-                                />}
-                            </ListItem>
-                            <ListItem disablePadding>
-                                <ListItemButton onClick={toggleDeletePopup}>
-                                    <ListItemText primary="Delete project" />
-                                </ListItemButton>
-                                {isDeleteOpen && <Popup
-                                    content={
-                                        <>
-                                            <b style={{ fontSize: '1.6em', marginLeft: '25%' }}>Delete a project</b>
-                                            <div style={{ textAlign: 'center', marginTop: '3%' }}>Are you sure you want to delete this project?</div>
+            <div className="sidebar-prj">
+                <Tabs/>
+            </div>
+            <div className="title-prj">Projects</div>
+            <div className="projects-list">
+                <div className="prj-list-title">Ongoing Projects</div>
+                <div style={{ marginLeft: '5%' }}>
+                    <Project/>
+                </div>
+            </div>
+            <div className="content-prj">
+                <Card style={{ width: '90%', marginTop: '4%' }}>
+                    <div>
+                        <IconButton onClick={navigateBack} style={{ color: 'black', fontSize: '1.4em', float: 'right', marginRight: '2%' }}>
+                            <AiIcons.AiOutlineClose />
+                        </IconButton>
+                        <IconButton onClick={handleClick} style={{ color: 'black', opacity: '80%', float: 'right', marginRight: '1%' }}>
+                            <CgIcons.CgMore />
+                        </IconButton>
+                        {/*<IconButton style={{ color: 'black', fontSize: '1.4em', float: 'right', marginRight: '1%' }}>
+                            <FaIcons.FaUserPlus />
+                        </IconButton>*/}
+                        <Popover id={id} open={open} anchorEl={popover} onClose={handleClose}
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+                            <List>
+                                <ListItem disablePadding>
+                                    <ListItemButton onClick={toggleModifyPopup}>
+                                        <ListItemText primary="Modify project" />
+                                    </ListItemButton>
+                                    {isModifyOpen && <PopupPrj
+                                        content={
                                             <div>
-                                                <Button 
+                                                <b style={{ fontSize: '2em' }}>Modify a project</b>
+                                                <form>
+                                                    <div 
+                                                        style={{ 
+                                                            textAlign: 'left', 
+                                                            marginTop: '3%', 
+                                                            fontSize: '1.15em', 
+                                                            fontFamily: 'Inter', 
+                                                            fontWeight: 600, 
+                                                        }}>
+                                                        <label>Project Name</label>
+                                                    </div>
+                                                    <div>
+                                                        <input className="prj-mod-name" type="text"></input>
+                                                    </div>
+                                                    <div style={{ textAlign: 'left', marginTop: '3%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
+                                                        <label>Members</label>
+                                                    </div>
+                                                    <div>
+                                                        <input className="prj-mod-members" type="text">{/*chip for each member*/}</input>
+                                                    </div>
+                                                    <div style={{ marginTop: '2%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
+                                                        <label>Start Date</label>
+                                                    </div>
+                                                    <div>
+                                                        <DatePicker
+                                                        className="prj-mod-date"
+                                                        selected={startDate}
+                                                        onChange={(date) => setStartDate(date)}
+                                                        dateFormat="MMMM d, yyyy"/>
+                                                    </div>
+                                                    <div style={{ marginTop: '2%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
+                                                        <label>Due Date</label>
+                                                    </div>
+                                                    <div>
+                                                        <DatePicker
+                                                        className="prj-mod-date"
+                                                        selected={endDate}
+                                                        onChange={(date) => setEndDate(date)}
+                                                        dateFormat="MMMM d, yyyy"/>
+                                                    </div>
+                                                </form>
+                                                <Button
                                                     variant="contained"
-                                                    onClick={toggleDeletePopup}
-                                                    style={{ margin: '7% 0 0 15%', backgroundColor: '#A9A9A9', borderRadius: '2px' }}>
-                                                    Cancel
+                                                    style={{ margin: '3% 0 50% 3%', width: '75%', backgroundColor: '#000000' }}>
+                                                    Save
                                                 </Button>
-                                                <Button 
-                                                    variant="contained"
-                                                    style={{ margin: '7% 0 0 5%', backgroundColor: '#E2534A', borderRadius: '2px' }}>
-                                                    Delete
-                                                </Button>                                        
                                             </div>
-                                        </>
-                                    }
-                                    handleClose={toggleDeletePopup}
-                                />}
-                            </ListItem>
-                        </List>
-                    </Popover>
-                </div>
-                <div 
-                    style={{ 
-                        textAlign: 'left', 
-                        fontFamily: 'Inter', 
-                        fontSize: '1.3em', 
-                        fontWeight: 600,
-                        margin: '5% 0 0 5%' 
-                    }}>
-                    Project Name
-                </div>
-                <div style={{ float: 'right', marginRight: '5%' }}>
-                    <BootstrapButton onClick={toggleProgressPopup}>
-                        View Project Progress
-                    </BootstrapButton>
-                    {isProgressOpen && <Popup
-                        content={
-                            <>
-                                <b style={{ fontSize: '1.6em' }}>Project Progress</b>
-                                <div style={{ color: '#6978b5', position: 'absolute', margin: '5% 0 0 38%' }}>
-                                    <CircularProgressWithLabel/>
-                                </div>
-                                <div>
-                                    <Button 
-                                        variant="contained"
-                                        style={{ margin: '35% 0 0 3%', backgroundColor: '#000000', borderRadius: '2px' }}>
-                                        Update Progress
-                                    </Button>                                        
-                                </div>
-                            </>
-                        }
-                        handleClose={toggleProgressPopup}
-                    />}
-                </div>
-                <div style={{ textAlign: 'left', marginLeft: '5%', fontFamily: 'Inter' }}>Project Group</div>
-                <div style={{ textAlign: 'left', marginLeft: '5%', fontFamily: 'Inter' }}>Due Date: June 27, 2022</div>
-                <div className="container-content">
-                    <div className="personal-tasks">
-                        <div style={{ fontSize: '1.2em', fontFamily: 'Inter', fontWeight: 600 }}>My Tasks</div>
-                        <Task/>
+                                        }
+                                        handleClose={toggleModifyPopup}
+                                    />}
+                                </ListItem>
+                                <ListItem disablePadding>
+                                    <ListItemButton onClick={toggleDeletePopup}>
+                                        <ListItemText primary="Delete project" />
+                                    </ListItemButton>
+                                    {isDeleteOpen && <Popup
+                                        content={
+                                            <>
+                                                <b style={{ fontSize: '1.6em', marginLeft: '25%' }}>Delete a project</b>
+                                                <div style={{ textAlign: 'center', marginTop: '3%' }}>Are you sure you want to delete this project?</div>
+                                                <div>
+                                                    <Button 
+                                                        variant="contained"
+                                                        onClick={toggleDeletePopup}
+                                                        style={{ margin: '7% 0 0 15%', backgroundColor: '#A9A9A9', borderRadius: '2px' }}>
+                                                        Cancel
+                                                    </Button>
+                                                    <Button 
+                                                        variant="contained"
+                                                        style={{ margin: '7% 0 0 5%', backgroundColor: '#E2534A', borderRadius: '2px' }}>
+                                                        Delete
+                                                    </Button>                                        
+                                                </div>
+                                            </>
+                                        }
+                                        handleClose={toggleDeletePopup}
+                                    />}
+                                </ListItem>
+                            </List>
+                        </Popover>
                     </div>
-                    <div className="group-tasks">
-                        <div className="vl-prj"></div>
-                        <div style={{ fontSize: '1.2em', fontFamily: 'Inter', fontWeight: 600 }}>Group Tasks</div>
-                        <Task/>
+                    <div 
+                        style={{ 
+                            textAlign: 'left', 
+                            fontFamily: 'Inter', 
+                            fontSize: '1.3em', 
+                            fontWeight: 600,
+                            margin: '5% 0 0 5%' 
+                        }}>
+                        Project Name
                     </div>
-                </div>
-            </Card>
+                    <div style={{ float: 'right', marginRight: '5%' }}>
+                        <BootstrapButton onClick={toggleProgressPopup}>
+                            View Project Progress
+                        </BootstrapButton>
+                        {isProgressOpen && <Popup
+                            content={
+                                <>
+                                    <b style={{ fontSize: '1.6em' }}>Project Progress</b>
+                                    <div style={{ color: '#6978b5', position: 'absolute', margin: '5% 0 0 38%' }}>
+                                        <CircularProgressWithLabel/>
+                                    </div>
+                                    <div>
+                                        <Button 
+                                            variant="contained"
+                                            style={{ margin: '35% 0 0 3%', backgroundColor: '#000000', borderRadius: '2px' }}>
+                                            Update Progress
+                                        </Button>                                        
+                                    </div>
+                                </>
+                            }
+                            handleClose={toggleProgressPopup}
+                        />}
+                    </div>
+                    <div style={{ textAlign: 'left', marginLeft: '5%', fontFamily: 'Inter' }}>Project Group</div>
+                    <div style={{ textAlign: 'left', marginLeft: '5%', fontFamily: 'Inter' }}>Due Date: June 27, 2022</div>
+                    <div className="container-content">
+                        <div className="personal-tasks">
+                            <div style={{ fontSize: '1.2em', fontFamily: 'Inter', fontWeight: 600 }}>My Tasks</div>
+                            <Task/>
+                        </div>
+                        <div className="group-tasks">
+                            <div className="vl-prj"></div>
+                            <div style={{ fontSize: '1.2em', fontFamily: 'Inter', fontWeight: 600 }}>Group Tasks</div>
+                            <Task/>
+                        </div>
+                    </div>
+                </Card>
+            </div>
         </div>
-      </div>
     );
 }

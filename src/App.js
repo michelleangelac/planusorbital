@@ -32,7 +32,7 @@ export default function App() {
         <Route path='/groups' element={<Groups/>}></Route>
         <Route path='/projects' element={<Projects/>}></Route>
           <Route path='/content' element={<Content/>}></Route>
-        <Route path='/settings' element={<Settings/>}></Route>
+        <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>}></Route>
       </Routes>
     </div>
   );

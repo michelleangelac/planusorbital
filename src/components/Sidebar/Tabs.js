@@ -60,15 +60,12 @@ function Tabs() {
   const { signout } = useAuth();
 
   const [name, setName] = useState("");
-  var name3 = getData().then(userData => setName(userData.name)).catch(err => console.log(err));
   // console.log({ name });
 
   const [username, setUsername] = useState("");
-  var name2 = getData().then(userData => setUsername(userData.username)).catch(err => console.log(err));
   // console.log(username);
 
   const [profile, setProfile] = useState("");
-  var name1 = getData().then(userData => setProfile(userData.profile)).catch(err => console.log(err));
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged((user) => {

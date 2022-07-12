@@ -17,11 +17,14 @@ import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db, firebaseAuth } from "../hooks/useAuth";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import passwordChangesInput from "../hooks/passwordChangesInput";
 
 //add scroll bar
 
 function PageSignUp() {
   const navigate = useNavigate();
+
+  const { handleSubmit } = passwordChangesInput();
 
   //Password visibility
   const [values, setValues] = React.useState({
@@ -56,29 +59,6 @@ function PageSignUp() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (values.password !== values.confirmPassword) {
-        alert("Passwords don't match");
-        navigate("/signup");
-    } else if (values.username == "" || values.name == "" || values.email == "" || values.password == "") {
-        alert("Please fill in the required fields.");
-        navigate("/signup");
-    } else {
-        signup(values.email, values.confirmPassword);
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-          console.log(user);
-          if (user) {
-            setDoc(doc(db, "profile", values.email), { username: values.username, name: values.name, email: values.email, password: values.password, faculty: values.faculty });
-            navigate("/dashboard");
-          } else {
-            navigate("#");
-          }
-        })
-      }
-    }
 
   const { signup } = useAuth();
 
@@ -185,7 +165,7 @@ function PageSignUp() {
             color: '#FFFFFF' 
           }}
           variant="contained"
-          onClick={handleSubmit}
+          onClick={() => handleSubmit(values.password, values.confirmPassword, values.username, values.name, values.email, values.faculty)}
         >
           Sign Up
         </Button>
