@@ -10,6 +10,7 @@ import "./Tabs.css";
 import { Avatar } from '@mui/material';
 import { db, useAuth, firebaseAuth } from '../../hooks/useAuth'; 
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
 
 async function getData(user) {
   console.log(user);
@@ -51,6 +52,7 @@ function profilePicture(link, name){
 }
 
 function Tabs() {
+  const navigate = useNavigate();
   const [sidebar, setSidebar] = useState(false);
 
   const showSidebar = () => setSidebar(!sidebar);

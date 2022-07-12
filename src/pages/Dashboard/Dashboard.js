@@ -32,11 +32,12 @@ async function getName(user) {
 }
 
 function Dashboard() {
+  var numOfTasks = 1;
+  var numOfProjects = 1;
+
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   // var name2 = getName().then(userData => setName(userData.name)).catch(err => console.log(err));
-  
-  var numOfTasks = 0;
-  var numOfProjects = 0;
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged((user) => {
@@ -69,20 +70,18 @@ function Dashboard() {
                 Hi { name },
               </div>
               <div className="tasks-text2">
-                You have completed 3/5 of your tasks today.
+                You have completed { numOfTasks }/5 of your tasks.
               </div>
             </Paper>
           </Box>
         </div>
         <div className="left-papers">
-          <NoTask/>
-          {/*<TaskDb/>*/}
+          {numOfTasks > 0 ? <TaskDb/> : <NoTask/>}
         </div>
       </div>
       <div className="projects">
         <div className="left-papers">
-          <NoProject/>
-          {/*<ProjectDb/>*/}
+          {numOfProjects > 0 ? <ProjectDb/> : <NoProject/>}
         </div>
       </div>
       <div className="schedules">

@@ -16,11 +16,11 @@ export default function NoTask() {
         >
           <Paper variant="outlined">
             <div className="paper-text">
-              Today's Tasks
+              Uncompleted Tasks
             </div>
             <div className="hr"></div>
             <div className="paper-text2" style={{ textAlign: 'center', margin: '2% 0 2% 0' }}>
-              You don't have any tasks left today.
+              You don't have any uncompleted tasks.
             </div>
           </Paper>
         </Box>
