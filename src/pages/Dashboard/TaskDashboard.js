@@ -28,7 +28,7 @@ export default function TaskDb() {
           >
             <Paper variant="outlined">
               <div className="paper-text">
-                Today's Tasks
+                Uncompleted Tasks
               </div>
               <div className="hr"></div>
               <div className="paper-text2">
@@ -49,11 +49,6 @@ export default function TaskDb() {
                       {taskStatus}
                   </div>
                 </Box>
-              </div>
-
-              <div className="hr"></div>
-              <div className="paper-text2">
-                Watch A Business Proposal
               </div>
             </Paper>
           </Box>

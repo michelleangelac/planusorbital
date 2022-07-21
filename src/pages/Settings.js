@@ -299,6 +299,10 @@ function Settings() {
             style={{ backgroundColor: '#5062AD', width: '43vh' }}>
             Save Changes
           </Button>
+          {/*<Prompt
+            when={handleSave}
+            message='Changes saved.'  
+          />*/}
         </div>
         <div>
           <Button 
