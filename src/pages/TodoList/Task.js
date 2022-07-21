@@ -13,6 +13,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
 
 //modify progress blm bs
+
 async function getTask(user, id) {
     //console.log(user.email);
     const q = query(collection(db, "tasks"), where("__name__", "==", id));
@@ -92,8 +93,6 @@ async function getTask(user, id) {
           return progress2;
         }
     }
-
-
     
     function handleDelete() {
         var user = firebaseAuth.currentUser;

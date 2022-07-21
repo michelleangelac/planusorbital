@@ -25,6 +25,7 @@
     "react-datepicker": "^4.8.0",
     "react-dom": "18.0.0",
     "react-icons": "^4.4.0",
+    "react-image-file-resizer": "^0.4.8",
     "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.0",
     "short-react-calendar": "^1.0.3",

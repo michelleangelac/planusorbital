@@ -34,7 +34,6 @@ async function getName(user) {
 function Dashboard() {
   var numOfTasks = 1;
   var numOfProjects = 1;
-  
   const navigate = useNavigate();
   const [name, setName] = useState("");
   // var name2 = getName().then(userData => setName(userData.name)).catch(err => console.log(err));
