@@ -37,7 +37,7 @@
     background: #D0D4EB;
 }
 
-.popup-box-sch {
+.popup-box-sch1 {
     position: fixed;
     background: #00000080;
     width: 100%;
@@ -47,22 +47,33 @@
     z-index: 20;
 }
   
-.box-sch {
+.box-sch1 {
+    position: relative;
+    width: 70vh;    
+    margin: auto;
+    height: auto;
+    max-height: 70vh;
+    margin-top: 35vh;
     background: #fff;
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 20px;
     border: 1px solid #999;
-    overflow-y: auto;
+    overflow: auto;
     z-index: 20;
 }
   
-.close-icon-sch {
-    content: 'x';
+.close-icon-sch1 {
+    content: 'BACK';
     cursor: pointer;
+    position: fixed;
+    right: 38%;
+    top: 33%;
     background: #fff;
     border-radius: 2px;
     width: 25px;
     height: 25px;
+    line-height: 20px;
+    text-align: center;
     font-size: 24px;
     z-index: 20;
 }
