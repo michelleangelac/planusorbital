@@ -11,6 +11,19 @@ import PopupSch from "../Schedules/Popup";
 import "./Projects.css"
 import "@fontsource/inter";
 
+import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
+import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Navigate, useNavigate } from "react-router-dom";
+import { SettingsSystemDaydreamRounded } from "@mui/icons-material";
+
+const initialState = {
+  name: "",
+  members: [],
+  startDate: "",
+  endDate: ""
+}
+
 function Projects() {
   const [isOpen, setIsOpen] = useState(false);
 

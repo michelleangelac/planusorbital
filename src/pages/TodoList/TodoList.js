@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import IconButton from '@mui/material/IconButton';
 import * as CgIcons from "react-icons/cg";
 import * as IoIcons from "react-icons/io";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Slider } from "@mui/material";
 
 import Tabs from "../../components/Sidebar/Tabs";
 import Task from "./Task";
@@ -20,7 +20,8 @@ import { SettingsSystemDaydreamRounded } from "@mui/icons-material";
 const initialState = {
   name: "",
   project: "",
-  members: []
+  members: [],
+  progress: 0
 }
 
 async function getTasks(user, status) {
@@ -50,6 +51,12 @@ function TodoList() {
   const [values2, setValues2] = useState(initialState);
 
   console.log("ini", values2);
+
+  const [progress, setProgress] = useState(progress);
+  const handleSlider = (prop) => (event, newValue) => {
+    setProgress(newValue);
+    setValues2({ ...values2, [prop]: event.target.value });
+  }
  
   function togglePopup(status1) {
     setValues2(initialState);
@@ -57,10 +64,20 @@ function TodoList() {
     setStatus(status1);
   }
 
+  function setProgressValue(status2, progress2) {
+    if (status2 == "Not Started") {
+      return 0;
+    } else if (status2 == "Completed") {
+      return 100;
+    } else {
+      return progress2;
+    }
+  }
+
   function handleConfirm() {
     var user = firebaseAuth.currentUser;
     //console.log(user);
-    addDoc(collection(db, "tasks"), { user: user.email, name: values2.name, project: values2.project, members: values2.members, status: status, isCompleted: false});
+    addDoc(collection(db, "tasks"), { user: user.email, name: values2.name, project: values2.project, members: values2.members, status: status, isCompleted: false, progress: values2.progress });
     //useEffect();
     setTasks([]);
         getTasks(user, "Not Started").then(userData => userData.forEach(x => setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
@@ -172,6 +189,23 @@ function TodoList() {
                   value={values2.members}
                   onChange={handleChange("members")}
                   variant="standard"/>
+              </div>
+              <div>
+                <div 
+                  style={{ margin: '5% 47% 0 0', opacity: '80%', fontSize: '1.15em' }}>
+                  Progress
+                </div>
+                <Slider
+                  sx={{ 
+                    width: '33.5vh', 
+                    verticalAlign: 'middle',
+                    color: '#A9A9A9',
+                    marginRight: '25%'
+                  }}
+                  defaultValue={0} 
+                  value={setProgressValue(status, values2.progress)}
+                  onChange={handleSlider("progress")} 
+                  valueLabelDisplay="auto"/>
               </div>
               <div>
                 <Button 

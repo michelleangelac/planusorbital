@@ -227,6 +227,10 @@ function Settings() {
             style={{ backgroundColor: '#5062AD', width: '43vh' }}>
             Save Changes
           </Button>
+          {/*<Prompt
+            when={handleSave}
+            message='Changes saved.'  
+          />*/}
         </div>
         <div>
           <Button 
@@ -250,7 +254,7 @@ function Settings() {
                 onChange={handleImageChange}
               />
               <label htmlFor="contained-button-file">
-                <Button variant="contained" onClick={handleSubmit} color="primary" component="span">
+                <Button style={{ marginTop: '4%' }} variant="contained" onClick={handleSubmit} color="primary" component="span">
                 Upload
                 </Button>
               </label>

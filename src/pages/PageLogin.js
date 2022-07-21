@@ -192,6 +192,7 @@ function PageLogin() {
             Create an account
           </a>
         </p>
+        <div style={{ fontSize: '0.8em', fontFamily: "Inter", marginTop: '5%' }}>PlaNUS ©2022</div>
       </div>
     </div>
   );

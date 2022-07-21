@@ -12,6 +12,9 @@ import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc, deleteD
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
 
+
+//modify progress blm bs
+
 async function getTask(user, id) {
     //console.log(user.email);
     const q = query(collection(db, "tasks"), where("__name__", "==", id));
@@ -24,12 +27,13 @@ async function getTask(user, id) {
     }
   }
 
-function Task(props) {
+  function Task(props) {
     const navigate = useNavigate();
+
     const [isModifyOpen, setIsModifyOpen] = useState(false);
  
     const toggleModifyPopup = () => {
-      setOldValues({name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted});
+      setOldValues({name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted, progress: values.progress});
       setIsModifyOpen(!isModifyOpen);
     }
 
@@ -37,13 +41,11 @@ function Task(props) {
  
     const toggleDeletePopup = () => {
       setIsDeleteOpen(!isDeleteOpen);
-    }
-
-    // const [status, setStatus] = useState('');
+    } 
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
-      };
+    };
 
     const [values, setValues] = React.useState({
         name: "",
@@ -66,10 +68,52 @@ function Task(props) {
     function handleConfirm() {
         var user = firebaseAuth.currentUser;
         //console.log(user);
-        updateDoc(doc(db, "tasks", props.id), { name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted});
+        updateDoc(doc(db, "tasks", props.id), { name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted, progress: values.progress});
         toggleModifyPopup("Not Started");
         props.setTasks([]);
+    }
+    
+    const [status, setStatus] = useState(status);
+    const handleSelect = (prop) => (event) => {
+        setStatus(event.target.value);
+        setValues({ ...values, [prop]: event.target.value });
+    }
+
+    const [progress, setProgress] = useState(progress);
+    const handleSlider = (prop) => (event, newValue) => {
+        setProgress(newValue);
+        setValues({ ...values, [prop]: event.target.value });
+    }
+
+    function setProgressValue(status2, progress2) {
+        if (status2 == "Not Started") {
+          return 0;
+        } else if (status2 == "Completed") {
+          return 100;
+        } else {
+          return progress2;
         }
+    }
+
+
+    
+    function handleDelete() {
+        var user = firebaseAuth.currentUser;
+        deleteDoc(doc(db, "tasks", props.id));
+        toggleDeletePopup("Not Started");
+        props.setTasks([]);
+    }
+        
+    useEffect(() => {
+        firebaseAuth.onAuthStateChanged((user) => {
+            if (user) {
+                getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
+                getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
+            } else {
+                navigate("/login");
+            }
+        });
+    }, [])
     
       function handleDelete() {
         var user = firebaseAuth.currentUser;
@@ -102,13 +146,15 @@ function Task(props) {
             >
                 <Paper style={{ backgroundColor: '#F5F5F5' }}>
                     <div className="task-name" style={{ marginLeft: '5%' }}>
-                        { oldValues.name }
-                        <IconButton onClick={toggleModifyPopup} style={{ color: 'black', marginLeft: '18%' }}>
-                            <FaIcons.FaRegEdit style={{ fontSize: '80%', opacity: '75%' }} />
-                        </IconButton>
-                        <IconButton onClick={toggleDeletePopup} style={{ color: 'black' }}>
+                        <IconButton onClick={toggleDeletePopup} style={{ color: 'black', float: 'right' }}>
                             <MdIcons.MdOutlineDelete style={{ fontSize: '90%', opacity: '75%' }} />
                         </IconButton>
+                        <IconButton onClick={toggleModifyPopup} style={{ color: 'black', float: 'right' }}>
+                            <FaIcons.FaRegEdit style={{ fontSize: '80%', opacity: '75%' }} />
+                        </IconButton>
+                        <div style={{ paddingTop: '3%' }}>
+                            { oldValues.name }
+                        </div>
                         {isModifyOpen && <Popup
                             content={
                                 <>
@@ -153,7 +199,7 @@ function Task(props) {
                                             Members
                                         </b>
                                         <TextField 
-                                        defaultValue="Gwyneth"
+                                        value={ values.members }
                                         onChange = {handleChange("members")}
                                         style={{ color: '#A9A9A9', width: '25vh' }}
                                         variant="standard"/>
@@ -168,13 +214,10 @@ function Task(props) {
                                             Status
                                         </b>
                                         <FormControl variant="standard" sx={{ m: 1, width: '25vh' }}>
-                                            <Select
-                                            value={values.status}
-                                            defaultValue={"Not Started"}
-                                            >
-                                            <MenuItem value={"Not Started"}>Not Started</MenuItem>
-                                            <MenuItem value={"In Progress"}>In Progress</MenuItem>
-                                            <MenuItem value={"Completed"}>Completed</MenuItem>
+                                            <Select value={values.status} onChange={handleSelect("status")}>
+                                                <MenuItem value={"Not Started"}>Not Started</MenuItem>
+                                                <MenuItem value={"In Progress"}>In Progress</MenuItem>
+                                                <MenuItem value={"Completed"}>Completed</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </div>
@@ -193,16 +236,15 @@ function Task(props) {
                                                 verticalAlign: 'middle',
                                                 color: '#A9A9A9'
                                             }} 
-                                            value={values.progress}
-                                            onChange={handleChange("progress")} 
-                                            aria-label="Default" 
+                                            value={setProgressValue(values.status, values.progress)}
+                                            onChange={handleSlider("progress")} 
                                             valueLabelDisplay="auto"/>
                                     </div>
                                     <div>
                                         <Button 
                                         variant="contained"
                                         onClick={handleConfirm}
-                                        style={{ marginTop: '7%', width: '95%', backgroundColor: '#A9A9A9' }}>
+                                        style={{ marginTop: '7%', width: '95%', backgroundColor: '#000000' }}>
                                         Confirm
                                         </Button>
                                     </div>

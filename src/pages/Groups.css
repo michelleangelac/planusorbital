@@ -1,0 +1,17 @@
+.container-grp {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 0.085fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 
+    "sidebar-grp content-grp";
+}
+
+.sidebar-grp {
+    grid-area: sidebar-grp;
+}
+
+.content-grp {
+    grid-area: content-grp;
+    background: #D0D4EB;
+}
