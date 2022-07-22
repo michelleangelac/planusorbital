@@ -11,30 +11,32 @@ const events = [{ start: new Date(), end: new Date(), title: "special event" }];
 
 const DnDCalendar = withDragAndDrop(Calendar);
 
-function AgendaCalendar() {
-  const state = { events };
+function AgendaCalendar(props) {
+  const events = props.events;
 
-  const onEventResize = (data) => {
-    const { start, end } = data;
-    setState((state) => {
-      state.events[0].start = start;
-      state.events[0].end = end;
-      return { events: state.events };
-    });
-  };
+  // console.log(state);
+
+  // const onEventResize = (data) => {
+  //   const { start, end } = data;
+  //   setState((state) => {
+  //     state.events[0].start = start;
+  //     state.events[0].end = end;
+  //     return { events: state.events };
+  //   });
+  // };
   
-  const onEventDrop = (data) => {
-    console.log(data);
-  };
+  // const onEventDrop = (data) => {
+  //   console.log(data);
+  // };
 
   return (
     <div className="App">
       <DnDCalendar
         defaultDate={moment().toDate()}
-        events={state.events}
+        events={events}
         localizer={localizer}
-        onEventDrop={onEventDrop}
-        onEventResize={onEventResize}
+        // onEventDrop={onEventDrop}
+        // onEventResize={onEventResize}
         resizable
         style={{ height: '60vh' }}
         view='agenda' 
