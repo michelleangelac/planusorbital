@@ -325,7 +325,7 @@ function Settings() {
                 style={{ display: 'none' }}
                 id="contained-button-file"
                 onChange={handleImageChange}
-              >
+              />
               <label htmlFor="contained-button-file">
               <Button variant="contained" color="primary" component="span">
                 Browse Files
