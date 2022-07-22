@@ -13,6 +13,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
 
 //modify progress blm bs
+
 async function getTask(user, id) {
     //console.log(user.email);
     const q = query(collection(db, "tasks"), where("__name__", "==", id));
@@ -40,12 +41,10 @@ async function getTask(user, id) {
     const toggleDeletePopup = () => {
       setIsDeleteOpen(!isDeleteOpen);
     } 
-    
-    // const [status, setStatus] = useState('');
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
-      };
+    };
 
     const [values, setValues] = React.useState({
         name: "",
@@ -68,10 +67,11 @@ async function getTask(user, id) {
     function handleConfirm() {
         var user = firebaseAuth.currentUser;
         //console.log(user);
-        updateDoc(doc(db, "tasks", props.id), { name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted});
+        updateDoc(doc(db, "tasks", props.id), { name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted, progress: values.progress});
         toggleModifyPopup("Not Started");
         props.setTasks([]);
-        }
+    }
+
     const [status, setStatus] = useState(status);
     const handleSelect = (prop) => (event) => {
         setStatus(event.target.value);
@@ -93,8 +93,6 @@ async function getTask(user, id) {
           return progress2;
         }
     }
-
-
     
     function handleDelete() {
         var user = firebaseAuth.currentUser;
@@ -108,24 +106,6 @@ async function getTask(user, id) {
             if (user) {
                 getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
                 getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
-            } else {
-                navigate("/login");
-            }
-        });
-    }, [])
-    
-      function handleDelete() {
-        var user = firebaseAuth.currentUser;
-        deleteDoc(doc(db, "tasks", props.id));
-        toggleDeletePopup("Not Started");
-        props.setTasks([]);
-        }
-        
-    useEffect(() => {
-        firebaseAuth.onAuthStateChanged((user) => {
-            if (user) {
-                getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted})).catch(err => console.log(err));
-                getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted})).catch(err => console.log(err));
             } else {
                 navigate("/login");
             }

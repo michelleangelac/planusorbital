@@ -190,6 +190,40 @@ function TodoList() {
                   onChange={handleChange("members")}
                   variant="standard"/>
               </div>
+              <div> 
+                <div 
+                  style={{ margin: '5% 47% 0 0', opacity: '80%', fontSize: '1.15em' }}>
+                  Progress
+                </div>
+                <Slider
+                  sx={{ 
+                    width: '33.5vh', 
+                    verticalAlign: 'middle',
+                    color: '#A9A9A9',
+                    marginRight: '25%'
+                  }}
+                  defaultValue={0} 
+                  value={setProgressValue(status, values2.progress)}
+                  onChange={handleSlider("progress")} 
+                  valueLabelDisplay="auto"/>
+              </div>
+              <div>
+                <div 
+                  style={{ margin: '5% 47% 0 0', opacity: '80%', fontSize: '1.15em' }}>
+                  Progress
+                </div>
+                <Slider
+                  sx={{ 
+                    width: '33.5vh', 
+                    verticalAlign: 'middle',
+                    color: '#A9A9A9',
+                    marginRight: '25%'
+                  }}
+                  defaultValue={0} 
+                  value={setProgressValue(status, values2.progress)}
+                  onChange={handleSlider("progress")} 
+                  valueLabelDisplay="auto"/>
+              </div>
               <div>
                 <div 
                   style={{ margin: '5% 47% 0 0', opacity: '80%', fontSize: '1.15em' }}>
