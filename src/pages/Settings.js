@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Button, FormControl, InputLabel, TextField, Box, IconButton } from "@mui/material";
+import { Avatar, Button, FormControl, InputLabel, TextField, IconButton, Alert, Snackbar, Box } from "@mui/material";
 import * as IoIcons from "react-icons/io";
+import * as MdIcons from "react-icons/md";
 
 import Tabs from "../components/Sidebar/Tabs";
 import Popup from "../components/Popup";
@@ -14,7 +15,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { SettingsSystemDaydreamRounded } from "@mui/icons-material";
 import passwordChangesInput from "../hooks/passwordChangesInput";
 
-import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "firebase/storage";
+import Resizer from "react-image-file-resizer";
 
 async function getData(user) {
   // console.log("Dashboard", user);
@@ -41,15 +43,29 @@ async function handleConvertURL(file) {
 function Settings() {
   const navigate = useNavigate();
 
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
+
+  const [progress, setProgress] = useState(null);
+
+  const [uploadingImage, setUploadingImage] = useState(null);
 
   const [url, setUrl] = useState(null);
+
+  const [urlPopUp, setUrlPopUp] = useState(null);
 
   const { handleSubmitReset } = passwordChangesInput();
 
   const [isPictureOpen, setIsPictureOpen] = useState(false);
 
-  // const [pfp, setPfp] = useState(<Avatar style={{ margin: 'auto', width: '20vh', height: '20vh' }} {...stringAvatar(values.name)} />)
+  const [profilePic, setProfilePic] = useState(null);
+
+  const [openSb, setOpenSb] = useState(false);
+  const handleCloseSb = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSb(false);
+  };
 
   const [values, setValues] = React.useState({
     username: "",
@@ -84,19 +100,24 @@ function Settings() {
     setValues2({ ...values2, [prop]: event.target.value });
   };
 
-  function handleSave() {
+  function handleOpenSb() {
+    () => setOpenSb(true);
+  }
+
+  const handleSave = () => {
+    setOpenSb(true);
     var user = firebaseAuth.currentUser;
     //console.log(user);
     updateDoc(doc(db, "profile", user.email), { username: values.username, email: values.email, name: values.name, faculty: values.faculty});
     setValues({ username: values.username, email: values.email, name: values.name, faculty: values.faculty});
-  }
+  };
 
   var getInitials = function (string) {
     var names = string.split(' '),
-        initials = names[0].substring(0, 1).toUpperCase();
+      initials = names[0].substring(0, 1).toUpperCase();
     
     if (names.length > 1) {
-        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+      initials += names[names.length - 1].substring(0, 1).toUpperCase();
     }
     return initials;
   };
@@ -124,42 +145,100 @@ function Settings() {
     return values.name ? profilePicture(values.profile, values.name) : <Avatar style={{ margin: 'auto', width: '20vh', height: '20vh' }}/>;
   }
 
-  const handleImageChange = (e) => {
+  const resizeFile = (file) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        300,
+        300,
+        "JPEG",
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "base64"
+      );
+    });
+
+  const handleImageChange = async (e) => {
     if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-      console.log(image);
-    }
+      const file = e.target.files[0];
+      const imageResized = await resizeFile(file);
+      var myImage = new Image();
+      // fetch(imageResized).then((response) => {
+      //   myImage.src = response;
+      // });
+
+      const getBase64StringFromDataURL = (dataURL) =>
+      dataURL.replace('data:', '').replace(/^.+,/, '');
+
+      fetch(imageResized)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const storage = getStorage();
+          const user = firebaseAuth.currentUser;
+          const imageRef = ref(storage, user.email);
+          const metadata = {
+          contentType: 'image/jpeg',
+          };
+          console.log("INI", image);
+          const uploadImage = uploadBytesResumable(imageRef, blob, metadata);
+          uploadImage.on('state_changed',
+            (snapshot) => {
+              setProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+              switch (snapshot.state) {
+                case 'paused':
+                  console.log('Upload is paused');
+                  break;
+                case 'running':
+                  console.log('Upload is running');
+                  break;
+              }
+            }, 
+            (error) => {
+              alert(error.message);
+            },
+            () => {
+              // console.log(image);
+              getDownloadURL(uploadImage.snapshot.ref)
+              .then((url) => {
+                console.log(url);
+                setUrl(url);
+              });
+              console.log("FINISH UPLOADING!");
+            }
+          );
+        });
+      // const blob = await base64Response.blob();
+      // const finalFile = new File([blob], {type: blob.type});
+      // myImage.src = finalFile; 
+      // setImage(myImage);
+      // console.log(image);
+      // console.log(myImage);
+      // console.log("ello", image);
+      }
+    //setOpenSb(true);
   }
 
   const handleSubmit = () => {
-    const storage = getStorage();
     var user = firebaseAuth.currentUser;
-    const imageRef = ref(storage, user.email);
-    uploadBytes(imageRef, image)
-    .then(() => {
-      getDownloadURL(imageRef)
-      .then((url) => {
-        console.log(url);
-        setUrl(url);
-        updateDoc(doc(db, "profile", user.email), {profile: url});
-  
-      })
-      .catch(error => {
-        console.log(error.message, "error getting the image url");
-      });
-      setImage(null);
-    })
-    .catch(error => {
-      console.log(error.message);
-    });
-  };
+    updateDoc(doc(db, "profile", user.email), {profile: url}).catch(err => alert(err.message));
+    setValues({profile: url});
+    togglePicturePopup();
+    setUrl("");
+  }
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
         getData(user)
-        .then(userData => setValues({username: userData.username, email: userData.email, name: userData.name, faculty: userData.faculty, profile: userData.profile}))
+        .then(userData => {
+          setValues({username: userData.username, email: userData.email, name: userData.name, faculty: userData.faculty, profile: userData.profile});
+          setProfilePic(profilePicture(userData.profile, userData.name));
+        })
         .catch((err) => console.log(err));
+        console.log(values.profile);
       } else {
         navigate("/login");
       }
@@ -171,10 +250,11 @@ function Settings() {
       <div className="sidebar-set">
         <Tabs/>
       </div>
-      <div className="title-set">Settings</div>
-      <div className="navbar-set">Account</div>
+      <div className="title-set">
+        Account Settings
+      </div>
       <div className="profilepic-set">
-        { profilePicture(values.profile, values.name) }
+        { profilePic }
         <IconButton 
           className="changepic-btn"
           style={{ backgroundColor: '#5062AD' }} 
@@ -227,10 +307,11 @@ function Settings() {
             style={{ backgroundColor: '#5062AD', width: '43vh' }}>
             Save Changes
           </Button>
-          {/*<Prompt
-            when={handleSave}
-            message='Changes saved.'  
-          />*/}
+          <Snackbar open={openSb} autoHideDuration={6000} onClose={handleCloseSb}>
+            <Alert onClose={handleCloseSb} severity="success" sx={{ width: '100%' }}>
+              Changes Saved
+            </Alert>
+          </Snackbar>
         </div>
         <div>
           <Button 
@@ -244,21 +325,25 @@ function Settings() {
         {isPictureOpen && <Popup
           content={
             <>
-              <b style={{ fontSize: '1.5em' }}>Change Profile Picture</b>
+              <b style={{ fontSize: '1.5em', fontFamily: 'Inter' }}>Change Profile Picture</b>
+              <img style={{ marginTop: '2%' }} src = {url} alt="" />
               <div>
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="contained-button-file"
-                onChange={handleImageChange}
-              />
-              <label htmlFor="contained-button-file">
-                <Button style={{ marginTop: '4%' }} variant="contained" onClick={handleSubmit} color="primary" component="span">
-                Upload
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  id="contained-button-file"
+                  onChange={handleImageChange}
+                />
+                <label htmlFor="contained-button-file">
+                <IconButton style={{ marginTop: '2%', color: '#5062AD' }} component="span" variant="outlined">
+                  <MdIcons.MdOutlineFileUpload style={{ fontSize: '1.5em' }}/>
+                </IconButton>
+                </label>
+              </div>           
+                <Button style={{ marginTop: '2%', backgroundColor: '#5062AD', borderRadius: '12px', width: '40vh' }} variant="contained" onClick={handleSubmit}>
+                  Upload
                 </Button>
-              </label>
-              </div>
             </>
           }
           handleClose={togglePicturePopup}
@@ -299,8 +384,11 @@ function Settings() {
                 <Button 
                   variant="contained"
                   fullWidth 
-                  onClick={() => handleSubmitReset(values2.currentPassword, values2.newPassword, values2.confirmPassword, values.username, values.name, values.email, values.faculty).then(() => setValues2({currentPassword:"", confirmPassword:"", newPassword:""}))}
-                  style={{ marginTop: '7%', maxWidth: '75%', backgroundColor: '#A9A9A9' }}>
+                  onClick={() => {
+                    handleSubmitReset(values2.currentPassword, values2.newPassword, values2.confirmPassword, values.username, values.name, values.email, values.faculty).then(() => setValues2({currentPassword:"", confirmPassword:"", newPassword:""})) && setOpenSb(true)
+                    setOpenSb(true);
+                  }}
+                  style={{ marginTop: '7%', maxWidth: '75%', backgroundColor: '#000000' }}>
                   Confirm
                 </Button>
               </div>

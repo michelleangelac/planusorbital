@@ -19,6 +19,7 @@ import { Box, Paper } from "@mui/material";
 import * as AiIcons from "react-icons/ai";
 import * as BsIcons from "react-icons/bs";
 import { onAuthStateChanged } from "firebase/auth";
+import { TakeoutDiningSharp } from "@mui/icons-material";
 
 async function getName(user) {
   console.log("Dashboard", user);
@@ -31,18 +32,85 @@ async function getName(user) {
   }
 }
 
+async function getUncompletedTasks(user) {
+  //console.log(user.email);
+  const q = query(collection(db, "tasks"), where("user", "==", user.email), where("isCompleted", "==", false));
+  try {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function getTasks(user) {
+  //console.log(user.email);
+  const q = query(collection(db, "tasks"), where("user", "==", user.email));
+  try {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function getSchedules(user) {
+  //console.log(user.email);
+  const q = query(collection(db, "schedules"), where("user", "==", user.email));
+  try {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function Dashboard() {
-  var numOfTasks = 1;
   var numOfProjects = 1;
 
   const navigate = useNavigate();
+
   const [name, setName] = useState("");
-  // var name2 = getName().then(userData => setName(userData.name)).catch(err => console.log(err));
+  
+  const [tasks, setTasks] = useState([]);
+  const [uncompletedTasks, setUncompletedTasks] = useState([]);
+  const [numOfTasks, setNumOfTasks] = useState(0);
+  const [totalTasks, setTotalTasks] = useState(0);
+
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
-        getName(user).then(userData => setName(userData.name)).catch(err => console.log(err));
+        getName(user)
+        .then(userData => setName(userData.name))
+        .catch(err => console.log(err));
+
+        setUncompletedTasks([]);
+        setNumOfTasks(0);
+        getUncompletedTasks(user)
+        .then(userData => userData.forEach(x => {
+          setUncompletedTasks(prev => [...prev, x.id]);
+          setNumOfTasks(numOfTasks => numOfTasks + 1);
+        }))
+        // .then(() => console.log(uncompletedTasks.length))
+        .catch(err => console.log(err));
+
+        setTasks([]);
+        setTotalTasks(0);
+        getTasks(user)
+        .then(userData => userData.forEach(x => {
+          setTasks(prev => [...prev, x.id]);
+          setTotalTasks(totalTasks => totalTasks + 1);
+        }))
+
+        setEvents([]);
+        getSchedules(user)
+        .then(userData => userData.forEach(x => setEvents(prev => [...prev, {start: new Date((x.get("startDate").seconds * 1000) + (x.get("startDate").nanoseconds / 1000000)), end: new Date((x.get("endDate").seconds * 1000) + (x.get("endDate").nanoseconds / 1000000)), title: x.get("name"), privacy: x.get("privacy"), id: x.id}])))
+        // .then(console.log(events))
+        .catch(err => console.log(err.message)); 
+
+        // console.log(uncompletedTasks);
       } else {
         navigate("/login");
       }
@@ -70,13 +138,29 @@ function Dashboard() {
                 Hi { name },
               </div>
               <div className="tasks-text2">
-                You have completed { numOfTasks }/5 of your tasks.
+                You have completed { totalTasks - numOfTasks }/{totalTasks} of your tasks.
               </div>
             </Paper>
           </Box>
         </div>
         <div className="left-papers">
-          {numOfTasks > 0 ? <TaskDb/> : <NoTask/>}
+          <Box
+            sx={{
+              display: 'flex',
+              '& > :not(style)': {
+                m: 1,
+                width: '90%',
+                height: 'auto'
+              },
+            }}
+          >
+          <Paper variant="outlined">
+              <div className="paper-text">
+                Uncompleted Tasks
+              </div>
+              {numOfTasks > 0 ? uncompletedTasks.map(x => <TaskDb id={x} setTasks={setTasks} />) : <NoTask/>}
+            </Paper>
+          </Box>
         </div>
       </div>
       <div className="projects">
@@ -87,7 +171,7 @@ function Dashboard() {
       <div className="schedules">
         <div className="calendar-text">Monthly Schedule</div>
         <div className="calendar-dsh">
-          <AgendaCalendar/>
+          <AgendaCalendar events = {events}/>
         </div>
       </div>
     </div>

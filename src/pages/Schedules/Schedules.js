@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import { Avatar, IconButton, Switch, TextField } from "@mui/material";
@@ -19,8 +19,28 @@ import PopupSch from "./Popup";
 import './Schedules.css';
 import "@fontsource/inter";
 
+import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
+import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Navigate, useNavigate } from "react-router-dom";
+
+async function getSchedules(user) {
+  //console.log(user.email);
+  const q = query(collection(db, "schedules"), where("user", "==", user.email));
+  try {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function Schedules() {
+  const navigate = useNavigate();
+
   const [isAddOpen, setIsAddOpen] = useState(false);
+
+  const [events, setEvents] = useState([]);
  
   const toggleAddPopup = () => {
     setIsAddOpen(!isAddOpen);
@@ -29,6 +49,10 @@ function Schedules() {
   const [startDate, setStartDate] = useState(setHours(setMinutes(new Date(), 30), 16));
 
   const [endDate, setEndDate] = useState(setHours(setMinutes(new Date(), 30), 16));
+
+  const [name, setName] = useState("");
+
+  const [privacy, setPrivacy] = useState(false);
 
   const BootstrapButton = styled(Button)({
     boxShadow: 'none',
@@ -51,20 +75,43 @@ function Schedules() {
     }
   });
 
+  function handleSave() {
+    var user = firebaseAuth.currentUser;
+    //console.log(user);
+    addDoc(collection(db, "schedules"), { user: user.email, name: name, startDate: startDate, endDate: endDate, privacy: privacy});
+    setEvents([]);
+    getSchedules(user)
+        .then(userData => userData.forEach(x => setEvents(prev => [...prev, {start: new Date((x.get("startDate").seconds * 1000) + (x.get("startDate").nanoseconds / 1000000)), end: new Date((x.get("endDate").seconds * 1000) + (x.get("endDate").nanoseconds / 1000000)), title: x.get("name"), privacy: x.get("privacy"), id: x.id}])))
+        // .then(console.log(events))
+        .catch(err => console.log(err.message));
+    toggleAddPopup();
+  }
+
+  useEffect(() => {
+    firebaseAuth.onAuthStateChanged((user) => {
+      if(user) {
+        setEvents([]);
+        getSchedules(user)
+        .then(userData => userData.forEach(x => setEvents(prev => [...prev, {start: new Date((x.get("startDate").seconds * 1000) + (x.get("startDate").nanoseconds / 1000000)), end: new Date((x.get("endDate").seconds * 1000) + (x.get("endDate").nanoseconds / 1000000)), title: x.get("name"), privacy: x.get("privacy"), id: x.id}])))
+        // .then(console.log(events))
+        .catch(err => console.log(err.message));  
+      } else {
+        navigate("/login");
+      }
+    });
+  }, [])
+
   return (
     <div className="container-sch">
       <div className="sidebar-sch">
         <div className="tabs">
           <Tabs/>
         </div>
-        {/*<div className="icon">
-          <AiIcons.AiOutlineHome/>
-        </div>*/}
       </div>
       <div className="title-sch">Schedules</div>
       <div className="calendar-sch">
         <div className="big-calendar">
-          <BigCalendar/>
+          <BigCalendar events = { events } setEvents={setEvents}/>
         </div>
       </div>
       <div className="nusmods-btn">
@@ -88,13 +135,13 @@ function Schedules() {
           {isAddOpen && <PopupSch
             content={
               <>
-                <b style={{ fontSize: '2em' }}>Add a schedule</b>
+                <b style={{ fontSize: '2em', fontFamily: 'Inter' }}>Add a schedule</b>
                 <form>
                   <div style={{ textAlign: 'left', margin: '3% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
                     <label>Schedule Name</label>
                   </div>
                   <div>
-                    <input className="event-name" type="text" placeholder="Schedule Name"></input>
+                    <input className="event-name" type="text" placeholder="Schedule Name" value={name} onChange={(event) => setName(event.target.value)}></input>
                   </div>
                   <div style={{ textAlign: 'left', margin: '2% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
                     <label>Start Date and Time</label>
@@ -132,14 +179,18 @@ function Schedules() {
                   </div>
                   {/*(bell) Remind me: select*/}
                 </form>
+                <div style={{ textAlign: 'left', margin: '2% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
+                  <label>Privacy</label>
+                </div>
                 <div style={{ textAlign: 'right', margin: '2% 13% 0 0' }}>
                   <FaIcons.FaUsers style={{ fontSize: '1.6em', verticalAlign: 'middle', position: 'relative', left: '9%'  }}/>
-                  <Switch color="default"/>
+                  <Switch color="default" onChange={(event) => setPrivacy(event.target.checked)}/>
                   <FaIcons.FaUserLock style={{ fontSize: '1.4em', verticalAlign: 'middle' }}/>
                 </div>
                 <Button
                     variant="contained"
-                    style={{ margin: '3% 0 50% 0', width: '75%', backgroundColor: '#000000' }}>
+                    style={{ margin: '3% 0 60% 0', width: '75%', backgroundColor: '#000000' }}
+                    onClick={handleSave}>
                     Save
                 </Button>
               </>

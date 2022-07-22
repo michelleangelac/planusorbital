@@ -3,9 +3,9 @@ import './Schedules.css';
 
 const PopupSch = props => {
     return (
-      <div className="popup-box-sch">
+      <div className="popup-box-sch1">
         <div 
-          className="box-sch"
+          className="box-sch1"
           style={{ 
             position: 'fixed', 
             width: '70vh', 
@@ -13,7 +13,7 @@ const PopupSch = props => {
             margin: '15vh 0 0 75vh' 
           }}>
           <span 
-            className="close-icon-sch" 
+            className="close-icon-sch1" 
             onClick={props.handleClose}
             style={{ position: 'fixed', top: '16%', left: '51%' }}>
             x

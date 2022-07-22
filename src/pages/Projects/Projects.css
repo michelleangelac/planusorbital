@@ -1,11 +1,11 @@
 .container-prj {
     display: grid;
     height: 100vh;
-    grid-template-columns: 0.13fr 0.5fr 1fr;
-    grid-template-rows: 0.25fr 1fr;
+    grid-template-columns: 0.17fr 1fr 1fr;
+    grid-template-rows: 0.15fr 1fr;
     grid-template-areas: 
     "sidebar-prj title-prj title-prj"
-    "sidebar-prj projects-list content-prj";   
+    "sidebar-prj ongoing-prj completed-prj";   
 }
 
 .sidebar-prj {
@@ -21,18 +21,18 @@
     font-family: "Inter";
 }
 
-.projects-list {
-    grid-area: projects-list;
+.ongoing-prj {
+    grid-area: ongoing-prj;
     background: #D0D4EB;
 }
 
-.content-prj {
-    grid-area: content-prj;
+.completed-prj {
+    grid-area: completed-prj;
     background: #D0D4EB;
 }
 
 .prj-list-title {
-    font-size: 1.2em;
+    font-size: 1.5em;
     font-family: 'Inter';
     font-weight: 600;
 }
@@ -40,6 +40,7 @@
 .prj-deadline {
     color: #6978b5;
     font-family: 'Inter';
+    font-size: 0.85em;
     margin: 2% 0 0 3%;
     text-align: left;
 }
@@ -49,7 +50,7 @@
     color: #6978b5;
     font-size: 1.2em;
     font-family: "Inter";
-    margin-top: 1%;
+    margin-top: 2%;
 }
 
 .popup-box-prj {
@@ -91,15 +92,6 @@
     border-radius: 4px;
 }
 
-.prj-mod-name, .prj-mod-members, .prj-mod-date {
-    font-family: "Inter";
-    width: 75%;
-    height: 6.5vh;
-    margin: 2% 0 2% 3%;
-    border: 1px solid #999;
-    border-radius: 4px;
-}
-
 .container-content {
     display: grid;
     height: auto;
@@ -123,5 +115,12 @@
     border-left: 2px solid rgb(118, 117, 117);
     height: 70vh;
     float: left;
+    opacity: 60%;
+}
+
+.vl-pr {
+    border-left: 2px solid #7D8ED4;
+    height: 87vh;
+    float: right;
     opacity: 60%;
 }

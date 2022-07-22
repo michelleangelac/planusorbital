@@ -121,12 +121,6 @@ function Tabs() {
             </Link>
           </li>
           <li className='icon'>
-            <Link to='/groups'>
-              <BsIcons.BsChatLeftText/>
-              <span>Groups</span>
-            </Link>
-          </li>
-          <li className='icon'>
             <Link to='/projects'>
               <AiIcons.AiOutlineFile/>
               <span>Projects</span>

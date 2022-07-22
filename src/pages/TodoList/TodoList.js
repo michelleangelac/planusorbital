@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import IconButton from '@mui/material/IconButton';
 import * as CgIcons from "react-icons/cg";
 import * as IoIcons from "react-icons/io";
-import { Button, TextField, Slider } from "@mui/material";
+import { Button, TextField, Slider, Snackbar, Alert } from "@mui/material";
 
 import Tabs from "../../components/Sidebar/Tabs";
 import Task from "./Task";
@@ -21,7 +21,8 @@ const initialState = {
   name: "",
   project: "",
   members: [],
-  progress: 0
+  progress: 0,
+  isCompleted: Boolean()
 }
 
 async function getTasks(user, status) {
@@ -50,18 +51,39 @@ function TodoList() {
 
   const [values2, setValues2] = useState(initialState);
 
-  console.log("ini", values2);
+  //console.log("ini", values2);
 
   const [progress, setProgress] = useState(progress);
-  const handleSlider = (prop) => (event, newValue) => {
-    setProgress(newValue);
-    setValues2({ ...values2, [prop]: event.target.value });
+  const handleSlider = (prop, prop2) => (event, newValue) => {
+    var value = 0;
+    if (prop2 == "Completed") {
+      value = 100;
+    } else if (prop2 == "In Progress")  {
+      value = event.target.value;
+    }
+    setProgress(value);
+    setValues2({ ...values2, [prop]: value });
+  }
+
+  const [completed, setCompleted] = useState(false);
+
+  const [openSb, setOpenSb] = useState(false);
+  const handleCloseSb = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSb(false);
+  };
+
+  function handleSbText(text) {
+    return text;
   }
  
-  function togglePopup(status1) {
+  function togglePopup(status1, comp1) {
     setValues2(initialState);
     setIsOpen(!isOpen);
     setStatus(status1);
+    setCompleted(comp1);
   }
 
   function setProgressValue(status2, progress2) {
@@ -75,10 +97,11 @@ function TodoList() {
   }
 
   function handleConfirm() {
+    setOpenSb(true);
+    handleSbText("Added");
     var user = firebaseAuth.currentUser;
     //console.log(user);
-    addDoc(collection(db, "tasks"), { user: user.email, name: values2.name, project: values2.project, members: values2.members, status: status, isCompleted: false, progress: values2.progress });
-    //useEffect();
+    addDoc(collection(db, "tasks"), { user: user.email, name: values2.name, project: values2.project, members: values2.members, status: status, isCompleted: completed, progress: values2.progress });
     setTasks([]);
         getTasks(user, "Not Started").then(userData => userData.forEach(x => setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
         setTasks2([]);
@@ -127,7 +150,7 @@ function TodoList() {
         <Button 
           className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
-          onClick={() => togglePopup("Not Started")}>
+          onClick={() => togglePopup("Not Started", false)}>
           Add task
         </Button>
       </div>
@@ -144,9 +167,14 @@ function TodoList() {
         <Button 
           className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
-          onClick={() => togglePopup("In Progress")}>
+          onClick={() => togglePopup("In Progress", false)}>
           Add task
         </Button>
+        <Snackbar open={openSb} autoHideDuration={6000} onClose={handleCloseSb}>
+          <Alert onClose={handleCloseSb} severity="success" sx={{ width: '100%' }}>
+            Task Added
+          </Alert>
+        </Snackbar>
       </div>
       <div className="completed">
         <div className="completed-text"> 
@@ -159,13 +187,13 @@ function TodoList() {
         { tasks3.map(x => <Task id={ x } setTasks={setTasks3}/>) }
         <Button className="add-task"
           startIcon={<IoIcons.IoIosAdd />}
-          onClick={() => togglePopup("Completed")}>
+          onClick={() => togglePopup("Completed", true)}>
           Add task
         </Button>
         {isOpen && <Popup
           content={
             <>
-              <b style={{ fontSize: '1.5em' }}>Add a task</b>
+              <b style={{ fontSize: '1.5em', fontFamily: 'Inter' }}>Add a task</b>
               <div>
                 <TextField 
                   label="Name*"
@@ -190,7 +218,7 @@ function TodoList() {
                   onChange={handleChange("members")}
                   variant="standard"/>
               </div>
-              <div>
+              <div> 
                 <div 
                   style={{ margin: '5% 47% 0 0', opacity: '80%', fontSize: '1.15em' }}>
                   Progress
@@ -204,7 +232,7 @@ function TodoList() {
                   }}
                   defaultValue={0} 
                   value={setProgressValue(status, values2.progress)}
-                  onChange={handleSlider("progress")} 
+                  onChange={handleSlider("progress", status)} 
                   valueLabelDisplay="auto"/>
               </div>
               <div>

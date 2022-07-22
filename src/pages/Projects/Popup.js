@@ -8,14 +8,14 @@ const PopupPrj = props => {
           className="box-prj"
           style={{ 
             position: 'fixed', 
-            width: '70vh', 
-            height: '70vh',
-            margin: '15vh 0 0 75vh' 
+            width: '100vh', 
+            height: '80vh',
+            margin: '10vh 0 0 75vh' 
           }}>
           <span 
             className="close-icon-prj" 
             onClick={props.handleClose}
-            style={{ position: 'fixed', top: '16%', left: '51%' }}>
+            style={{ position: 'fixed', top: '11%', left: '65.25%' }}>
             x
           </span>
           {props.content}

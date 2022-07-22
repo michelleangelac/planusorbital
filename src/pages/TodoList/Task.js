@@ -2,18 +2,15 @@ import React , { useState, useEffect }from "react";
 import * as FaIcons from "react-icons/fa";
 import * as MdIcons from "react-icons/md";
 import { Box } from "@mui/system";
-import { Paper, IconButton, Button, TextField, Select, MenuItem, FormControl, Slider } from "@mui/material";
+import { Paper, IconButton, Button, TextField, Select, MenuItem, FormControl, Slider, Snackbar, Alert } from "@mui/material";
 
 import Popup from "../../components/Popup";
+//import TodoList from "./TodoList";
 import './TodoList.css';
 
 import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
-import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Navigate, useNavigate } from "react-router-dom";
-
-
-//modify progress blm bs
+import { doc, collection, query, where, getDocs, deleteDoc, updateDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 async function getTask(user, id) {
     //console.log(user.email);
@@ -25,23 +22,37 @@ async function getTask(user, id) {
     } catch (e) {
       console.log(e);
     }
-  }
+}
 
   function Task(props) {
     const navigate = useNavigate();
 
+    const [tasks, setTasks] = useState([]);
+
     const [isModifyOpen, setIsModifyOpen] = useState(false);
  
     const toggleModifyPopup = () => {
-      setOldValues({name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted, progress: values.progress});
-      setIsModifyOpen(!isModifyOpen);
+        setOldValues({name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted, progress: values.progress});
+        setIsModifyOpen(!isModifyOpen);
     }
 
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
  
     const toggleDeletePopup = () => {
       setIsDeleteOpen(!isDeleteOpen);
-    } 
+    }
+    
+    /*const [openSb, setOpenSb] = useState(false);
+    const handleCloseSb = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSb(false);
+    };
+
+    function handleSbText(text) {
+        return text;
+    }*/
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -52,7 +63,7 @@ async function getTask(user, id) {
         project: "",
         members: [],
         status: "",
-        isCompleted: false,
+        isCompleted: Boolean(),
         progress: 0
     });
 
@@ -61,7 +72,7 @@ async function getTask(user, id) {
         project: "",
         members: [],
         status: "",
-        isCompleted: "",
+        isCompleted: Boolean(),
         progress: 0
     });
 
@@ -69,44 +80,54 @@ async function getTask(user, id) {
         var user = firebaseAuth.currentUser;
         //console.log(user);
         updateDoc(doc(db, "tasks", props.id), { name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted, progress: values.progress});
-        toggleModifyPopup("Not Started");
-        props.setTasks([]);
+        toggleModifyPopup();
+        setTasks([]);
+        //document.write(setOpenSb(true));
+        //document.write(handleSbText("Modified"));
     }
-    
+
     const [status, setStatus] = useState(status);
     const handleSelect = (prop) => (event) => {
         setStatus(event.target.value);
-        setValues({ ...values, [prop]: event.target.value });
-    }
-
-    const [progress, setProgress] = useState(progress);
-    const handleSlider = (prop) => (event, newValue) => {
-        setProgress(newValue);
-        setValues({ ...values, [prop]: event.target.value });
-    }
-
-    function setProgressValue(status2, progress2) {
-        if (status2 == "Not Started") {
-          return 0;
-        } else if (status2 == "Completed") {
-          return 100;
-        } else {
-          return progress2;
+        setValues({ ...values, status: event.target.value });
+        if (prop == "Completed") {
+            setCompleted(true);
         }
     }
 
+    const [progress, setProgress] = useState(progress);
+    const handleSlider = (prop2, prop3) => (event) => {
+        var value = event.target.value;
+        if (prop2 == "Not Started" || prop2 == "Completed") {
+            value = prop3;
+        }
+        setProgress(value);
+        setValues({ ...values, progress: value });
+    }
 
+    const [completed, setCompleted] = useState(completed);
+
+    function setProgressValue(status2, progress2) {
+        if (status2 == "Not Started") {
+            return 0;
+        } else if (status2 == "Completed") {
+            return 100;
+        } else {
+            return progress2;
+        }
+    }
     
     function handleDelete() {
         var user = firebaseAuth.currentUser;
         deleteDoc(doc(db, "tasks", props.id));
         toggleDeletePopup("Not Started");
-        props.setTasks([]);
+        setTasks([]);
     }
         
     useEffect(() => {
         firebaseAuth.onAuthStateChanged((user) => {
             if (user) {
+                setTasks([]);
                 getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
                 getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
             } else {
@@ -115,24 +136,6 @@ async function getTask(user, id) {
         });
     }, [])
     
-      function handleDelete() {
-        var user = firebaseAuth.currentUser;
-        deleteDoc(doc(db, "tasks", props.id));
-        toggleDeletePopup("Not Started");
-        props.setTasks([]);
-        }
-        
-    useEffect(() => {
-        firebaseAuth.onAuthStateChanged((user) => {
-            if (user) {
-                getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted})).catch(err => console.log(err));
-                getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted})).catch(err => console.log(err));
-            } else {
-                navigate("/login");
-            }
-        });
-    }, [])
-
     return (
         <div className="task-paper">
             <Box
@@ -214,7 +217,7 @@ async function getTask(user, id) {
                                             Status
                                         </b>
                                         <FormControl variant="standard" sx={{ m: 1, width: '25vh' }}>
-                                            <Select value={values.status} onChange={handleSelect("status")}>
+                                            <Select value={values.status} onChange={handleSelect(status)}>
                                                 <MenuItem value={"Not Started"}>Not Started</MenuItem>
                                                 <MenuItem value={"In Progress"}>In Progress</MenuItem>
                                                 <MenuItem value={"Completed"}>Completed</MenuItem>
@@ -237,7 +240,7 @@ async function getTask(user, id) {
                                                 color: '#A9A9A9'
                                             }} 
                                             value={setProgressValue(values.status, values.progress)}
-                                            onChange={handleSlider("progress")} 
+                                            onChange={handleSlider(values.status, setProgressValue(values.status, values.progress))} 
                                             valueLabelDisplay="auto"/>
                                     </div>
                                     <div>
@@ -255,20 +258,20 @@ async function getTask(user, id) {
                         {isDeleteOpen && <Popup
                             content={
                                 <>
-                                    <b style={{ fontSize: '1.6em', marginLeft: '25%' }}>Delete a task</b>
+                                    <b style={{ fontSize: '1.6em', marginLeft: '25%', fontFamily: 'Inter' }}>Delete a task</b>
                                     <div style={{ textAlign: 'center', marginTop: '3%' }}>Are you sure you want to delete this task?</div>
                                     <div>
                                         <Button 
-                                        variant="contained"
-                                        onClick={toggleDeletePopup}
-                                        style={{ margin: '7% 0 0 15%', backgroundColor: '#A9A9A9', borderRadius: '2px' }}>
-                                        Cancel
+                                            variant="contained"
+                                            onClick={toggleDeletePopup}
+                                            style={{ margin: '7% 0 0 15%', backgroundColor: '#A9A9A9', borderRadius: '2px' }}>
+                                            Cancel
                                         </Button>
                                         <Button 
-                                        variant="contained"
-                                        onClick={handleDelete}
-                                        style={{ margin: '7% 0 0 5%', backgroundColor: '#E2534A', borderRadius: '2px' }}>
-                                        Delete
+                                            variant="contained"
+                                            onClick={handleDelete}
+                                            style={{ margin: '7% 0 0 5%', backgroundColor: '#E2534A', borderRadius: '2px' }}>
+                                            Delete
                                         </Button>                                        
                                     </div>
                                 </>
