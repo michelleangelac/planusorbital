@@ -12,7 +12,6 @@ import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc, deleteD
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
 
-
 //modify progress blm bs
 
 async function getTask(user, id) {
@@ -72,7 +71,7 @@ async function getTask(user, id) {
         toggleModifyPopup("Not Started");
         props.setTasks([]);
     }
-    
+
     const [status, setStatus] = useState(status);
     const handleSelect = (prop) => (event) => {
         setStatus(event.target.value);
@@ -94,8 +93,6 @@ async function getTask(user, id) {
           return progress2;
         }
     }
-
-
     
     function handleDelete() {
         var user = firebaseAuth.currentUser;
@@ -109,24 +106,6 @@ async function getTask(user, id) {
             if (user) {
                 getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
                 getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
-            } else {
-                navigate("/login");
-            }
-        });
-    }, [])
-    
-      function handleDelete() {
-        var user = firebaseAuth.currentUser;
-        deleteDoc(doc(db, "tasks", props.id));
-        toggleDeletePopup("Not Started");
-        props.setTasks([]);
-        }
-        
-    useEffect(() => {
-        firebaseAuth.onAuthStateChanged((user) => {
-            if (user) {
-                getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted})).catch(err => console.log(err));
-                getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted})).catch(err => console.log(err));
             } else {
                 navigate("/login");
             }
