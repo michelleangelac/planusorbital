@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Paper } from "@mui/material";
+import { Box, Divider, Paper } from "@mui/material";
 
 export default function NoProject() {
     return (
@@ -18,7 +18,7 @@ export default function NoProject() {
               <div className="paper-text">
                 Upcoming Projects
               </div>
-              <div className="hr"></div>
+              <div><Divider/></div>
               <div className="paper-text2" style={{ textAlign: 'center', margin: '2% 0 2% 0' }}>
                 You don't have any upcoming projects.
               </div>

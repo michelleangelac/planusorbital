@@ -161,7 +161,7 @@ function BigCalendar(props) {
         {(isEventOpen || isModifyOpen || isDeleteOpen) && <PopupSch
           content=
           {<>
-            {isEventOpen ? <b style={{ fontSize: '2em' }}>Details</b> : isModifyOpen ? <b style={{ fontSize: '2em' }}>Modify a schedule</b> : <b style={{ fontSize: '2em' }}>Delete a schedule</b>}
+            {isEventOpen ? <b style={{ fontSize: '2em', fontFamily: 'Inter' }}>Schedule Details</b> : isModifyOpen ? <b style={{ fontSize: '2em', fontFamily: 'Inter' }}>Modify a schedule</b> : <b style={{ fontSize: '2em', fontFamily: 'Inter' }}>Delete a schedule</b>}
             <form>
               {isDeleteOpen ? <div></div> : 
               <div style={{ textAlign: 'left', margin: '3% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
@@ -172,7 +172,7 @@ function BigCalendar(props) {
               <div>
                 <input className="event-name" type="text" placeholder="Schedule Name" value={name} onChange={(event) => setName(event.target.value)}></input>
               </div> : isEventOpen ?
-              <div style={{ textAlign: 'left', margin: '0% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 300 }}>
+              <div style={{ textAlign: 'left', margin: '0% 0  0 10%', fontSize: '1.05em', fontFamily: 'Inter', fontWeight: 300 }}>
                 <label>{name}</label>
               </div> :
               <div>
@@ -198,7 +198,7 @@ function BigCalendar(props) {
                   ]}
                   dateFormat="MMMM d, yyyy h:mm aa" />
               </div> : isEventOpen ?
-              <div style={{ textAlign: 'left', margin: '0% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 300 }}>
+              <div style={{ textAlign: 'left', margin: '0% 0  0 10%', fontSize: '1.05em', fontFamily: 'Inter', fontWeight: 300 }}>
                 <label>{startDate.toString()}</label>
               </div> :
               <div></div>
@@ -223,7 +223,7 @@ function BigCalendar(props) {
                   ]}
                   dateFormat="MMMM d, yyyy h:mm aa" />
               </div> : isEventOpen ?
-              <div style={{ textAlign: 'left', margin: '0% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 300 }}>
+              <div style={{ textAlign: 'left', margin: '0% 0  0 10%', fontSize: '1.05em', fontFamily: 'Inter', fontWeight: 300 }}>
                 <label>{endDate.toString()}</label>
               </div> :
               <div></div>
@@ -241,29 +241,29 @@ function BigCalendar(props) {
               <Switch color="default" onChange={(event) => setPrivacy(event.target.checked)} />
               <FaIcons.FaUserLock style={{ fontSize: '1.4em', verticalAlign: 'middle' }} />
             </div> : isEventOpen ?
-            <div style={{ textAlign: 'left', margin: '0% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 300 }}>
+            <div style={{ textAlign: 'left', margin: '0% 0  0 10%', fontSize: '1.05em', fontFamily: 'Inter', fontWeight: 300 }}>
                 <label>{privacy.toString()}</label>
               </div> :
             <div></div>
             }
             {isDeleteOpen ? 
-              <div style={{ textAlign: 'left', margin: '0% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 300 }}>
+              <div style={{ margin: '5% 0 5% 0', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 300 }}>
                 <label>Are you sure you want to delete "{name}"?  </label>
               </div> : <div></div>}
             {isEventOpen ?
             <div>
-            <Button variant="contained" style={{ margin: '3% 0 3% 0', width: '75%', backgroundColor: '#000000' }} onClick = {toggleModifyPopup}>
-              Modify
-            </Button>
-            <Button variant="contained" style={{ margin: '3% 0 3% 0', width: '75%', backgroundColor: '#000000'}} onClick = {toggleDeletePopup}>
-              Delete
-            </Button></div> : isModifyOpen ? 
-            <Button variant="contained" onClick={handleSave} style={{ margin: '3% 0 3% 0', width: '75%', backgroundColor: '#000000' }}>
-              Save
-            </Button> :
-            <Button variant="contained" onClick = {handleDelete} style={{ margin: '3% 0 3% 0', width: '75%', backgroundColor: '#000000' }}>
-              Confirm Delete
-            </Button>
+              <Button variant="contained" style={{ margin: '3% 0 3% 0', width: '45%', backgroundColor: '#000000', marginRight: '5%', borderRadius: '8px' }} onClick = {toggleModifyPopup}>
+                Modify
+              </Button>
+              <Button variant="contained" style={{ margin: '3% 0 3% 0', width: '45%', backgroundColor: '#000000', borderRadius: '8px' }} onClick = {toggleDeletePopup}>
+                Delete
+              </Button></div> : isModifyOpen ? 
+              <Button variant="contained" onClick={handleSave} style={{ margin: '3% 0 70% 0', width: '75%', backgroundColor: '#000000' }}>
+                Save
+              </Button> :
+              <Button variant="contained" onClick = {handleDelete} style={{ margin: '0 0 3% 0', width: '70%', backgroundColor: '#000000', borderRadius: '8px' }}>
+                Confirm Delete
+              </Button>
             }
           </>}
           handleClose={toggleCloseEventPopup} />}

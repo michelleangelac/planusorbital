@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Button, FormControl, InputLabel, TextField, Box, IconButton } from "@mui/material";
+import { Avatar, Button, FormControl, InputLabel, TextField, IconButton, Alert, Snackbar, Box } from "@mui/material";
 import * as IoIcons from "react-icons/io";
+import * as MdIcons from "react-icons/md";
 
 import Tabs from "../components/Sidebar/Tabs";
 import Popup from "../components/Popup";
@@ -56,11 +57,15 @@ function Settings() {
 
   const [isPictureOpen, setIsPictureOpen] = useState(false);
 
-  const [changesSaved, setChangesSaved] = useState("");
-
   const [profilePic, setProfilePic] = useState(null);
 
-  // const [pfp, setPfp] = useState(<Avatar style={{ margin: 'auto', width: '20vh', height: '20vh' }} {...stringAvatar(values.name)} />)
+  const [openSb, setOpenSb] = useState(false);
+  const handleCloseSb = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSb(false);
+  };
 
   const [values, setValues] = React.useState({
     username: "",
@@ -95,20 +100,24 @@ function Settings() {
     setValues2({ ...values2, [prop]: event.target.value });
   };
 
-  function handleSave() {
+  function handleOpenSb() {
+    () => setOpenSb(true);
+  }
+
+  const handleSave = () => {
+    setOpenSb(true);
     var user = firebaseAuth.currentUser;
     console.log(user);
     updateDoc(doc(db, "profile", user.email), { username: values.username, email: values.email, name: values.name, faculty: values.faculty});
     setValues({ username: values.username, email: values.email, name: values.name, faculty: values.faculty});
-    setChangesSaved("Changes have been saved successfully!");
-  }
+  };
 
   var getInitials = function (string) {
     var names = string.split(' '),
-        initials = names[0].substring(0, 1).toUpperCase();
+      initials = names[0].substring(0, 1).toUpperCase();
     
     if (names.length > 1) {
-        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+      initials += names[names.length - 1].substring(0, 1).toUpperCase();
     }
     return initials;
   };
@@ -209,6 +218,7 @@ function Settings() {
       // console.log(myImage);
       // console.log("ello", image);
       }
+    //setOpenSb(true);
   }
 
   const handleSubmit = () => {
@@ -240,8 +250,9 @@ function Settings() {
       <div className="sidebar-set">
         <Tabs/>
       </div>
-      <div className="title-set">Settings</div>
-      <div className="navbar-set">Account</div>
+      <div className="title-set">
+        Account Settings
+      </div>
       <div className="profilepic-set">
         { profilePic }
         <IconButton 
@@ -299,10 +310,11 @@ function Settings() {
             style={{ backgroundColor: '#5062AD', width: '43vh' }}>
             Save Changes
           </Button>
-          {/*<Prompt
-            when={handleSave}
-            message='Changes saved.'  
-          />*/}
+          <Snackbar open={openSb} autoHideDuration={6000} onClose={handleCloseSb}>
+            <Alert onClose={handleCloseSb} severity="success" sx={{ width: '100%' }}>
+              Changes Saved
+            </Alert>
+          </Snackbar>
         </div>
         <div>
           <Button 
@@ -316,25 +328,25 @@ function Settings() {
         {isPictureOpen && <Popup
           content={
             <>
-              <b style={{ fontSize: '1.5em' }}>Change Profile Picture</b>
-              <img src = {url} alt="" />
+              <b style={{ fontSize: '1.5em', fontFamily: 'Inter' }}>Change Profile Picture</b>
+              <img style={{ marginTop: '2%' }} src = {url} alt="" />
               <div>
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="contained-button-file"
-                onChange={handleImageChange}
-              />
-              <label htmlFor="contained-button-file">
-              <Button variant="contained" color="primary" component="span">
-                Browse Files
-              </Button>
-              </label>
-              </div>
-              <Button variant="contained" onClick = {handleSubmit} color="primary" component="span">
-                Upload
-              </Button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  id="contained-button-file"
+                  onChange={handleImageChange}
+                />
+                <label htmlFor="contained-button-file">
+                <IconButton style={{ marginTop: '2%', color: '#5062AD' }} component="span" variant="outlined">
+                  <MdIcons.MdOutlineFileUpload style={{ fontSize: '1.5em' }}/>
+                </IconButton>
+                </label>
+              </div>           
+                <Button style={{ marginTop: '2%', backgroundColor: '#5062AD', borderRadius: '12px', width: '40vh' }} variant="contained" onClick={handleSubmit}>
+                  Upload
+                </Button>
             </>
           }
           handleClose={togglePicturePopup}
@@ -375,8 +387,11 @@ function Settings() {
                 <Button 
                   variant="contained"
                   fullWidth 
-                  onClick={() => handleSubmitReset(values2.currentPassword, values2.newPassword, values2.confirmPassword, values.username, values.name, values.email, values.faculty).then(() => setValues2({currentPassword:"", confirmPassword:"", newPassword:""}))}
-                  style={{ marginTop: '7%', maxWidth: '75%', backgroundColor: '#A9A9A9' }}>
+                  onClick={() => {
+                    handleSubmitReset(values2.currentPassword, values2.newPassword, values2.confirmPassword, values.username, values.name, values.email, values.faculty).then(() => setValues2({currentPassword:"", confirmPassword:"", newPassword:""})) && setOpenSb(true)
+                    setOpenSb(true);
+                  }}
+                  style={{ marginTop: '7%', maxWidth: '75%', backgroundColor: '#000000' }}>
                   Confirm
                 </Button>
               </div>

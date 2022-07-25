@@ -36,6 +36,8 @@ async function getSchedules(user) {
 }
 
 function Schedules() {
+  const navigate = useNavigate();
+
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const [events, setEvents] = useState([]);
@@ -105,9 +107,6 @@ function Schedules() {
         <div className="tabs">
           <Tabs/>
         </div>
-        {/*<div className="icon">
-          <AiIcons.AiOutlineHome/>
-        </div>*/}
       </div>
       <div className="title-sch">Schedules</div>
       <div className="calendar-sch">
@@ -136,7 +135,7 @@ function Schedules() {
           {isAddOpen && <PopupSch
             content={
               <>
-                <b style={{ fontSize: '2em' }}>Add a schedule</b>
+                <b style={{ fontSize: '2em', fontFamily: 'Inter' }}>Add a schedule</b>
                 <form>
                   <div style={{ textAlign: 'left', margin: '3% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
                     <label>Schedule Name</label>
@@ -180,6 +179,9 @@ function Schedules() {
                   </div>
                   {/*(bell) Remind me: select*/}
                 </form>
+                <div style={{ textAlign: 'left', margin: '2% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
+                  <label>Privacy</label>
+                </div>
                 <div style={{ textAlign: 'right', margin: '2% 13% 0 0' }}>
                   <FaIcons.FaUsers style={{ fontSize: '1.6em', verticalAlign: 'middle', position: 'relative', left: '9%'  }}/>
                   <Switch color="default" onChange={(event) => setPrivacy(event.target.checked)}/>
@@ -187,7 +189,7 @@ function Schedules() {
                 </div>
                 <Button
                     variant="contained"
-                    style={{ margin: '3% 0 50% 0', width: '75%', backgroundColor: '#000000' }}
+                    style={{ margin: '3% 0 60% 0', width: '75%', backgroundColor: '#000000' }}
                     onClick={handleSave}>
                     Save
                 </Button>
