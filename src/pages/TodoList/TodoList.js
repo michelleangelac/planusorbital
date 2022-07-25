@@ -23,7 +23,8 @@ const initialState = {
   project: "",
   members: [],
   progress: 0,
-  isCompleted: Boolean()
+  isCompleted: Boolean(),
+  group: Boolean()
 }
 
 async function getTasks(user, status) {

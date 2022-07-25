@@ -60,7 +60,7 @@ function PageSignUp() {
     event.preventDefault();
   };
 
-  const { signup } = useAuth();
+  const { signup } = useAuth() || {};
 
   return (
     <div className="container-log">

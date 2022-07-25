@@ -40,6 +40,17 @@ async function getProjects(user) {
   }
 }
 
+async function getCompletedProjects(user) {
+  //console.log(user.email);
+  const q = query(collection(db, "projects"), where("user", "==", user.email), where("progress", "==", 100));
+  try {
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 async function getUser(email) {
   console.log("email", email);
   const q = query(collection(db, "profile"), where("email", "==", email));
@@ -55,6 +66,8 @@ function Projects() {
   const navigate = useNavigate();
 
   const [projects, setProjects] = useState([]);
+
+  const [completedProjects, setCompletedProjects] = useState([]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -104,6 +117,8 @@ function Projects() {
     addDoc(collection(db, "projects"), { user: user.email, name: values2.name, members: members, startDate: startDate, endDate: endDate, progress: 0 });
     setProjects([]);
     getProjects(user).then(userData => userData.forEach(x => setProjects(prev => [...prev, x.id]))).catch(err => console.log(err));
+    setCompletedProjects([]);
+    getCompletedProjects(user).then(userData => userData.forEach(x => setCompletedProjects(prev => [...prev, x.id]))).catch(err => console.log(err));
     togglePopupClose();
   }
 
@@ -147,6 +162,11 @@ function Projects() {
           getProjects(user)
           .then(userData => userData.forEach(x => {
               setProjects(prev => [...prev, x.id]);
+          }))
+          .catch(err => console.log(err));
+          getCompletedProjects(user)
+          .then(userData => userData.forEach(x => {
+              setCompletedProjects(prev => [...prev, x.id]);
           }))
           .catch(err => console.log(err));
         }
@@ -254,7 +274,7 @@ function Projects() {
       <div className="completed-prj">
         <div className="prj-list-title">Completed Projects</div>
         <div style={{ marginLeft: '5%' }}>
-          { projects.map(x => <Project id={ x } setProjects={setProjects} />) }
+          { completedProjects.map(x => <Project id={ x } setProjects={setCompletedProjects} />) }
         </div>
       </div>
     </div>

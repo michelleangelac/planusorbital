@@ -1,29 +1,60 @@
-import React from "react";
-import { Box, Divider, Paper } from "@mui/material";
+import React, { useEffect } from "react";
+import { Divider } from "@mui/material";
 
-export default function ProjectDb() {
-    return (
-        <>
-            <Box
-            sx={{
-              display: 'flex',
-              '& > :not(style)': {
-                m: 1,
-                width: '90%',
-                height: 'auto',
-              },
-            }}
-          >
-            <Paper variant="outlined">
-              <div className="paper-text">
-                Upcoming Projects
-              </div>
-              <div><Divider/></div>
-              <div className="paper-text2">
-                <strong>03/06/2022</strong> BT2102 Assignment 1
-              </div>
-            </Paper>
-          </Box>
-        </>
-    );
+import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
+import { doc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+
+async function getProject(user, id) {
+  const q = query(collection(db, "projects"), where("__name__", "==", id));
+  try {
+    const querySnapshot = await getDocs(q);
+    console.log(querySnapshot.docs[0].data());
+    return querySnapshot.docs[0].data();
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export default function ProjectDb(props) {
+  const navigate = useNavigate();
+
+  const [values, setValues] = React.useState({
+    name: "",
+    groupName: "",
+    members: [],
+    startDate: new Date(),
+    endDate: new Date(),
+    isCompleted: false,
+    progress: 0
+  });
+
+  function handleDateChange(prop) {
+    const timestamp = new Date(prop.seconds * 1000 + prop.nanoseconds / 1000000);
+    return timestamp;
+  }
+
+  function displayDate(prop) {
+    const dateArray = String(prop).split(" ");
+    return dateArray[2] + " " + dateArray[1] + " " + dateArray[3];
+  }
+
+  useEffect(() => {
+    firebaseAuth.onAuthStateChanged((user) => {
+      if (user) {
+        getProject(user, props.id).then(userData => setValues({name: userData.name, groupName: userData.groupName, members: userData.members, startDate: handleDateChange(userData.startDate), endDate: handleDateChange(userData.endDate), isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
+      } else {
+        navigate("/login");
+      }
+    });
+  }, [])
+
+  return (
+    <>
+      <div><Divider/></div>
+      <div className="paper-text2">
+        <strong>{ values.name }</strong> due on { displayDate(values.endDate) }
+      </div>
+    </>
+  );
 }

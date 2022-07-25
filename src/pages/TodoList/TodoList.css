@@ -6,6 +6,7 @@
     grid-template-areas: 
     "sidebar title title title"
     "sidebar not-started in-progress completed";
+    overflow-y: auto;
 }
 
 .sidebar {

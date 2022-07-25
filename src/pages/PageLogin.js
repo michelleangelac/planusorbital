@@ -88,8 +88,8 @@ function PageLogin() {
     () => setOpenSb(true);
   }
   
-  const { signInWithGoogle } = useAuth();
-  const { signin } = useAuth();
+  const { signInWithGoogle } = useAuth() || {};
+  const { signin } = useAuth() || {};
 
   const BootstrapButton = styled(Button)({
     boxShadow: 'none',

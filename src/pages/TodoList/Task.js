@@ -341,7 +341,8 @@ async function getTasks(user, status) {
                                             style={{ 
                                                 fontSize: '1.2em', 
                                                 verticalAlign: 'bottom',
-                                                marginRight: '21%' 
+                                                marginRight: '18%',
+                                                width: '29vh' 
                                             }}>
                                             Project
                                         </b>

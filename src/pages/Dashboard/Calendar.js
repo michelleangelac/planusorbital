@@ -2,8 +2,9 @@ import React from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+//import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
+//import "react-big-calendar/lib/css/react-big-calendar.css";
+import "./Calendar.css";
 
 const localizer = momentLocalizer(moment);
 
@@ -32,6 +33,7 @@ function AgendaCalendar(props) {
   return (
     <div className="App">
       <DnDCalendar
+        className="react-calendar"
         defaultDate={moment().toDate()}
         events={events}
         localizer={localizer}
