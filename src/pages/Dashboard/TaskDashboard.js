@@ -19,6 +19,7 @@ async function getTask(user, id) {
 }
 
 export default function TaskDb(props) {
+  const navigate = useNavigate();
     // var taskName = "hello";
     // console.log(taskName);
     // var taskStatus = props.status;
@@ -76,4 +77,4 @@ export default function TaskDb(props) {
               </div>
               </>
     )
-}
+  }

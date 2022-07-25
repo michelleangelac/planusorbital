@@ -1,14 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Button, styled } from "@material-ui/core";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import Avatar from "@mui/material/Avatar";
-
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { InputLabel, FormControl, Avatar, IconButton, InputAdornment, Snackbar, Alert } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import './PageLogin.css';
 import "@fontsource/inter";
@@ -46,6 +40,14 @@ function PageLogin() {
     event.preventDefault();
   };
 
+  const [openSb, setOpenSb] = useState(false);
+  const handleCloseSb = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSb(false);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     signin(values.email, values.password);
@@ -53,6 +55,7 @@ function PageLogin() {
     onAuthStateChanged(auth, (user) => {
       console.log(user);
       if (user) {
+        //setOpenSb(true);
         navigate("/dashboard");
       } else {
         navigate("#");
@@ -73,11 +76,16 @@ function PageLogin() {
         if (isNewUser) {
           setDoc(doc(db, "profile", user.email), { username: generateUsername(user.email), name: user.displayName, email: user.email, password: values.password, faculty: values.faculty , profile: profilePic });
         }
+        //setOpenSb(true);
         navigate("/dashboard");
       } else {
         navigate("#");
       }
     })
+  }
+
+  function handleOpenSb() {
+    () => setOpenSb(true);
   }
   
   const { signInWithGoogle } = useAuth();
@@ -186,6 +194,11 @@ function PageLogin() {
         >
           Login
         </Button>
+        <Snackbar open={openSb} autoHideDuration={6000} onClose={handleCloseSb}>
+          <Alert onClose={handleCloseSb} severity="success" sx={{ width: '100%' }}>
+            Logged In
+          </Alert>
+        </Snackbar>
         <p style={{ fontSize: '0.75em', fontFamily: "Inter" }}>
           Not registered yet?{" "}
           <a href="/signup" className="signup-link">

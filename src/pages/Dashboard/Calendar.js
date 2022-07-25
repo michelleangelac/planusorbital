@@ -24,7 +24,7 @@ function AgendaCalendar(props) {
   //     return { events: state.events };
   //   });
   // };
-  
+
   // const onEventDrop = (data) => {
   //   console.log(data);
   // };
@@ -35,8 +35,8 @@ function AgendaCalendar(props) {
         defaultDate={moment().toDate()}
         events={events}
         localizer={localizer}
-        // onEventDrop={onEventDrop}
-        // onEventResize={onEventResize}
+        //onEventDrop={onEventDrop}
+        //onEventResize={onEventResize}
         resizable
         style={{ height: '60vh' }}
         view='agenda' 

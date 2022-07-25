@@ -1,7 +1,5 @@
 import * as React from "react";
-import { Button, Typography } from "@material-ui/core";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
+import { InputLabel, FormControl, Button, Snackbar, Alert } from "@mui/material";
 
 import './PageLogin.css';
 import "@fontsource/inter";
@@ -11,6 +9,14 @@ import { useAuth } from "../hooks/useAuth";
 //import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 
 function ResetPassword() {
+  const [openSb, setOpenSb] = React.useState(false);
+  const handleCloseSb = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSb(false);
+  };
+
   const [values, setValues] = React.useState({
     email: ""
   });
@@ -68,10 +74,18 @@ function ResetPassword() {
             color: '#FFFFFF' 
           }}
           variant="contained"
-          onClick={() => resetpassword(values.email)}
+          onClick={() => {
+            resetpassword(values.email);
+            setOpenSb(true);
+          }}
         >
           Continue
         </Button>
+        <Snackbar open={openSb} autoHideDuration={6000} onClose={handleCloseSb}>
+          <Alert onClose={handleCloseSb} severity="success" sx={{ width: '100%' }}>
+            Link Sent
+          </Alert>
+        </Snackbar>
       </div>
     </div>
   );

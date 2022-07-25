@@ -69,7 +69,7 @@ function Dashboard() {
   // var numOfTasks = 1;
   var numOfProjects = 1;
   const navigate = useNavigate();
-  
+
   const [name, setName] = useState("");
   
   const [tasks, setTasks] = useState([]);

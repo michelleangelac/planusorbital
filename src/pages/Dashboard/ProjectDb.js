@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Paper } from "@mui/material";
+import { Box, Divider, Paper } from "@mui/material";
 
 export default function ProjectDb() {
     return (
@@ -18,7 +18,7 @@ export default function ProjectDb() {
               <div className="paper-text">
                 Upcoming Projects
               </div>
-              <div className="hr"></div>
+              <div><Divider/></div>
               <div className="paper-text2">
                 <strong>03/06/2022</strong> BT2102 Assignment 1
               </div>
