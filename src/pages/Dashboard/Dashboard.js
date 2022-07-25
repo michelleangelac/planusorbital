@@ -67,7 +67,6 @@ async function getSchedules(user) {
 
 function Dashboard() {
   var numOfProjects = 1;
-
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
