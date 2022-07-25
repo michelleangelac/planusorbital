@@ -186,7 +186,6 @@ async function getTasks(user, status) {
 
     const handleSelectNew = (event) => {
         console.log("handleSelectNew", event.target.value);
-        console.log("proj", project, projects, projectName)
         setProject(event.target.value);
         setValues({...values, project: event.target.value});
         getProject(user, event.target.value).then(userData => setProjectName(userData.name));

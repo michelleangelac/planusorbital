@@ -151,8 +151,7 @@ function TodoList() {
     if(values2.name == "") {
       alert("Please fill in the required fields!");
     } else {
-      console.log("mem",members);
-      addDoc(collection(db, "tasks"), { user: user.email, name: values2.name, project: project, members: members, status: status, isCompleted: completed, progress: values2.progress, group: members.length > 1 ? true : false });
+      addDoc(collection(db, "tasks"), { user: user.email, name: values2.name, project: project, members: members, status: status, isCompleted: completed, progress: values2.progress });
     setTasks([]);
         getTasks(user, "Not Started").then(userData => userData.forEach(x => setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
         setTasks2([]);
@@ -264,29 +263,30 @@ function TodoList() {
                   variant="standard"/>
               </div>
               <div style={{ marginBottom: '1.5%', marginTop: '5%' }}>
-                                        <div 
+                                        <b 
                                             style={{ 
                                                 fontSize: '1.2em', 
                                                 verticalAlign: 'bottom',
                                                 marginRight: '52%' 
                                             }}>
                                             Project
-                                        </div>
-                                        <FormControl variant="standard" sx={{ m: 1, width: '35vh' }}>
+                                        </b>
+                                        <FormControl variant="standard" sx={{ m: 1, width: '25vh' }}>
                                         <Select value={project} onChange={handleSelectNew}>
                                             {projects.map(x => <MenuItem value = {x.id}><>{x.name}</></MenuItem>)}
                                         </Select>
                                         </FormControl>
                                     </div>
-                                      <div style={{ marginBottom: '1.5%' , marginTop: '5%' }}>
-                                        <div
+              <div style={{ marginBottom: '1.5%' , marginTop: '5%' }}>
+                                        <b 
                                             style={{ 
                                                 fontSize: '1.2em', 
                                                 verticalAlign: 'bottom',
                                                 marginRight: '45%',
+                                                marginTop: '40%' 
                                             }}>
                                             Members
-                                        </div>
+                                        </b>
                                         </div>              
               <div>
               {(members).map(x => <MemberList email={x} setMembers={setMembers}/>)}
