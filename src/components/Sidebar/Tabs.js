@@ -57,7 +57,7 @@ function Tabs() {
 
   const showSidebar = () => setSidebar(!sidebar);
 
-  const { signout } = useAuth();
+  const { signout } = useAuth() || {};
 
   const [name, setName] = useState("");
   // console.log({ name });

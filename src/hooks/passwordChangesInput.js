@@ -8,9 +8,9 @@ import { getAuth, onAuthStateChanged, reauthenticateWithCredential, EmailAuthPro
 export default function passwordChangesInput() {
     const navigate = useNavigate();
     
-    const { signup } = useAuth();
+    const { signup } = useAuth() || {};
 
-    const { updatepassword } = useAuth();
+    const { updatepassword } = useAuth() || {};
 
     const handleSubmit = (password, confirmPassword, username, name, email, faculty) => {
         if (password !== confirmPassword) {

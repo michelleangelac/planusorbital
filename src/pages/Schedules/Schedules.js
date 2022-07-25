@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import { Avatar, IconButton, Switch, TextField } from "@mui/material";
+import { Avatar, IconButton, Switch, Button, Snackbar, Alert } from "@mui/material";
 import DatePicker from "react-datepicker";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import "react-datepicker/dist/react-datepicker.css";
 import * as MdIcons from "react-icons/md";
 import * as FaIcons from "react-icons/fa";
-import * as AiIcons from "react-icons/ai";
-import * as BsIcons from "react-icons/bs";
-import * as BiIcons from "react-icons/bi";
 
 import Tabs from "../../components/Sidebar/Tabs";
 import BigCalendar from "./Calendar";
@@ -21,8 +17,7 @@ import "@fontsource/inter";
 
 import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
 import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 async function getSchedules(user) {
   //console.log(user.email);
@@ -54,6 +49,14 @@ function Schedules() {
 
   const [privacy, setPrivacy] = useState(false);
 
+  const [openSb, setOpenSb] = useState(false);
+  const handleCloseSb = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSb(false);
+  };
+
   const BootstrapButton = styled(Button)({
     boxShadow: 'none',
     textTransform: 'none',
@@ -84,6 +87,7 @@ function Schedules() {
         .then(userData => userData.forEach(x => setEvents(prev => [...prev, {start: new Date((x.get("startDate").seconds * 1000) + (x.get("startDate").nanoseconds / 1000000)), end: new Date((x.get("endDate").seconds * 1000) + (x.get("endDate").nanoseconds / 1000000)), title: x.get("name"), privacy: x.get("privacy"), id: x.id}])))
         // .then(console.log(events))
         .catch(err => console.log(err.message));
+    setOpenSb(true);
     toggleAddPopup();
   }
 
@@ -111,13 +115,13 @@ function Schedules() {
       <div className="title-sch">Schedules</div>
       <div className="calendar-sch">
         <div className="big-calendar">
-          <BigCalendar events = { events } setEvents={setEvents}/>
+          <BigCalendar events={events} setEvents={setEvents} />
         </div>
       </div>
       <div className="nusmods-btn">
         <BootstrapButton 
           variant="contained"
-          style={{ backgroundColor: '#5062AD' }}
+          style={{ backgroundColor: '#5062AD', borderRadius: '8px', marginTop: '2%' }}
           startIcon={
             <Avatar
               sx={{ width: '26px', height: '26px' }} 
@@ -129,9 +133,14 @@ function Schedules() {
           Import Schedules from NUSMods
         </BootstrapButton>
         <div>
-          <IconButton onClick={toggleAddPopup} style={{ fontSize: '3.5em', color: '#5062AD', marginLeft: '70%' }}>
+          <IconButton onClick={toggleAddPopup} style={{ fontSize: '3.5em', color: '#5062AD', margin: '0 0 1.5% 70%' }}>
             <MdIcons.MdOutlineAddCircle/>
           </IconButton>
+          <Snackbar open={openSb} autoHideDuration={6000} onClose={handleCloseSb}>
+            <Alert onClose={handleCloseSb} severity="success" sx={{ width: '100%' }}>
+              Schedule Added
+            </Alert>
+          </Snackbar>
           {isAddOpen && <PopupSch
             content={
               <>

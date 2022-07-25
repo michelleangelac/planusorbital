@@ -1,25 +1,21 @@
-import React, {useState, useEffect} from "react";
+import React, { useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import moment from "moment";
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import { Avatar, IconButton, Switch, TextField } from "@mui/material";
+import { Switch, Snackbar, Alert } from "@mui/material";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import DatePicker from "react-datepicker";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import "react-datepicker/dist/react-datepicker.css";
-import * as MdIcons from "react-icons/md";
 import * as FaIcons from "react-icons/fa";
 
 import PopupSch from "./Popup";
 
-import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
-import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Navigate, useNavigate } from "react-router-dom";
+import { db, firebaseAuth } from "../../hooks/useAuth";
+import { doc, setDoc, collection, query, where, getDocs, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -56,6 +52,22 @@ function BigCalendar(props) {
 
   const [privacy, setPrivacy] = useState(false);
 
+  const [openModSb, setOpenModSb] = useState(false);
+  const handleCloseModSb = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenModSb(false);
+  };
+
+  const [openDelSb, setOpenDelSb] = useState(false);
+  const handleCloseDelSb = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenDelSb(false);
+  };
+
   const toggleCloseEventPopup = () => {
     setIsEventOpen(!isEventOpen);
     setIsModifyOpen(false);
@@ -63,6 +75,7 @@ function BigCalendar(props) {
   }
 
   const toggleEventPopup = (event) => {
+    console.log(event);
     setStartDate(event.start);
     setEndDate(event.end);
     setName(event.title);
@@ -96,6 +109,7 @@ function BigCalendar(props) {
         // .then(console.log(events))
         .catch(err => console.log(err.message));
     });
+    setOpenModSb(true);
     setIsEventOpen(true);
     setIsModifyOpen(false);
     setIsDeleteOpen(false);
@@ -111,6 +125,7 @@ function BigCalendar(props) {
         // .then(console.log(events))
         .catch(err => console.log(err.message));
     });
+    setOpenDelSb(true);
     setIsDeleteOpen(false);
     setIsEventOpen(false);
     setIsModifyOpen(false);
@@ -127,26 +142,12 @@ function BigCalendar(props) {
         // .then(console.log(events))
         .catch(err => console.log(err.message));
     });
-    // props.setEvents([]);
-    // getSchedules(user)
-    //     .then(userData => userData.forEach(x => props.setEvents(prev => [...prev, {start: new Date((x.get("startDate").seconds * 1000) + (x.get("startDate").nanoseconds / 1000000)), end: new Date((x.get("endDate").seconds * 1000) + (x.get("endDate").nanoseconds / 1000000)), title: x.get("name"), privacy: x.get("privacy"), id: x.id}])))
-    //     // .then(console.log(events))
-    //     .catch(err => console.log(err.message));
   }
 
-  // const [events, setEvents] = React.useState({...props.events});
-
-  // useEffect(() => {
-  //   firebaseAuth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       setEvents()
-  //     }
-  //   })
-  // })
-
   return (
-    <><div className="App">
+    <><div className="big-calendar">
       <DragAndDropCalendar
+        className="react-calendar"
         defaultDate={moment().toDate()}
         defaultView="month"
         events={props.events}
@@ -155,8 +156,20 @@ function BigCalendar(props) {
         onEventDrop={(event) => moveEvent(event)}
         onEventResize={(event) => moveEvent(event)}
         resizable
-        selectable
-        style={{ height: '60vh' }} />
+        selectable 
+        showAllEvents />
+    </div>
+    <div>
+      <Snackbar open={openModSb} autoHideDuration={6000} onClose={handleCloseModSb}>
+        <Alert onClose={handleCloseModSb} severity="success" sx={{ width: '100%' }}>
+          Schedule Updated
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openDelSb} autoHideDuration={6000} onClose={handleCloseDelSb}>
+        <Alert onClose={handleCloseDelSb} severity="success" sx={{ width: '100%' }}>
+          Schedule Deleted
+        </Alert>
+      </Snackbar>
     </div><div>
         {(isEventOpen || isModifyOpen || isDeleteOpen) && <PopupSch
           content=
@@ -252,10 +265,10 @@ function BigCalendar(props) {
               </div> : <div></div>}
             {isEventOpen ?
             <div>
-              <Button variant="contained" style={{ margin: '3% 0 3% 0', width: '45%', backgroundColor: '#000000', marginRight: '5%', borderRadius: '8px' }} onClick = {toggleModifyPopup}>
+              <Button variant="contained" style={{ margin: '6% 2% 3% 2%', width: '45%', backgroundColor: '#000000', borderRadius: '6px' }} onClick = {toggleModifyPopup}>
                 Modify
               </Button>
-              <Button variant="contained" style={{ margin: '3% 0 3% 0', width: '45%', backgroundColor: '#000000', borderRadius: '8px' }} onClick = {toggleDeletePopup}>
+              <Button variant="contained" style={{ margin: '6% 0 3% 4%', width: '45%', backgroundColor: '#000000', borderRadius: '6px' }} onClick = {toggleDeletePopup}>
                 Delete
               </Button></div> : isModifyOpen ? 
               <Button variant="contained" onClick={handleSave} style={{ margin: '3% 0 70% 0', width: '75%', backgroundColor: '#000000' }}>

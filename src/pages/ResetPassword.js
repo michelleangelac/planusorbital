@@ -21,7 +21,7 @@ function ResetPassword() {
     email: ""
   });
 
-  const { resetpassword } = useAuth();
+  const { resetpassword } = useAuth() || {};
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });

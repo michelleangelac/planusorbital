@@ -16,7 +16,7 @@ import { firebaseAuth } from "./hooks/useAuth";
 import { Navigate } from "react-router-dom";
 
 export default function App() {
-  const { user } = useAuth();
+  const { user } = useAuth() || {};
   return (
     <div className="App">
       <Routes>

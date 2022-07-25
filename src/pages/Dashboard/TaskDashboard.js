@@ -20,18 +20,15 @@ async function getTask(user, id) {
 export default function TaskDb(props) {
   const navigate = useNavigate();
 
-    // var taskName = "hello";
-    // console.log(taskName);
-    // var taskStatus = props.status;
-    var boxColor = '';
+  var boxColor = '';
 
-    const [values, setValues] = React.useState({
-      name: "",
-      project: "",
-      members: [],
-      status: "",
-      isCompleted: false,
-      progress: 0
+  const [values, setValues] = React.useState({
+    name: "",
+    project: "",
+    members: [],
+    status: "",
+    isCompleted: false,
+    progress: 0
   });
 
     if (values.status == 'Not Started') {

@@ -6,6 +6,7 @@
     grid-template-areas: 
     "sidebar-dsh tasks schedules"
     "sidebar-dsh projects schedules";
+    overflow-y: auto;
 }
 
 .sidebar-dsh {
@@ -56,6 +57,11 @@
     font-family: "Inter";
     font-weight: 900;
     margin: 0 0 2% 3%;
+}
+
+.scroll-paper {
+    overflow-y: scroll;
+    max-height: 35vh;
 }
 
 .paper-text {

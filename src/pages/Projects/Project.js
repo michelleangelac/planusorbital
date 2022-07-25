@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Card, Divider, IconButton, LinearProgress, Button } from "@mui/material";
+import { Avatar, Card, Divider, IconButton, LinearProgress, Button, Slider } from "@mui/material";
 import { CircularProgress, Typography } from "@mui/material";
 import * as IoIcons from "react-icons/io";
 import * as FaIcons from "react-icons/fa";
@@ -42,7 +42,7 @@ async function getProject(user, id) {
 
 async function getTasks(user, prop) {
     //console.log(prop);
-    const q = query(collection(db, "tasks"), where("user", "==", user.email), where("isCompleted", "==", false), where("project", "==", prop));
+    const q = query(collection(db, "tasks"), where("user", "==", user.email), where("isCompleted", "==", false), where("group", "==", false));
     try {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs;
@@ -53,7 +53,7 @@ async function getTasks(user, prop) {
 
 async function getGroupTasks(user, prop) {
     //console.log(prop);
-    const q = query(collection(db, "tasks"), where("user", "==", user.email), where("isCompleted", "==", false), where("project", "==", prop));
+    const q = query(collection(db, "tasks"), where("user", "==", user.email), where("isCompleted", "==", false), where("group", "==", true));
     try {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs;
@@ -82,7 +82,7 @@ export default function Project(props) {
     const [groupTasks, setGroupTasks] = useState([]);
 
     const [name, setName] = useState("");
-    const [groupName, setGroupName] = useState("");
+    //const [groupName, setGroupName] = useState("");
     const [members, setMembers] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
@@ -108,7 +108,7 @@ export default function Project(props) {
     
     const togglePopup = () => {
         setName(projects.name);
-        setGroupName(projects.groupName);
+        //setGroupName(projects.groupName);
         setMembers(projects.members);
         setStartDate(projects.startDate);
         setEndDate(projects.endDate);
@@ -247,9 +247,9 @@ export default function Project(props) {
                         endDate: handleDateChange(userData.endDate), isCompleted: userData.isCompleted, progress: userData.progress})).catch(err => console.log(err));
                 }
                 setTasks([]);
-                getTasks(user, props.id).then(userData => userData.forEach(x => setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
+                getTasks(user, name).then(userData => userData.forEach(x => setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
                 setGroupTasks([]);
-                getGroupTasks(user, props.id).then(userData => userData.forEach(x => setGroupTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
+                getGroupTasks(user, name).then(userData => userData.forEach(x => setGroupTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
                 getUser(currentMemberAdded).then(userData => setNum(userData.length));
                     if (add) {
                       setMessage(isSameUser ? "User is already a member!" : ( num > 0 ? "User added successfully!" : "User not found!"));
@@ -335,7 +335,7 @@ export default function Project(props) {
                         }}>
                         { projects.name }
                     </div>
-                    <div style={{ textAlign: 'left', marginLeft: '5%', fontFamily: 'Inter' }}>
+                    <div style={{ textAlign: 'left', marginLeft: '5%', fontFamily: 'Inter', paddingRight: '50px' }}>
                         { "(" + projects.members + ")" }
                     </div>
                     <div style={{ textAlign: 'left', marginLeft: '5%', fontFamily: 'Inter' }}>
@@ -355,7 +355,7 @@ export default function Project(props) {
                         <div className="group-tasks">
                             <div className="vl-prj"></div>
                             <div style={{ fontSize: '1.2em', fontFamily: 'Inter', fontWeight: 600 }}>Group Tasks</div>
-                                { tasks.map(x => <TaskPrj id={ x } setTasks={setTasks} />) }
+                                { groupTasks.map(x => <TaskPrj id={ x } setTasks={setGroupTasks} />) }
                             </div>
                         </div>
                 </div>
@@ -428,6 +428,19 @@ export default function Project(props) {
                                     onChange={(date) => setEndDate(date)}
                                     dateFormat="MMMM d, yyyy"/>
                             </div>
+                            <div style={{ textAlign: 'left', margin: '2% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
+                                <label>Progress</label>
+                            </div>
+                            <Slider
+                                sx={{
+                                    margin: '2% 13% 2% 0', 
+                                    width: '43vh', 
+                                    verticalAlign: 'middle',
+                                    color: '#A9A9A9'
+                                }} 
+                                value={progress}
+                                onChange={(event) => setProgress(event.target.value)} 
+                                valueLabelDisplay="auto"/>
                         </form>
                         <Button
                             variant="contained"
