@@ -83,9 +83,18 @@
     z-index: 20;
 }
 
-.prj-name, .prj-members, .prj-date {
+.prj-name, .prj-date {
     font-family: "Inter";
     width: 75%;
+    height: 6.5vh;
+    margin: 2% 0 2% 0;
+    border: 1px solid #999;
+    border-radius: 4px;
+}
+
+.prj-members {
+    font-family: "Inter";
+    width: 61.5%;
     height: 6.5vh;
     margin: 2% 0 2% 0;
     border: 1px solid #999;
