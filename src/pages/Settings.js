@@ -107,7 +107,7 @@ function Settings() {
   const handleSave = () => {
     setOpenSb(true);
     var user = firebaseAuth.currentUser;
-    //console.log(user);
+    console.log(user);
     updateDoc(doc(db, "profile", user.email), { username: values.username, email: values.email, name: values.name, faculty: values.faculty});
     setValues({ username: values.username, email: values.email, name: values.name, faculty: values.faculty});
   };
@@ -300,6 +300,9 @@ function Settings() {
           </div>
       </div>
       <div className="save-btn">
+        <div>
+        {changesSaved}
+        </div>
         <div>
           <Button 
             variant="contained" 

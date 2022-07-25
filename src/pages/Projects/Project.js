@@ -16,6 +16,18 @@ import TaskPrj from "./TaskProject";
 import Popup from "../../components/Popup";
 import PopupSch from "../Schedules/Popup";
 import PopupPrj from "./Popup";
+import MemberList from "./Member";
+
+async function getProjects(user) {
+    const q = query(collection(db, "projects"), where("members", "array-contains", user.email));
+    try {
+      const querySnapshot = await getDocs(q);
+      //console.log(querySnapshot.docs[0].data());
+      return querySnapshot.docs;
+    } catch (e) {
+      console.log(e);
+    }
+}
 
 async function getProject(user, id) {
     const q = query(collection(db, "projects"), where("__name__", "==", id));
@@ -39,12 +51,35 @@ async function getTasks(user, prop) {
     }
 }
 
+async function getGroupTasks(user, prop) {
+    //console.log(prop);
+    const q = query(collection(db, "tasks"), where("user", "==", user.email), where("isCompleted", "==", false), where("project", "==", prop));
+    try {
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs;
+    } catch (e) {
+      console.log(e);
+    }
+}
+
+async function getUser(email) {
+    console.log("email", email);
+    const q = query(collection(db, "profile"), where("email", "==", email));
+    try {
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
 export default function Project(props) {
     const navigate = useNavigate();
 
     const [projects, setProjects] = useState([]);
 
     const [tasks, setTasks] = useState([]);
+    const [groupTasks, setGroupTasks] = useState([]);
 
     const [name, setName] = useState("");
     const [groupName, setGroupName] = useState("");
@@ -52,7 +87,7 @@ export default function Project(props) {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [completed, setCompleted] = useState(false);
-    const [progress, setProgress] = useState(progress);
+    const [progress, setProgress] = useState(0);
     const [id, setID] = useState("");
 
     const [isOpen, setIsOpen] = useState(false); 
@@ -60,14 +95,24 @@ export default function Project(props) {
     const [isModifyOpen, setIsModifyOpen] = useState(false);
 
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+    const [currentMemberAdded, setCurrentMemberAdded] = useState("");
+
+    const [isSameUser, setIsSameUser] = useState(false);
+
+    const [num, setNum] = useState(false);
+
+    const [add, setAdd] = useState(false);
+
+    const [message, setMessage] = useState("");
     
-    const togglePopup = (event) => {
-        setName(event.name);
-        setGroupName(event.groupName);
-        setMembers(event.members);
-        setStartDate(event.startDate);
-        setEndDate(event.endDate);
-        setID(event.id);
+    const togglePopup = () => {
+        setName(projects.name);
+        setGroupName(projects.groupName);
+        setMembers(projects.members);
+        setStartDate(projects.startDate);
+        setEndDate(projects.endDate);
+        setProgress(projects.progress);
         setIsOpen(!isOpen);
         setIsModifyOpen(false);
         setIsDeleteOpen(false);
@@ -85,21 +130,36 @@ export default function Project(props) {
         setIsDeleteOpen(!isDeleteOpen);
     }
 
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-      };
+    // const handleChange = (prop) => (event) => {
+    //     setValues({ ...values, [prop]: event.target.value });
+    //   };
 
     function handleSave() {
         var user = firebaseAuth.currentUser;
-        updateDoc(doc(db, "projects", id), { name: name, groupName: groupName, members: members, startDate: startDate, endDate: endDate, isCompleted: completed, progress: progress })
-        .then(() => props.setProjects([]))
+        console.log("handleSave", user.email, id);
+        updateDoc(doc(db, "projects", id), { name: name, members: members, startDate: startDate, endDate: endDate, progress: progress })
         .then(() => {
-          getProject(user)
-            .then(userData => userData.forEach(x => props.setProjects(prev => [...prev, {startDate: handleDateChange(userData.startDate), 
-                endDate: handleDateChange(userData.endDate), isCompleted: userData.isCompleted, progress: userData.progress, id: x.id}])))
+            console.log(projects);
+            setProjects([]);
+            getProject(user, id)
+            .then(userData => {
+                console.log(userData);
+                (setProjects({name: userData.name, groupName: userData.groupName, members: userData.members, startDate: handleDateChange(userData.startDate), 
+                    endDate: handleDateChange(userData.endDate), isCompleted: userData.isCompleted, progress: userData.progress}));
+            })
             // .then(console.log(events))
             .catch(err => console.log(err.message));
-        });
+        })
+        // .then(() => {
+        //   getProject(user, id)
+        //     .then(userData => {
+        //         console.log(userData);
+        //         setProjects(prev => [...prev, {name: userData.name, startDate: userData.startDate, 
+        //         endDate: userData.endDate, isCompleted: userData.isCompleted, progress: userData.progress, id: id}]);
+        //     })
+        //     // .then(console.log(events))
+        //     .catch(err => console.log(err.message));
+        // });
         setIsOpen(true);
         setIsModifyOpen(false);
         setIsDeleteOpen(false);
@@ -112,9 +172,8 @@ export default function Project(props) {
         deleteDoc(doc(db, "projects", id))
         .then(() => props.setProjects([]))
         .then(() => {
-          getProject(user)
-            .then(userData => userData.forEach(x => props.setProjects(prev => [...prev, {startDate: handleDateChange(userData.startDate), 
-                endDate: handleDateChange(userData.endDate), isCompleted: x.get("isCompleted"), progress: x.get("progress"), id: x.id}])))
+          getProjects(user)
+            .then(userData => userData.forEach(x => props.setProjects(prev => [...prev, x.id])))
             // .then(console.log(events))
             .catch(err => console.log(err.message));
         });
@@ -140,6 +199,7 @@ export default function Project(props) {
 
     function handleDateChange(prop) {
         const timestamp = new Date(prop.seconds * 1000 + prop.nanoseconds / 1000000);
+        // console.log(timestamp);
         return timestamp;
     }
 
@@ -148,20 +208,61 @@ export default function Project(props) {
         return dateArray[1] + " " + dateArray[2] + ", " + dateArray[3];
     }
 
+    function handleAdd() {
+        console.log(currentMemberAdded.toString());
+        console.log("members", members);
+        console.log("project.members", projects.members);
+        if ((members).includes(currentMemberAdded)) {
+          console.log("bener");
+          setIsSameUser(true);
+          // console.log(isSameUser);
+        }
+        else {
+          setIsSameUser(false);
+          getUser(currentMemberAdded).then(userData => setNum(userData.length));
+          getUser(currentMemberAdded.toString()).then(userData => userData.forEach(x => {
+            // setNum(prev => prev+1);
+            // console.log("ada dlm", ada);
+            // handle kalo mem  ber udah ada di array
+            // handle kalo user add user sendiri
+            setMembers(prev => [...prev, x.get("email")]);
+          }));
+        }
+        // console.log("ada", ada);
+        // setCurrentMemberAdded("");  
+        setAdd(true);
+        // setIsSameUser(false);
+        // setUserExists(false);
+      }
+
     useEffect(() => {
         firebaseAuth.onAuthStateChanged((user) => {
             if (user) {
-                setProjects([]);
+                console.log("isOpen", isOpen);
+                setID(props.id);
+                if (projects.length == 0) {
+                    setProjects([]);
                     getProject(user, props.id)
                         .then(userData => setProjects({name: userData.name, groupName: userData.groupName, members: userData.members, startDate: handleDateChange(userData.startDate), 
                         endDate: handleDateChange(userData.endDate), isCompleted: userData.isCompleted, progress: userData.progress})).catch(err => console.log(err));
+                }
                 setTasks([]);
-                    getTasks(user, projects.name).then(userData => userData.forEach(x => setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
+                getTasks(user, props.id).then(userData => userData.forEach(x => setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
+                setGroupTasks([]);
+                getGroupTasks(user, props.id).then(userData => userData.forEach(x => setGroupTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
+                getUser(currentMemberAdded).then(userData => setNum(userData.length));
+                    if (add) {
+                      setMessage(isSameUser ? "User is already a member!" : ( num > 0 ? "User added successfully!" : "User not found!"));
+                      setCurrentMemberAdded("");
+                      setNum(0);
+                      setIsSameUser(false);
+                      setAdd(false);
+                    }
             } else {
                 navigate("/login");
             }
         });
-    }, [])
+    }, [add, currentMemberAdded])
 
     function CircularProgressWithLabel() {
         return (
@@ -209,10 +310,6 @@ export default function Project(props) {
                         <IoIcons.IoIosArrowForward/>
                     </IconButton>
                 </div>
-                <div 
-                    style={{ fontFamily: 'Inter', fontWeight: 600, textAlign: 'left', margin: '2% 0 3% 11%' }}>
-                    { projects.groupName }
-                </div>
             </Card>
             {isOpen && <PopupPrj
               content={
@@ -232,14 +329,14 @@ export default function Project(props) {
                         style={{ 
                             textAlign: 'left', 
                             fontFamily: 'Inter', 
-                            fontSize: '1.3em', 
+                            fontSize: '2em', 
                             fontWeight: 600,
                             margin: '5% 0 0 5%' 
                         }}>
                         { projects.name }
                     </div>
                     <div style={{ textAlign: 'left', marginLeft: '5%', fontFamily: 'Inter' }}>
-                        { projects.groupName + " (" + projects.members + ")" }
+                        { "(" + projects.members + ")" }
                     </div>
                     <div style={{ textAlign: 'left', marginLeft: '5%', fontFamily: 'Inter' }}>
                         Start Date: { displayDate(projects.startDate) }
@@ -248,7 +345,7 @@ export default function Project(props) {
                         Due Date: { displayDate(projects.endDate) }
                     </div>
                     <div style={{ margin: '3% 0 3% 0' }}>
-                        <LinearProgressWithLabel/>
+                        <LinearProgressWithLabel />
                     </div>
                     <div className="container-content">
                         <div className="personal-tasks">
@@ -289,26 +386,27 @@ export default function Project(props) {
                                     type="text"/>
                             </div>
                             <div style={{ textAlign: 'left', margin: '2% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
-                                <label>Group Name</label>
-                            </div>
-                            <div>
-                                <input
-                                    defaultValue={projects.groupName}
-                                    value={groupName} 
-                                    onChange={(event) => setGroupName(event.target.value)}
-                                    className="prj-name" 
-                                    type="text"/>
-                            </div>
-                            <div style={{ textAlign: 'left', margin: '2% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
                                 <label>Members</label>
                             </div>
                             <div>
                                 <input
                                     defaultValue={projects.members}
-                                    value={members} 
-                                    onChange={(event) => setMembers(event.target.value)}
+                                    value={currentMemberAdded} 
+                                    onChange={(event) => setCurrentMemberAdded(event.target.value)}
                                     className="prj-members" 
                                     type="text"/>
+                                <div className="right" style={{display: 'inline-flex'}}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => handleAdd()}
+                                        style={{ margin: '3% 0 3% 0', width: '75%', backgroundColor: '#000000', height: '6.5vh'}}>
+                                        Add
+                                    </Button>
+                                </div>
+                                <div>
+                                {message}
+                                {(members).map(x => <MemberList email={x} setMembers={setMembers}/>)}
+                                </div>
                             </div>
                             <div style={{ textAlign: 'left', margin: '2% 0  0 10%', fontSize: '1.15em', fontFamily: 'Inter', fontWeight: 600 }}>
                                 <label>Start Date</label>
@@ -339,7 +437,7 @@ export default function Project(props) {
                         </Button>
                     </div>
                 }
-                handleClose={toggleModifyPopup}
+                handleClose={togglePopup}
             />}
             {isDeleteOpen && <Popup
                 content={
@@ -362,7 +460,7 @@ export default function Project(props) {
                         </div>
                     </>
                 }
-                handleClose={toggleDeletePopup}
+                handleClose={togglePopup}
             />}
         </div>
     );

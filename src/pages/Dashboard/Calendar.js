@@ -29,6 +29,19 @@ function AgendaCalendar(props) {
   //   console.log(data);
   // };
 
+  const onEventResize = (data) => {
+    const { start, end } = data;
+    setState((state) => {
+      state.events[0].start = start;
+      state.events[0].end = end;
+      return { events: state.events };
+    });
+  };
+  
+  const onEventDrop = (data) => {
+    console.log(data);
+  };
+
   return (
     <div className="App">
       <DnDCalendar
