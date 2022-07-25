@@ -7,6 +7,7 @@ import { Paper, IconButton, Button, TextField, Select, MenuItem, FormControl, Sl
 import Popup from "../../components/Popup";
 //import TodoList from "./TodoList";
 import './TodoList.css';
+import MemberList from "./Member";
 
 import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
 import { doc, collection, query, where, getDocs, deleteDoc, updateDoc } from "firebase/firestore";
@@ -24,15 +25,69 @@ async function getTask(user, id) {
     }
 }
 
+async function getProjects(user) {
+    //console.log(user.email);
+    const q = query(collection(db, "projects"), where("user", "==", user.email));
+    try {
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+async function getProject(user, id) {
+    const q = query(collection(db, "projects"), where("__name__", "==", id));
+    try {
+      const querySnapshot = await getDocs(q);
+      //console.log(querySnapshot.docs[0].data());
+      return querySnapshot.docs[0].data();
+    } catch (e) {
+      console.log(e);
+    }
+}
+
+async function getUser(email) {
+    console.log("email", email);
+    const q = query(collection(db, "profile"), where("email", "==", email));
+    try {
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+
+async function getTasks(user, status) {
+    //console.log(user.email);
+    const q = query(collection(db, "tasks"), where("user", "==", user.email), where("status", "==", status));
+    try {
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   function Task(props) {
     const navigate = useNavigate();
 
+    var user = firebaseAuth.currentUser;
+
     const [tasks, setTasks] = useState([]);
+
+    const [message, setMessage] = useState("");
+
+    const [projects, setProjects] = useState([]);
+
+    const [project, setProject] = useState("");
 
     const [isModifyOpen, setIsModifyOpen] = useState(false);
  
     const toggleModifyPopup = () => {
-        setOldValues({name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted, progress: values.progress});
+        getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
+                getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
         setIsModifyOpen(!isModifyOpen);
     }
 
@@ -77,59 +132,163 @@ async function getTask(user, id) {
     });
 
     function handleConfirm() {
+        if (values.name == "") {
+            alert("Please fill in the required fields!");
+        } else {
+        // setConfirm(true);
         var user = firebaseAuth.currentUser;
         //console.log(user);
-        updateDoc(doc(db, "tasks", props.id), { name: values.name, project: values.project, members: values.members, status: values.status, isCompleted: values.isCompleted, progress: values.progress});
+        console.log(values.progress);
+        // if (values.status == "Complete") {
+        //     setValues({progress: 100});
+        // } else if (values.status == "Not Started") {
+        //     setValues({progress: 0});
+        // }
+
+        // if (values.progress == 0) {
+        //     setValues({})
+        // }
+        updateDoc(doc(db, "tasks", props.id), { name: values.name, project: project, members: values.members, status: values.status, isCompleted: completed, progress: setProgressValue(values.status, values.progress)});
+        setValues([]);
+        setOldValues([]);
+        props.setTasks([])
+        getTasks(user, "Not Started").then(userData => userData.forEach(x => props.setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
+        props.setTasks2([]);
+        getTasks(user, "In Progress").then(userData => userData.forEach(x => props.setTasks2(prev => [...prev, x.id]))).catch(err => console.log(err));
+        props.setTasks3([]);
+        getTasks(user, "Completed").then(userData => userData.forEach(x => props.setTasks3(prev => [...prev, x.id]))).catch(err => console.log(err));
         toggleModifyPopup();
-        setTasks([]);
         //document.write(setOpenSb(true));
         //document.write(handleSbText("Modified"));
+        // setConfirm(false);
+        }
     }
+
+    const [completed, setCompleted] = useState(false);
 
     const [status, setStatus] = useState(status);
     const handleSelect = (prop) => (event) => {
+        console.log(event.target.value);
         setStatus(event.target.value);
-        setValues({ ...values, status: event.target.value });
-        if (prop == "Completed") {
+        setValues({...values, status: event.target.value });
+        if (event.target.value == "Completed") {
             setCompleted(true);
+            // setValues({...values, isCompleted: true});
+        } else {
+            setCompleted(false);
+            // setValues({...values, isCompleted: false});
         }
+    }
+
+    const [members, setMembers] = useState([]);
+
+    const [projectName, setProjectName] = useState("");
+
+    const handleSelectNew = (event) => {
+        console.log("handleSelectNew", event.target.value);
+        setProject(event.target.value);
+        setValues({...values, project: event.target.value});
+        getProject(user, event.target.value).then(userData => setProjectName(userData.name));
+        getProject(user, event.target.value).then(userData => setMembers(userData.members));
     }
 
     const [progress, setProgress] = useState(progress);
     const handleSlider = (prop2, prop3) => (event) => {
         var value = event.target.value;
+        console.log("slider", value, prop3);
         if (prop2 == "Not Started" || prop2 == "Completed") {
             value = prop3;
         }
         setProgress(value);
-        setValues({ ...values, progress: value });
+        setValues({...values, progress: value });
     }
-
-    const [completed, setCompleted] = useState(completed);
 
     function setProgressValue(status2, progress2) {
         if (status2 == "Not Started") {
             return 0;
         } else if (status2 == "Completed") {
             return 100;
+        } else if (progress2 == 0) {
+            return progress2 + 1;
+        } else if (progress2 == 100) {
+            return progress2 - 1;
         } else {
             return progress2;
         }
+    }
+
+    async function getName(id) {
+        var x = await getProject(user, id);
+        console.log(x.name);
+        return x.name;
     }
     
     function handleDelete() {
         var user = firebaseAuth.currentUser;
         deleteDoc(doc(db, "tasks", props.id));
         toggleDeletePopup("Not Started");
-        setTasks([]);
+        setValues([]);
+        setOldValues([]);
+        props.setTasks([])
+        getTasks(user, "Not Started").then(userData => userData.forEach(x => props.setTasks(prev => [...prev, x.id]))).catch(err => console.log(err));
+        props.setTasks2([]);
+        getTasks(user, "In Progress").then(userData => userData.forEach(x => props.setTasks2(prev => [...prev, x.id]))).catch(err => console.log(err));
+        props.setTasks3([]);
+        getTasks(user, "Completed").then(userData => userData.forEach(x => props.setTasks3(prev => [...prev, x.id]))).catch(err => console.log(err));
+        toggleModifyPopup();
     }
+
+    const [isSameUser, setIsSameUser] = useState(false);
+    const [num, setNum] = useState(0);
+    const [currentMemberAdded, setCurrentMemberAdded] = useState("");
+    const [add, setAdd] = useState(false);
+    function handleAdd() {
+        console.log(currentMemberAdded.toString());
+        console.log("members", members);
+        console.log("project.members", projects.members);
+        if ((members).includes(currentMemberAdded)) {
+          console.log("bener");
+          setIsSameUser(true);
+          // console.log(isSameUser);
+        }
+        else {
+          setIsSameUser(false);
+          getUser(currentMemberAdded).then(userData => setNum(userData.length));
+          getUser(currentMemberAdded.toString()).then(userData => userData.forEach(x => {
+            // setNum(prev => prev+1);
+            // console.log("ada dlm", ada);
+            // handle kalo mem  ber udah ada di array
+            // handle kalo user add user sendiri
+            setMembers(prev => [...prev, x.get("email")]);
+          }));
+        }
+        // console.log("ada", ada);
+        // setCurrentMemberAdded("");  
+        setAdd(true);
+        // setIsSameUser(false);
+        // setUserExists(false);
+      }
+
         
     useEffect(() => {
         firebaseAuth.onAuthStateChanged((user) => {
             if (user) {
+                console.log("rerender");
                 setTasks([]);
                 getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
                 getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
+                getTask(user, props.id).then(userData => setProject(userData.project));
+                getTask(user, props.id).then(userData => setMembers(userData.members));
+                setProjects([]);
+                getProjects(user).then(userData => userData.forEach(x => setProjects(prev => [...prev, {id : x.id, name: x.get("name")}])));
+                getUser(currentMemberAdded).then(userData => setNum(userData.length));
+                    if (add) {
+                      setMessage(isSameUser ? "User is already a member!" : ( num > 0 ? "User added successfully!" : "User not found!"));
+                      setCurrentMemberAdded("");
+                      setNum(0);
+                      setIsSameUser(false);
+                      setAdd(false);
+                    }
             } else {
                 navigate("/login");
             }
@@ -186,11 +345,11 @@ async function getTask(user, id) {
                                             }}>
                                             Project
                                         </b>
-                                        <TextField 
-                                        value={values.project}
-                                        onChange = { handleChange("project") }
-                                        style={{ color: '#A9A9A9', width: '25vh' }}
-                                        variant="standard"/>
+                                        <FormControl variant="standard" sx={{ m: 1, width: '25vh' }}>
+                                        <Select value={project} onChange={handleSelectNew}>
+                                            {projects.map(x => <MenuItem value = {x.id}><>{x.name}</></MenuItem>)}
+                                        </Select>
+                                        </FormControl>
                                     </div>              
                                     <div style={{ marginBottom: '1.5%' }}>
                                         <b 
@@ -201,11 +360,23 @@ async function getTask(user, id) {
                                             }}>
                                             Members
                                         </b>
-                                        <TextField 
-                                        value={ values.members }
-                                        onChange = {handleChange("members")}
+                                        {/* <TextField 
+                                        value={ currentMemberAdded }
+                                        onChange = {(e) => setCurrentMemberAdded(e.target.value)}
                                         style={{ color: '#A9A9A9', width: '25vh' }}
-                                        variant="standard"/>
+                                        variant="standard"/> */}
+                                        {/* <div className="right" style={{display: 'inline-flex'}}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => handleAdd()}
+                                        style={{ margin: '3% 0 3% 0', width: '75%', backgroundColor: '#000000', height: '4vh'}}>
+                                        Add
+                                    </Button>
+                                    </div> */}
+                                    <div>
+                                    {message}
+                                    {(members).map(x => <MemberList email={x} setMembers={setMembers}/>)}
+                                    </div>
                                     </div>
                                     <div style={{ marginBottom: '1.5%' }}>
                                         <b 
