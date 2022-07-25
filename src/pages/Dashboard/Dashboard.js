@@ -66,6 +66,7 @@ async function getSchedules(user) {
 }
 
 function Dashboard() {
+  // var numOfTasks = 1;
   var numOfProjects = 1;
   const navigate = useNavigate();
 
