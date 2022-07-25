@@ -31,7 +31,7 @@ async function getName(user) {
 
 async function getUncompletedTasks(user) {
   //console.log(user.email);
-  const q = query(collection(db, "tasks"), where("user", "==", user.email), where("status", "==", ["Not Started", "In Progress"]));
+  const q = query(collection(db, "tasks"), where("user", "==", user.email), where("status", "in", ["Not Started", "In Progress"]));
   try {
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs;
@@ -64,7 +64,7 @@ async function getSchedules(user) {
 
 async function getUncompletedProjects(user) {
   //console.log(user.email);
-  const q = query(collection(db, "projects"), where("user", "==", user.email), where("isCompleted", "==", false));
+  const q = query(collection(db, "projects"), where("user", "==", user.email));
   try {
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs;
@@ -117,7 +117,6 @@ function Dashboard() {
         }))
         // .then(() => console.log(uncompletedTasks.length))
         .catch(err => console.log(err));
-
         setTasks([]);
         setTotalTasks(0);
         getTasks(user)
@@ -138,6 +137,15 @@ function Dashboard() {
         .then(userData => userData.forEach(x => {
           setUncompletedProjects(prev => [...prev, x.id]);
           setNumOfProjects(numOfProjects => numOfProjects + 1);
+        }))
+        // .then(() => console.log(uncompletedTasks.length))
+        .catch(err => console.log(err));
+        setProjects([]);
+        setTotalProjects(0);
+        getProjects(user)
+        .then(userData => userData.forEach(x => {
+          setProjects(prev => [...prev, x.id]);
+          setTotalProjects(totalProjects => totalProjects + 1);
         }))
         
       } else {
@@ -208,7 +216,7 @@ function Dashboard() {
               <div className="paper-text">
                 Upcoming Projects
               </div>
-                {numOfProjects > 0 ? uncompletedProjects.map(x => <ProjectDb id={x} setTasks={setProjects} />) : <NoProject/>}
+                {numOfProjects > 0 ? uncompletedProjects.map(x => <ProjectDb id={x} setProjects={setProjects} />) : <NoProject/>}
             </Paper>
           </Box>
         </div>

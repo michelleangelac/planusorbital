@@ -21,7 +21,6 @@ export default function ProjectDb(props) {
 
   const [values, setValues] = React.useState({
     name: "",
-    groupName: "",
     members: [],
     startDate: new Date(),
     endDate: new Date(),
@@ -42,7 +41,7 @@ export default function ProjectDb(props) {
   useEffect(() => {
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
-        getProject(user, props.id).then(userData => setValues({name: userData.name, groupName: userData.groupName, members: userData.members, startDate: handleDateChange(userData.startDate), endDate: handleDateChange(userData.endDate), isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
+        getProject(user, props.id).then(userData => setValues({name: userData.name, members: userData.members, startDate: handleDateChange(userData.startDate), endDate: handleDateChange(userData.endDate), isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
       } else {
         navigate("/login");
       }

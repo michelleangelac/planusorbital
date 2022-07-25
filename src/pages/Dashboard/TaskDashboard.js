@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from "react";
-import { Box, Paper } from "@mui/material";
+import React, { useEffect } from "react";
+import { Box, Divider } from "@mui/material";
 
 import { db, firebaseAuth, useAuth } from "../../hooks/useAuth";
-import { doc, setDoc, collection, query, where, getDocs, addDoc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Navigate, useNavigate } from "react-router-dom";
+import { doc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 async function getTask(user, id) {
   //console.log(user.email);
@@ -43,36 +42,35 @@ export default function TaskDb(props) {
     useEffect(() => {
       firebaseAuth.onAuthStateChanged((user) => {
           if (user) {
-              getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
-              // getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
+            getTask(user, props.id).then(userData => setValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
+            // getTask(user, props.id).then(userData => setOldValues({name: userData.name, project: userData.project, members: userData.members, status: userData.status, isCompleted: userData.isCompleted, progress: userData.progress })).catch(err => console.log(err));
           } else {
-              navigate("/login");
+            navigate("/login");
           }
       });
   }, [])
 
     return (
-        <>
-        <div className="hr"></div>
-          <div className="paper-text2">
-                {values.name}
-                <Box
-                sx={{ 
-                    display: 'flex',
-                    justifyContent: 'center',
-                    width: '22%',
-                    backgroundColor: boxColor, 
-                    borderRadius: '16px', 
-                    textAlign: 'center',
-                    float: 'right',
-                    marginRight: '4%'
-                }}
-                >
-                  <div>
-                      {values.status}
-                  </div>
-                </Box>
-              </div>
-              </>
+      <>
+        <div><Divider/></div>
+        <div className="paper-text2">
+          {values.name}
+          <Box
+            sx={{ 
+              display: 'flex',
+              justifyContent: 'center',
+              width: '22%',
+              backgroundColor: boxColor, 
+              borderRadius: '16px', 
+              textAlign: 'center',
+              float: 'right',
+              marginRight: '4%'
+            }}>
+            <div>
+              {values.status}
+            </div>
+          </Box>
+        </div>
+      </>
     )
   }
