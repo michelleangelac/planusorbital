@@ -1,9 +1,18 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, updatePassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  sendPasswordResetEmail,
+  updatePassword,
+} from "firebase/auth";
 import React, { useState, useEffect, useContext, createContext } from "react";
-import { config as firebaseConfig } from "../config/firebase.js";
+import { config as firebaseConfig } from "../config/firebase.jsx";
 import { getFirestore } from "firebase/firestore";
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from "react-router-dom";
 
 // Code edited from https://usehooks.com/useAuth/ and
 // https://firebase.google.com/docs/auth/web/start#add-initialize-sdk
@@ -30,7 +39,7 @@ export function ProvideAuth({ children }) {
 
 // Hook for child components to get the auth object ...
 // ... and re-render when it changes.
-export const useAuth = () => { 
+export const useAuth = () => {
   return useContext(authContext);
 };
 
@@ -54,7 +63,7 @@ function useProvideAuth() {
     return createUserWithEmailAndPassword(firebaseAuth, email, password)
       .then((response) => {
         setUser(response.user);
-        console.log
+        console.log;
         return response.user;
       })
       .catch((err) => alert(err.message))
@@ -62,27 +71,33 @@ function useProvideAuth() {
   };
 
   const signout = () => {
-    return signOut(firebaseAuth).then(() => {
-      setUser(false);
-    }).catch((err) => {
-      alert(error);
-    });
+    return signOut(firebaseAuth)
+      .then(() => {
+        setUser(false);
+      })
+      .catch((err) => {
+        alert(error);
+      });
   };
 
   const resetpassword = (email) => {
-    return sendPasswordResetEmail(firebaseAuth, email).then(() => {
-      return true;
-    }).catch((err) => {
-      alert(error);
-    });
+    return sendPasswordResetEmail(firebaseAuth, email)
+      .then(() => {
+        return true;
+      })
+      .catch((err) => {
+        alert(error);
+      });
   };
 
   const updatepassword = (password) => {
-    return updatePassword(firebaseAuth.currentUser, password).then(() => {
-      return true;
-    }).catch((error) => {
-      alert(error);
-    });
+    return updatePassword(firebaseAuth.currentUser, password)
+      .then(() => {
+        return true;
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   const confirmPasswordReset = (code, password) => {
@@ -92,8 +107,9 @@ function useProvideAuth() {
   };
 
   const signInWithGoogle = () => {
-    return signInWithPopup(firebaseAuth, googleAuthProvider)
-    .catch((err) => alert(err.message));
+    return signInWithPopup(firebaseAuth, googleAuthProvider).catch((err) =>
+      alert(err.message)
+    );
   };
 
   // Subscribe to user on mount
@@ -125,6 +141,6 @@ function useProvideAuth() {
     resetpassword,
     updatepassword,
     confirmPasswordReset,
-    signInWithGoogle
+    signInWithGoogle,
   };
 }
