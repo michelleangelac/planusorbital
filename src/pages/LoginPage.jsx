@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-import "./PageLogin.css";
+import "./LoginPage.css";
 import "@fontsource/inter";
 import BootstrapInput from "../components/BootstrapInput";
 
