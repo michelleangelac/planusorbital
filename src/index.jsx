@@ -10,7 +10,6 @@ const rootElement = document.getElementById("root");
 ReactDOM.render(
   <StrictMode>
     <BrowserRouter>
-      <CssBaseline />
       <ProvideAuth>
         <App />
       </ProvideAuth>
