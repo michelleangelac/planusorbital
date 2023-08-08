@@ -8,7 +8,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import './PageLogin.css';
+import "./LoginPage.css";
 import "@fontsource/inter";
 import BootstrapInput from "../components/BootstrapInput";
 
@@ -35,7 +35,7 @@ function PageSignUp() {
     password: "",
     confirmPassword: "",
     showPassword: false,
-    showConfirmPassword: false
+    showConfirmPassword: false,
   });
 
   const handleChange = (prop) => (event) => {
@@ -45,14 +45,14 @@ function PageSignUp() {
   const handleClickShowPassword = () => {
     setValues({
       ...values,
-      showPassword: !values.showPassword
+      showPassword: !values.showPassword,
     });
   };
 
   const handleClickShowConfirmPassword = (x) => {
     setValues({
       ...values,
-      showConfirmPassword: !values.showConfirmPassword
+      showConfirmPassword: !values.showConfirmPassword,
     });
   };
 
@@ -67,53 +67,57 @@ function PageSignUp() {
       <div className="blue-bg"></div>
       <div className="content-log">
         <div className="title-su">Sign Up</div>
-        <FormControl variant="standard" style={{ marginBottom: '3%' }}>
+        <FormControl variant="standard" style={{ marginBottom: "3%" }}>
           <InputLabel shrink htmlFor="usn-input">
             Username*
           </InputLabel>
-          <BootstrapInput 
+          <BootstrapInput
             id="usn-bootstrap"
-            style={{ width: '45vh' }} 
-            value={values.username} 
-            onChange={handleChange("username")} />
+            style={{ width: "45vh" }}
+            value={values.username}
+            onChange={handleChange("username")}
+          />
         </FormControl>
-        <FormControl variant="standard" style={{ marginBottom: '3%' }}>
+        <FormControl variant="standard" style={{ marginBottom: "3%" }}>
           <InputLabel shrink htmlFor="fname-input">
             Full Name*
           </InputLabel>
-          <BootstrapInput 
+          <BootstrapInput
             id="fname-bootstrap"
-            style={{ width: '45vh' }} 
-            value={values.name} 
-            onChange={handleChange("name")}/>
+            style={{ width: "45vh" }}
+            value={values.name}
+            onChange={handleChange("name")}
+          />
         </FormControl>
-        <FormControl variant="standard" style={{ marginBottom: '3%' }}>
+        <FormControl variant="standard" style={{ marginBottom: "3%" }}>
           <InputLabel shrink htmlFor="email-input">
             Email Address*
           </InputLabel>
-          <BootstrapInput 
+          <BootstrapInput
             id="email-bootstrap"
-            style={{ width: '45vh' }} 
-            value={values.email} 
-            onChange={handleChange("email")}/>
+            style={{ width: "45vh" }}
+            value={values.email}
+            onChange={handleChange("email")}
+          />
         </FormControl>
-        <FormControl variant="standard" style={{ marginBottom: '3%' }}>
+        <FormControl variant="standard" style={{ marginBottom: "3%" }}>
           <InputLabel shrink htmlFor="faculty-input">
             Faculty
           </InputLabel>
-          <BootstrapInput 
-            id="faculty-bootstrap" 
-            style={{ width: '45vh' }}
-            value={values.faculty} 
-            onChange={handleChange("faculty")}/>
+          <BootstrapInput
+            id="faculty-bootstrap"
+            style={{ width: "45vh" }}
+            value={values.faculty}
+            onChange={handleChange("faculty")}
+          />
         </FormControl>
-        <FormControl variant="standard" style={{ margin: '0 0 3% 7.5%' }}>
+        <FormControl variant="standard" style={{ margin: "0 0 3% 7.5%" }}>
           <InputLabel shrink htmlFor="bootstrap-input">
             Set Password*
           </InputLabel>
           <BootstrapInput
             id="password-input"
-            style={{ width: '51.25vh' }}
+            style={{ width: "51.25vh" }}
             type={values.showPassword ? "text" : "password"}
             value={values.password}
             onChange={handleChange("password")}
@@ -131,13 +135,13 @@ function PageSignUp() {
             }
           />
         </FormControl>
-        <FormControl variant="standard" style={{ margin: '0 0 6% 7.5%' }}>
+        <FormControl variant="standard" style={{ margin: "0 0 6% 7.5%" }}>
           <InputLabel shrink htmlFor="bootstrap-input">
             Confirm Password*
           </InputLabel>
           <BootstrapInput
             id="confirm-password-input"
-            style={{ width: '51.25vh' }}
+            style={{ width: "51.25vh" }}
             type={values.showConfirmPassword ? "text" : "password"}
             value={values.confirmPassword}
             onChange={handleChange("confirmPassword")}
@@ -149,23 +153,36 @@ function PageSignUp() {
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {values.showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  {values.showConfirmPassword ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
                 </IconButton>
               </InputAdornment>
             }
           />
         </FormControl>
         <Button
-          style={{ 
-            width: '50vh', 
-            lineHeight: 2, 
-            fontSize: '1em',
-            marginBottom: '5%',  
+          style={{
+            width: "50vh",
+            lineHeight: 2,
+            fontSize: "1em",
+            marginBottom: "5%",
             backgroundColor: "#5062AD",
-            color: '#FFFFFF' 
+            color: "#FFFFFF",
           }}
           variant="contained"
-          onClick={() => handleSubmit(values.password, values.confirmPassword, values.username, values.name, values.email, values.faculty)}
+          onClick={() =>
+            handleSubmit(
+              values.password,
+              values.confirmPassword,
+              values.username,
+              values.name,
+              values.email,
+              values.faculty
+            )
+          }
         >
           Sign Up
         </Button>
